@@ -242,12 +242,4 @@ public class AppConstants {
             return R.drawable.ic_user_supervisor;
         }
     }
-
-    public static int getThemeTextColor(Context context) {
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = context.getTheme();
-        theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true);
-        @ColorInt int color = typedValue.data;
-        return color;
-    }
 }
