@@ -40,6 +40,7 @@ android {
     }
 
     publishing {
+
         singleVariant('release') {
             withSourcesJar()
             withJavadocJar()
@@ -108,11 +109,12 @@ afterEvaluate{
             release(MavenPublication) {
                 from components.release
 
-                groupId = 'com.github.GGCAndroidAppDriver'
-                artifactId = 'AppDriver'
+                groupId = 'com.rmj'
+                artifactId = 'appdriver'
                 version = '1.1'
             }
         }
+
 
         repositories {
             maven {
