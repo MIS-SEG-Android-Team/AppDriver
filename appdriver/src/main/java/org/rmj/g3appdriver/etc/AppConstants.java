@@ -18,8 +18,8 @@ import android.util.TypedValue;
 import androidx.annotation.ColorInt;
 
 import org.json.JSONObject;
-import org.rmj.g3appdriver.GCircle.Etc.DeptCode;
 import org.rmj.g3appdriver.R;
+import org.rmj.g3appdriver.GCircle.Etc.DeptCode;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -246,7 +246,7 @@ public class AppConstants {
     public static int getThemeTextColor(Context context) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+//        theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true);
         @ColorInt int color = typedValue.data;
         return color;
     }
