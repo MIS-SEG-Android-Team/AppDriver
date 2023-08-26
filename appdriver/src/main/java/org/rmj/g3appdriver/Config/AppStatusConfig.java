@@ -3,7 +3,7 @@ package org.rmj.g3appdriver.Config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class TestConfig {
+public class AppStatusConfig {
     private static final String TAG = "TestConfig";
 
     private final SharedPreferences poPref;
@@ -14,16 +14,16 @@ public class TestConfig {
 
     private static final String TEST_CASE = "cTestStat";
 
-    private static TestConfig poInstance;
+    private static AppStatusConfig poInstance;
 
-    private TestConfig(Context context){
+    private AppStatusConfig(Context context){
         poPref = context.getSharedPreferences(CONFIG_NAME, PRIV_MODE);
         poEdit = poPref.edit();
     }
 
-    public static TestConfig getInstance(Context context){
+    public static AppStatusConfig getInstance(Context context){
         if(poInstance == null){
-            poInstance = new TestConfig(context);
+            poInstance = new AppStatusConfig(context);
         }
         return poInstance;
     }

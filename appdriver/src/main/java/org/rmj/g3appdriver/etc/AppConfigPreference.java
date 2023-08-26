@@ -95,7 +95,7 @@ public class AppConfigPreference {
         return pref.getBoolean(IS_TESTING_PHASE, false);
     }
 
-    public void setTestCase(boolean isTesting){
+    public void setTestStatus(boolean isTesting){
         editor.putBoolean(IS_TESTING_PHASE, isTesting);
         editor.commit();
     }

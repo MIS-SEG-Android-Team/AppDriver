@@ -13,6 +13,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RBankInfo;
 import org.rmj.g3appdriver.lib.Etc.Barangay;
@@ -30,7 +31,6 @@ import org.rmj.g3appdriver.lib.Etc.Province;
 import org.rmj.g3appdriver.lib.Etc.Relation;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RSysConfig;
 import org.rmj.g3appdriver.lib.Etc.Town;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.ApprovalCode;
 
@@ -47,7 +47,7 @@ public class ImportData {
     @Before
     public void setUp() throws Exception {
         instance = (Application) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
     }
 
     @Test

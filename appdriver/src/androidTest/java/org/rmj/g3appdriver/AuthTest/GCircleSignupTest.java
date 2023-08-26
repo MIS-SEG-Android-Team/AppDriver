@@ -14,12 +14,12 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppConfig;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.lib.Account.AccountMaster;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
 import org.rmj.g3appdriver.lib.Account.pojo.AccountInfo;
-import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -38,8 +38,8 @@ public class GCircleSignupTest {
     @Before
     public void setUp() throws Exception {
         this.instance = ApplicationProvider.getApplicationContext();
-        AppConfigPreference.getInstance(instance).setProductID("gRider");
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppConfig.getInstance(instance).setProductID("gRider");
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
         this.poAccount = new AccountMaster(instance);
         this.poSys = poAccount.initGuanzonApp().getInstance(Auth.CREATE_ACCOUNT);
     }

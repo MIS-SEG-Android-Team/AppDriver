@@ -19,11 +19,11 @@ import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DLocatorSysLog;
 import org.rmj.g3appdriver.GCircle.room.Entities.EGLocatorSysLog;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.dev.Device.Telephony;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,17 +34,15 @@ public class DeviceLocationRecords {
     private static final String TAG = DeviceLocationRecords.class.getSimpleName();
 
     private final DLocatorSysLog poDao;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final GCircleApi poApi;
-    private final AppConfigPreference poConfig;
     private final Telephony poDevID;
 
     private String message;
 
     public DeviceLocationRecords(Application instance) {
         this.poDao = GGC_GCircleDB.getInstance(instance).locatorSysLogDao();
-        this.poHeaders = HttpHeaders.getInstance(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GCircleApi(instance);
         this.poDevID = new Telephony(instance);
     }

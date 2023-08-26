@@ -21,7 +21,6 @@ import org.rmj.g3appdriver.GCircle.Apps.GawadPacita.Obj.PacitaRule;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DPacita;
 import org.rmj.g3appdriver.GCircle.room.Entities.EPacitaEvaluation;
 import org.rmj.g3appdriver.GCircle.room.Entities.EPacitaRule;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.GawadPacita.pojo.BranchRate;
 

@@ -17,7 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.Apps.CreditApp.CreditApp;
 import org.rmj.g3appdriver.GCircle.Apps.CreditApp.CreditOnlineApplication;
 import org.rmj.g3appdriver.GCircle.Apps.CreditApp.model.LoanInfo;
@@ -41,7 +41,7 @@ public class TestCreateNewApp {
     @Before
     public void setUp() throws Exception {
         instance = (Application) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
-        AppConfigPreference.getInstance(instance).setTestCase(false);
+        AppStatusConfig.getInstance(instance).setTestStatus(false);
         creditApp = new CreditOnlineApplication(instance);
     }
 

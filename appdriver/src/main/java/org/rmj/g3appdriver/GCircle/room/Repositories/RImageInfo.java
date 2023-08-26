@@ -23,6 +23,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import org.json.JSONObject;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DImageInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EImageInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
@@ -38,17 +39,19 @@ import java.util.Locale;
 
 public class RImageInfo {
     private static final String TAG = "DB_Image_Repository";
+
+    private final Application instance;
+
     private final DImageInfo poDao;
 
-    private final AppConfigPreference poConfig;
     private final EmployeeSession poSession;
     private final AppTokenManager poToken;
 
     private String message;
 
     public RImageInfo(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).ImageInfoDao();
-        this.poConfig = AppConfigPreference.getInstance(instance);
         this.poSession = EmployeeSession.getInstance(instance);
         this.poToken = new AppTokenManager(instance);
     }
@@ -312,7 +315,7 @@ public class RImageInfo {
      */
     public String UploadImage(String fsVal){
         try{
-            if(poConfig.getTestStatus()){
+            if(AppStatusConfig.getInstance(instance).getTestStatus()){
                 message = "This feature is not available for testing...";
                 return fsVal;
             }
