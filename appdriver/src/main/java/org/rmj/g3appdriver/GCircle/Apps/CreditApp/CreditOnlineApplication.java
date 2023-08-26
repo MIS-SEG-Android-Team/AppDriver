@@ -25,7 +25,7 @@ import org.rmj.g3appdriver.GCircle.Apps.CreditApp.Obj.ReviewLoanInfo;
 import org.rmj.g3appdriver.GCircle.Apps.CreditApp.Obj.SpousePensionInfo;
 import org.rmj.g3appdriver.GCircle.Apps.CreditApp.model.LoanInfo;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DCreditApplication;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcModel;

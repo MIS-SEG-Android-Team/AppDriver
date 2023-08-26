@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Apps.BullsEye.PerformancePeriod;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.Entities.EAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchPerformance;

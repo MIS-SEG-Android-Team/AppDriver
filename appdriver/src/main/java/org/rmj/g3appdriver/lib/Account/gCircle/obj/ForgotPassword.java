@@ -12,7 +12,7 @@ import android.util.Patterns;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
 
 public class ForgotPassword implements iAuth {

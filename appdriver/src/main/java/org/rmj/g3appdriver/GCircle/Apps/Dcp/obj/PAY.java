@@ -12,7 +12,7 @@ import org.rmj.apprdiver.util.LRUtil;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.model.LRDcp;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.PaidDCP;
 import org.rmj.g3appdriver.GCircle.room.Entities.EDCPCollectionDetail;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 
 import java.util.Date;

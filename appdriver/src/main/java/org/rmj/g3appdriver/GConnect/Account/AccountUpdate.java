@@ -8,7 +8,7 @@ import android.app.Application;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GConnect.room.Entities.EClientInfo;
 import org.rmj.g3appdriver.etc.AppConstants;
 

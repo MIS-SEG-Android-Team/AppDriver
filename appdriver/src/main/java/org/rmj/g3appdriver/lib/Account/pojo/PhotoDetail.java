@@ -1,6 +1,6 @@
 package org.rmj.g3appdriver.lib.Account.pojo;
 
-import org.rmj.g3appdriver.dev.Api.WebFileServer;
+import org.rmj.g3appdriver.dev.Http.WebFileServer;
 
 public class PhotoDetail {
     private String sSourceCD;

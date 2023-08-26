@@ -60,4 +60,8 @@ public abstract class WebApi {
     public String getUrlDownloadTestUpdate() {
         return URL_DOWNLOAD_TEST_UPDATE;
     }
+
+    public String getAPI(String fsVal){
+        return "";
+    }
 }

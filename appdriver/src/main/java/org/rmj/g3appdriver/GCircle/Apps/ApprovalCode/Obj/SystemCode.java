@@ -14,7 +14,7 @@ import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.model.SCA;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.pojo.AppCodeParams;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.pojo.CreditAppInfo;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DApprovalCode;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECodeApproval;

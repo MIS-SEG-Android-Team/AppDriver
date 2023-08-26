@@ -16,7 +16,7 @@ import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DGCardTransactionLedge
 import org.rmj.g3appdriver.GConnect.room.Entities.EGCardLedger;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
 import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.dev.encryp.CodeGenerator;
 import org.rmj.g3appdriver.etc.AppConfigPreference;
 

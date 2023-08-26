@@ -16,7 +16,7 @@
  *      started creating this object
  */
 
-package org.rmj.g3appdriver.dev.Api;
+package org.rmj.g3appdriver.dev.Http;
 
 import android.util.Log;
 

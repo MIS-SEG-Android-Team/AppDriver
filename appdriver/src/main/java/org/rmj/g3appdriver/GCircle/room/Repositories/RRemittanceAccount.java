@@ -26,7 +26,7 @@ import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DRemittanceAccounts;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERemittanceAccounts;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 
 import java.util.List;
 

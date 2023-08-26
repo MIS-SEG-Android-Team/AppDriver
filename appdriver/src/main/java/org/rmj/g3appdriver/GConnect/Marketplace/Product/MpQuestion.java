@@ -4,7 +4,6 @@ import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 
 import android.app.Application;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,7 +14,7 @@ import org.rmj.g3appdriver.GConnect.Marketplace.Product.pojo.ProductInquiry;
 import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DProduct;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
 import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 
 import java.util.ArrayList;

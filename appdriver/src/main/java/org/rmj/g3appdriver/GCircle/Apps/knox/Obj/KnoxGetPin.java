@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Apps.knox.KnoxResult;
 import org.rmj.g3appdriver.GCircle.Apps.knox.model.SamsungKnox;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 
 public class KnoxGetPin extends SamsungKnox {

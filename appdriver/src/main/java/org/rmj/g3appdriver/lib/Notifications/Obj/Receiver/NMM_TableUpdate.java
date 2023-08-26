@@ -12,7 +12,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DNotificationReceiver;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchOpenMonitor;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationMaster;

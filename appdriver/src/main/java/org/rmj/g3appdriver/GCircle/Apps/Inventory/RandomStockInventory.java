@@ -20,7 +20,7 @@ import org.rmj.g3appdriver.GCircle.room.Entities.EInventoryMaster;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 
 import java.util.List;

@@ -2,12 +2,9 @@ package org.rmj.g3appdriver.lib.Notifications;
 
 import static org.junit.Assert.assertTrue;
 
-import android.util.Log;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.utils.SQLUtil;
 
