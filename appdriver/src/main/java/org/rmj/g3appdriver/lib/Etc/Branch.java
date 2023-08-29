@@ -24,11 +24,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -36,16 +37,14 @@ import java.util.List;
 public class Branch {
     private static final String TAG = Branch.class.getSimpleName();
 
+    private final Application instance;
     private final DBranchInfo poDao;
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
 
     private String message;
 
     public Branch(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).BranchDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -103,9 +102,9 @@ public class Branch {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportBranches(),
+                    new GCircleApi(instance).getUrlImportBranches(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

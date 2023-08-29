@@ -1,62 +1,50 @@
-package org.rmj.g3appdriver.lib.Account.gCircle.obj;
+package org.rmj.g3appdriver.GCircle.Authentication.obj;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 
 import android.app.Application;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.Patterns;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.pojo.PasswordUpdate;
 
-public class ForgotPassword implements iAuth {
-    private static final String TAG = ForgotPassword.class.getSimpleName();
+public class ChangePassword implements iAuth {
+    private static final String TAG = ChangePassword.class.getSimpleName();
 
     private final Application instance;
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
 
     private String message;
 
-    public ForgotPassword(Application instance) {
+    public ChangePassword(Application instance) {
         this.instance = instance;
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     @Override
     public int DoAction(Object args) {
         try{
-            if(args == null){
-                message = "Please enter your email";
-                return 0;
-            }
-
-            String lsEmail = (String) args;
-            if(lsEmail.trim().isEmpty()){
-                message = "Please enter your email";
-                return 0;
-            }
-
-            if(TextUtils.isEmpty(lsEmail) &&
-                    Patterns.EMAIL_ADDRESS.matcher(lsEmail).matches()){
-                message = "Please enter valid email";
+            PasswordUpdate loInfo = (PasswordUpdate) args;
+            if(!loInfo.isDataValid()){
+                message = loInfo.getMessage();
                 return 0;
             }
 
             JSONObject params = new JSONObject();
-            params.put("email", lsEmail);
+            params.put("oldpswd", loInfo.getOldPassword());
+            params.put("newpswd", loInfo.getNewPassword());
+
+            HttpHeaderProvider loHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlForgotPassword(),
+                    new GCircleApi(instance).getUrlChangePassword(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    loHeaders.getHeaders());
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return 0;
@@ -71,7 +59,7 @@ public class ForgotPassword implements iAuth {
                 return 0;
             }
 
-            message = "We've sent an email to your registered address with instructions for password recovery.";
+            message = "Password updated successfully.";
             return 1;
         } catch (Exception e){
             e.printStackTrace();

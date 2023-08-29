@@ -4,14 +4,14 @@ import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 
 import android.app.Application;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DPanalo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
@@ -24,20 +24,20 @@ import java.util.List;
 public class GPanalo {
     private static final String TAG = GPanalo.class.getSimpleName();
 
-    private final Context mContext;
+    private final Application instance;
 
     private final DPanalo poDao;
 
     private final GCircleApi poApis;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
     public GPanalo(Application instance) {
-        this.mContext = instance;
-        this.poDao = GGC_GCircleDB.getInstance(mContext).panaloDao();
+        this.instance = instance;
+        this.poDao = GGC_GCircleDB.getInstance(this.instance).panaloDao();
         this.poApis = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(mContext);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
     }
 
     public String getMessage() {

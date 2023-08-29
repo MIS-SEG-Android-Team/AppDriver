@@ -13,7 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DPacita;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
@@ -31,14 +32,14 @@ public class Pacita {
     private static final String TAG = Pacita.class.getSimpleName();
 
     private final DPacita poDao;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final GCircleApi poApi;
 
     private String message;
 
     public Pacita(Application instance) {
         this.poDao = GGC_GCircleDB.getInstance(instance).pacitaDao();
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GCircleApi(instance);
     }
 

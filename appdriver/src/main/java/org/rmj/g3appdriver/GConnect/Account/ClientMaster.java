@@ -10,7 +10,8 @@ import androidx.lifecycle.LiveData;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DClientInfo;
 import org.rmj.g3appdriver.GConnect.room.Entities.EClientInfo;
@@ -21,14 +22,14 @@ public class ClientMaster {
     private static final String TAG = ClientMaster.class.getSimpleName();
 
     private final DClientInfo poDao;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final GConnectApi poApi;
 
     private String message;
 
     public ClientMaster(Application instance) {
         this.poDao = GGC_GConnectDB.getInstance(instance).EClientDao();
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GConnectApi(instance);
     }
 

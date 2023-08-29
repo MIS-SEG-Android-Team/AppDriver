@@ -24,28 +24,27 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DCountryInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECountryInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
 
 public class Country {
     private static final String TAG = Country.class.getSimpleName();
-    private final DCountryInfo poDao;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final Application instance;
+
+    private final DCountryInfo poDao;
 
     private String message;
 
     public Country(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).CountryDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -80,9 +79,9 @@ public class Country {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportCountry(),
+                    new GCircleApi(instance).getUrlImportCountry(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

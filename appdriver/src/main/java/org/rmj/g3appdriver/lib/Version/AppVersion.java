@@ -11,8 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeInfo;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.dev.Device.Telephony;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
@@ -26,7 +27,7 @@ public class AppVersion {
     private final AppConfigPreference poConfig;
     private final Telephony poTlphony;
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final EmployeeMaster poUser;
 
     private String message;
@@ -35,7 +36,7 @@ public class AppVersion {
         this.poConfig = AppConfigPreference.getInstance(instance);
         this.poTlphony = new Telephony(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poUser = new EmployeeMaster(instance);
     }
 

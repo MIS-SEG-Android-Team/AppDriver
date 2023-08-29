@@ -26,9 +26,10 @@ import org.rmj.g3appdriver.GCircle.room.Entities.EImageInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RCollectionRemittance;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RImageInfo;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.dev.Device.Telephony;
 import org.rmj.g3appdriver.etc.AppConfigPreference;
@@ -57,7 +58,7 @@ public class LRDcp {
 
     protected final AppConfigPreference poConfig;
     protected final GCircleApi poApi;
-    protected final HttpHeaders poHeaders;
+    protected final HttpHeaderProvider poHeaders;
     protected final EmployeeSession poSession;
     protected final Telephony poDevice;
     protected final RImageInfo poImage;
@@ -77,7 +78,7 @@ public class LRDcp {
         this.poUser = new EmployeeMaster(instance);
         this.poConfig = AppConfigPreference.getInstance(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poSession = EmployeeSession.getInstance(instance);
         this.poDevice = new Telephony(instance);
         this.poImage = new RImageInfo(instance);

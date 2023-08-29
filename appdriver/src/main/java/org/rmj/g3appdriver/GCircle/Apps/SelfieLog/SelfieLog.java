@@ -29,9 +29,10 @@ import org.rmj.g3appdriver.GCircle.room.Entities.EImageInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ESelfieLog;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RImageInfo;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.Etc.DeptCode;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
@@ -50,7 +51,7 @@ public class SelfieLog {
 
     private final RImageInfo poImage;
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final EmployeeSession poSession;
     private String message;
 
@@ -59,7 +60,7 @@ public class SelfieLog {
         this.poUser = new EmployeeMaster(instance);
         this.poImage = new RImageInfo(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poSession = EmployeeSession.getInstance(instance);
     }
 

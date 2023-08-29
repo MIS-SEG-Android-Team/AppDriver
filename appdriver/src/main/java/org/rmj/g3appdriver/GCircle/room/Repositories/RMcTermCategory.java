@@ -22,11 +22,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcTermCategory;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcTermCategory;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -34,17 +34,15 @@ import java.util.List;
 public class RMcTermCategory {
     private static final String TAG = RMcTermCategory.class.getSimpleName();
 
-    private final DMcTermCategory poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DMcTermCategory poDao;
 
     private String message;
 
     public RMcTermCategory(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).McTermCategoryDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -71,9 +69,9 @@ public class RMcTermCategory {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportTermCategory(),
+                    new GCircleApi(instance).getUrlImportTermCategory(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

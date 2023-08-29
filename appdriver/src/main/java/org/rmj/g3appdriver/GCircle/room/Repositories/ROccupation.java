@@ -24,11 +24,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DOccupationInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EOccupationInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -36,17 +36,15 @@ import java.util.List;
 public class ROccupation {
     private static final String TAG = ROccupation.class.getSimpleName();
 
-    private final DOccupationInfo poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DOccupationInfo poDao;
 
     private String message;
 
     public ROccupation(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).OccupationDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -81,9 +79,9 @@ public class ROccupation {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportOccupations(),
+                    new GCircleApi(instance).getUrlImportOccupations(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

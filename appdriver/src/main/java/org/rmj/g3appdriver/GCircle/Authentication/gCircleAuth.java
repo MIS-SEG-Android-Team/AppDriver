@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.gCircle;
+package org.rmj.g3appdriver.GCircle.Authentication;
 
 import android.app.Application;
 import android.util.Log;
@@ -6,11 +6,11 @@ import android.util.Log;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
 import org.rmj.g3appdriver.lib.Account.Model.iAccount;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.gCircle.obj.ChangePassword;
-import org.rmj.g3appdriver.lib.Account.gCircle.obj.EmployeeAuthentication;
-import org.rmj.g3appdriver.lib.Account.gCircle.obj.ForgotPassword;
-import org.rmj.g3appdriver.lib.Account.gCircle.obj.Register;
-import org.rmj.g3appdriver.lib.Account.gCircle.obj.TerminateAccount;
+import org.rmj.g3appdriver.GCircle.Authentication.obj.ChangePassword;
+import org.rmj.g3appdriver.GCircle.Authentication.obj.EmployeeAuthentication;
+import org.rmj.g3appdriver.GCircle.Authentication.obj.ForgotPassword;
+import org.rmj.g3appdriver.GCircle.Authentication.obj.Register;
+import org.rmj.g3appdriver.GCircle.Authentication.obj.TerminateAccount;
 
 public class gCircleAuth implements iAccount {
     private static final String TAG = gCircleAuth.class.getSimpleName();

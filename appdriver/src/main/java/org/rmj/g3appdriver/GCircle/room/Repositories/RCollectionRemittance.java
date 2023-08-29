@@ -25,25 +25,24 @@ import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DDCP_Remittance;
 import org.rmj.g3appdriver.GCircle.room.Entities.EDCP_Remittance;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.Remittance;
 
 public class RCollectionRemittance {
     private static final String TAG = RCollectionRemittance.class.getSimpleName();
 
-    private final DDCP_Remittance poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DDCP_Remittance poDao;
 
     private String message;
 
     public RCollectionRemittance(Application instance) {
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).DCPRemitanceDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -136,9 +135,9 @@ public class RCollectionRemittance {
             param.put("nAmountxx", loDetail.getAmountxx());
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlDcpRemittance(),
+                    new GCircleApi(instance).getUrlDcpRemittance(),
                     param.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

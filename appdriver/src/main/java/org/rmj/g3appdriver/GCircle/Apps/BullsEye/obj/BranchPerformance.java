@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Apps.BullsEye.PerformancePeriod;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DBranchPerformance;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchPerformance;
@@ -26,18 +26,16 @@ import java.util.List;
 public class BranchPerformance extends ABPM {
     private static final String TAG = BranchPerformance.class.getSimpleName();
 
-    private final DBranchPerformance poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DBranchPerformance poDao;
 
     private String message;
 
     public BranchPerformance(Application instance) {
         super(instance);
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).BranchPerformanceDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     @Override
@@ -76,9 +74,9 @@ public class BranchPerformance extends ABPM {
                 params.put("areacd", lsAreaCode);
 
                 String lsResponse = WebClient.sendRequest(
-                        poApi.getImportBranchPerformance(),
+                        new GCircleApi(instance).getImportBranchPerformance(),
                         params.toString(),
-                        poHeaders.getHeaders());
+                        HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
                 JSONObject loResponse = new JSONObject(lsResponse);
                 String lsResult = loResponse.getString("result");

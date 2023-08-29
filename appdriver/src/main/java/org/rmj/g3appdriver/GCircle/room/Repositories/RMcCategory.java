@@ -21,11 +21,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcCategory;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcCategory;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -33,17 +34,15 @@ import java.util.List;
 public class RMcCategory {
     private static final String TAG = RMcCategory.class.getSimpleName();
 
-    private final DMcCategory poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DMcCategory poDao;
 
     private String message;
 
     public RMcCategory(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).McCategoryDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -70,9 +69,9 @@ public class RMcCategory {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportMcCategory(),
+                    new GCircleApi(instance).getUrlImportMcCategory(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = "Server no response";

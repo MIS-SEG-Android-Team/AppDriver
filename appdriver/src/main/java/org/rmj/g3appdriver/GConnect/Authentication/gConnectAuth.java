@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.gConnect;
+package org.rmj.g3appdriver.GConnect.Authentication;
 
 import android.app.Application;
 import android.util.Log;
@@ -6,10 +6,10 @@ import android.util.Log;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
 import org.rmj.g3appdriver.lib.Account.Model.iAccount;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.gConnect.obj.ResetPassword;
-import org.rmj.g3appdriver.lib.Account.gConnect.obj.SignIn;
-import org.rmj.g3appdriver.lib.Account.gConnect.obj.SignUp;
-import org.rmj.g3appdriver.lib.Account.gConnect.obj.UpdatePassword;
+import org.rmj.g3appdriver.GConnect.Authentication.obj.ResetPassword;
+import org.rmj.g3appdriver.GConnect.Authentication.obj.SignIn;
+import org.rmj.g3appdriver.GConnect.Authentication.obj.SignUp;
+import org.rmj.g3appdriver.GConnect.Authentication.obj.UpdatePassword;
 
 public class gConnectAuth implements iAccount {
     private static final String TAG = gConnectAuth.class.getSimpleName();

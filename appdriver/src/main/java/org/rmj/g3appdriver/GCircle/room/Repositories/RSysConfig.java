@@ -22,27 +22,26 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DSysConfig;
 import org.rmj.g3appdriver.GCircle.room.Entities.ESysConfig;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 
 public class RSysConfig {
     private static final String TAG = RSysConfig.class.getSimpleName();
-    private final DSysConfig poDao;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final Application instance;
+
+    private final DSysConfig poDao;
 
     private String message;
 
     public RSysConfig(Application instance) {
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).sysConfigDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -61,9 +60,9 @@ public class RSysConfig {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportSysConfig(),
+                    new GCircleApi(instance).getUrlImportSysConfig(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

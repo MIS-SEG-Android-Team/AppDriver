@@ -8,18 +8,19 @@ import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 
 public abstract class PetMngr {
     protected final GCircleApi poApi;
-    protected final HttpHeaders poHeaders;
+    protected final HttpHeaderProvider poHeaders;
     protected final EmployeeSession poSession;
     protected final EmployeeMaster poUser;
     protected String message;
 
     public PetMngr(Application instance) {
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poSession = EmployeeSession.getInstance(instance);
         this.poUser = new EmployeeMaster(instance);
     }

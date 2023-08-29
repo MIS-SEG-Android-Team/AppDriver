@@ -24,30 +24,28 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DTownInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-    public class Town {
+public class Town {
     private static final String TAG = Town.class.getSimpleName();
 
-    private final DTownInfo poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DTownInfo poDao;
 
     private String message;
 
     public Town(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).TownDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -89,9 +87,9 @@ import java.util.Objects;
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportTown(),
+                    new GCircleApi(instance).getUrlImportTown(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

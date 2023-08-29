@@ -36,7 +36,7 @@ public class HttpHeaderManager {
                 Log.d(TAG, "Initialize headers for Guanzon App.");
                 return GConnectHeaders.getInstance(instance);
             default:
-                throw new IllegalArgumentException("Invalid product id detected.");
+                throw new IllegalArgumentException("ERROR: Product ID not properly initialize.");
         }
     }
 }

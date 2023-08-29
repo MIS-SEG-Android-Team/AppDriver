@@ -17,9 +17,10 @@ import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECashCount;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.Etc.DeptCode;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
@@ -38,7 +39,7 @@ public class CashCount {
     private final EmployeeMaster poUser;
 
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final EmployeeSession poSession;
 
     private String message;
@@ -47,7 +48,7 @@ public class CashCount {
         this.poDao = GGC_GCircleDB.getInstance(instance).CashCountDao();
         this.poUser = new EmployeeMaster(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poSession = EmployeeSession.getInstance(instance);
     }
 

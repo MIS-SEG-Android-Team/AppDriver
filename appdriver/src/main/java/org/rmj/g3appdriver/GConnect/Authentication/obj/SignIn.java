@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.gConnect.obj;
+package org.rmj.g3appdriver.GConnect.Authentication.obj;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
@@ -12,19 +12,17 @@ import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DClientInfo;
 import org.rmj.g3appdriver.GConnect.room.Entities.EClientInfo;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
+import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
 
 public class SignIn implements iAuth {
     private static final String TAG = SignIn.class.getSimpleName();
 
     private final Application instance;
     private final DClientInfo poDao;
-    private final GConnectApi poApi;
-    private final HttpHeaders poHeaders;
     private final AppConfigPreference poConfig;
 
     private String message;
@@ -32,17 +30,16 @@ public class SignIn implements iAuth {
     public SignIn(Application instance) {
         this.instance = instance;
         this.poDao = GGC_GConnectDB.getInstance(instance).EClientDao();
-        this.poApi = new GConnectApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
         this.poConfig = AppConfigPreference.getInstance(instance);
     }
 
     @Override
     public int DoAction(Object args) {
         try{
-            UserAuthInfo loInfo = (UserAuthInfo) args;
-            if(!loInfo.isAuthInfoValid()){
-                message = loInfo.getMessage();
+            LoginCredentials loInfo = (LoginCredentials) args;
+            LoginCredentials.EntryValidator loValidator = new LoginCredentials.EntryValidator();
+            if(!loValidator.isDataValid(loInfo)){
+                message = loValidator.getMessage();
                 return 0;
             }
 
@@ -56,9 +53,9 @@ public class SignIn implements iAuth {
             params.put("pswd", loInfo.getPassword());
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getSIGN_IN(),
+                    new GConnectApi(instance).getSIGN_IN(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             JSONObject loResponse = new JSONObject(lsResponse);
             String lsResult = loResponse.getString("result");

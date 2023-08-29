@@ -26,11 +26,12 @@ import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMCColor;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMCModelCashPrice;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcModel;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcModel;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -42,14 +43,14 @@ public class RMcModel {
     private final DMcModel poDao;
 
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
     public RMcModel(Application instance){
         this.poDao = GGC_GCircleDB.getInstance(instance).McModelDao();
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
     }
 
     public String getMessage() {

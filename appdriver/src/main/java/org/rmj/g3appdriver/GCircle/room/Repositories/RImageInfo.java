@@ -315,7 +315,7 @@ public class RImageInfo {
      */
     public String UploadImage(String fsVal){
         try{
-            if(AppStatusConfig.getInstance(instance).getTestStatus()){
+            if(AppStatusConfig.getInstance(instance).isTestMode()){
                 message = "This feature is not available for testing...";
                 return fsVal;
             }

@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.gCircle.obj;
+package org.rmj.g3appdriver.GConnect.Authentication.obj;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
@@ -8,48 +8,40 @@ import android.app.Application;
 import android.util.Log;
 
 import org.json.JSONObject;
-import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.pojo.PasswordUpdate;
 
-public class TerminateAccount implements iAuth {
-    private static final String TAG = TerminateAccount.class.getSimpleName();
+public class UpdatePassword implements iAuth {
+    private static final String TAG = UpdatePassword.class.getSimpleName();
 
     private final Application instance;
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
 
     private String message;
 
-    public TerminateAccount(Application instance) {
+    public UpdatePassword(Application instance) {
         this.instance = instance;
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     @Override
     public int DoAction(Object args) {
         try{
-            String lsPasswrd = (String) args;
-
-            if(lsPasswrd == null){
-                message = "";
-                return 0;
-            }
-
-            if(lsPasswrd.trim().isEmpty()){
-                message = "";
+            PasswordUpdate loInfo = (PasswordUpdate) args;
+            if(!loInfo.isDataValid()){
+                message = loInfo.getMessage();
                 return 0;
             }
 
             JSONObject params = new JSONObject();
-            params.put("password", lsPasswrd);
+            params.put("oldpswd", loInfo.getOldPassword());
+            params.put("newpswd", loInfo.getNewPassword());
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlDeactivateAccount(),
+                    new GConnectApi(instance).getChangePasswordAPI(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
@@ -65,7 +57,7 @@ public class TerminateAccount implements iAuth {
                 return 0;
             }
 
-            message = "Account deactivation will be process for 24 hrs";
+            message = "Password updated successfully.";
             return 1;
         } catch (Exception e){
             e.printStackTrace();

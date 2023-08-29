@@ -24,11 +24,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcBrand;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcBrand;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -36,17 +36,15 @@ import java.util.List;
 public class RMcBrand {
     private static final String TAG = RMcBrand.class.getSimpleName();
 
-    private final DMcBrand poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DMcBrand poDao;
 
     private String message;
 
     public RMcBrand(Application instance){
-        poDao = GGC_GCircleDB.getInstance(instance).McBrandDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.instance = instance;
+        this.poDao = GGC_GCircleDB.getInstance(instance).McBrandDao();
     }
 
     public String getMessage() {
@@ -77,9 +75,9 @@ public class RMcBrand {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportBrand(),
+                    new GCircleApi(instance).getUrlImportBrand(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

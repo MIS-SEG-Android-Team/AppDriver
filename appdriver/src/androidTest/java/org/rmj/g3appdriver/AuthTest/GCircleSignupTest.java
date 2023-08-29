@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.Config.AppStatusConfig;
-import org.rmj.g3appdriver.lib.Account.AccountMaster;
+import org.rmj.g3appdriver.lib.Account.GAuthentication;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
 import org.rmj.g3appdriver.lib.Account.pojo.AccountInfo;
@@ -29,7 +29,7 @@ public class GCircleSignupTest {
 
     private Application instance;
 
-    private AccountMaster poAccount;
+    private GAuthentication poAccount;
     private iAuth poSys;
 
     private boolean isSuccess = false;
@@ -40,8 +40,8 @@ public class GCircleSignupTest {
         this.instance = ApplicationProvider.getApplicationContext();
         AppConfig.getInstance(instance).setProductID("gRider");
         AppStatusConfig.getInstance(instance).setTestStatus(true);
-        this.poAccount = new AccountMaster(instance);
-        this.poSys = poAccount.initGuanzonApp().getInstance(Auth.CREATE_ACCOUNT);
+        this.poAccount = new GAuthentication(instance);
+        this.poSys = poAccount.initAppAuthentication().getInstance(Auth.CREATE_ACCOUNT);
     }
 
     @After

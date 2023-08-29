@@ -25,6 +25,8 @@ import org.rmj.g3appdriver.GCircle.Apps.CreditApp.Obj.ReviewLoanInfo;
 import org.rmj.g3appdriver.GCircle.Apps.CreditApp.Obj.SpousePensionInfo;
 import org.rmj.g3appdriver.GCircle.Apps.CreditApp.model.LoanInfo;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DCreditApplication;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
@@ -40,7 +42,6 @@ import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.lib.Etc.Branch;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RMcBrand;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RMcModel;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
@@ -78,7 +79,7 @@ public class CreditOnlineApplication {
 
     private final EmployeeSession poSession;
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
@@ -88,7 +89,7 @@ public class CreditOnlineApplication {
         this.poUser = new EmployeeMaster(instance);
         this.poSession = EmployeeSession.getInstance(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poBranch = new Branch(instance);
         this.poBrand = new RMcBrand(instance);
         this.poModel = new RMcModel(instance);

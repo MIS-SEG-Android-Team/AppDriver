@@ -18,10 +18,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcModel;
-import org.rmj.g3appdriver.lib.Account.AccountMaster;
+import org.rmj.g3appdriver.lib.Account.GAuthentication;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
+import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
 import org.rmj.g3appdriver.lib.Ganado.Obj.ProductInquiry;
 import org.rmj.g3appdriver.lib.Ganado.pojo.InstallmentInfo;
 
@@ -45,8 +45,8 @@ public class TestProductInquiry {
         instance = ApplicationProvider.getApplicationContext();
         AppConfig.getInstance(instance).setProductID("gRider");
         this.poSys = new ProductInquiry(instance);
-        poAuth = new AccountMaster(instance).initGuanzonApp().getInstance(Auth.AUTHENTICATE);
-        poAuth.DoAction(new UserAuthInfo("mikegarcia8748@gmail.com", "123456", "09171870011"));
+        poAuth = new GAuthentication(instance).initAppAuthentication().getInstance(Auth.AUTHENTICATE);
+        poAuth.DoAction(new LoginCredentials("mikegarcia8748@gmail.com", "123456", "09171870011"));
     }
 
     @Test

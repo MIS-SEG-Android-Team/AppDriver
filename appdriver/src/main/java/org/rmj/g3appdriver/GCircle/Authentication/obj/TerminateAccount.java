@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.gCircle.obj;
+package org.rmj.g3appdriver.GCircle.Authentication.obj;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
@@ -9,43 +9,49 @@ import android.util.Log;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.pojo.PasswordUpdate;
 
-public class ChangePassword implements iAuth {
-    private static final String TAG = ChangePassword.class.getSimpleName();
+public class TerminateAccount implements iAuth {
+    private static final String TAG = TerminateAccount.class.getSimpleName();
 
     private final Application instance;
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
-    public ChangePassword(Application instance) {
+    public TerminateAccount(Application instance) {
         this.instance = instance;
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
     }
 
     @Override
     public int DoAction(Object args) {
         try{
-            PasswordUpdate loInfo = (PasswordUpdate) args;
-            if(!loInfo.isDataValid()){
-                message = loInfo.getMessage();
+            String lsPasswrd = (String) args;
+
+            if(lsPasswrd == null){
+                message = "";
+                return 0;
+            }
+
+            if(lsPasswrd.trim().isEmpty()){
+                message = "";
                 return 0;
             }
 
             JSONObject params = new JSONObject();
-            params.put("oldpswd", loInfo.getOldPassword());
-            params.put("newpswd", loInfo.getNewPassword());
+            params.put("password", lsPasswrd);
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlChangePassword(),
+                    poApi.getUrlDeactivateAccount(),
                     params.toString(),
                     poHeaders.getHeaders());
+
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return 0;
@@ -60,7 +66,7 @@ public class ChangePassword implements iAuth {
                 return 0;
             }
 
-            message = "Password updated successfully.";
+            message = "Account deactivation will be process for 24 hrs";
             return 1;
         } catch (Exception e){
             e.printStackTrace();

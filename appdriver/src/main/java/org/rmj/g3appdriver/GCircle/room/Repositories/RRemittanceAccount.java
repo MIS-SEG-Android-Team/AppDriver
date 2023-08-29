@@ -25,7 +25,8 @@ import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DRemittanceAccounts;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERemittanceAccounts;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 
 import java.util.List;
@@ -35,14 +36,14 @@ public class RRemittanceAccount {
     private final DRemittanceAccounts poDao;
 
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
     public RRemittanceAccount(Application instance) {
         this.poDao = GGC_GCircleDB.getInstance(instance).RemitanceAccDao();
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
     }
 
     public String getMessage() {

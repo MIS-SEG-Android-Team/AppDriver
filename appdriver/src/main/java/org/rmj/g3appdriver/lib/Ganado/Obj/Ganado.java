@@ -18,7 +18,8 @@ import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DGanadoOnline;
 import org.rmj.g3appdriver.GCircle.room.Entities.EGanadoOnline;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERelation;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.lib.Etc.Relation;
@@ -37,7 +38,7 @@ public class Ganado {
     private final DGanadoOnline poDao;
     private final EmployeeSession poSession;
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final Relation poRelate;
 
     private String message;
@@ -47,7 +48,7 @@ public class Ganado {
         this.poDao = GGC_GCircleDB.getInstance(instance).ganadoDao();
         this.poSession = EmployeeSession.getInstance(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poRelate = new Relation(instance);
     }
 

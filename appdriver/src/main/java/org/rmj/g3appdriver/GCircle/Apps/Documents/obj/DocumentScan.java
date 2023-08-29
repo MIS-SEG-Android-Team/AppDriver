@@ -12,7 +12,8 @@ import androidx.lifecycle.LiveData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebFileServer;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DFileCode;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECreditApplicationDocuments;
@@ -30,7 +31,7 @@ public class DocumentScan {
     private final RImageInfo poImage;
     private final GCircleApi poApi;
     private final AppTokenManager poToken;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
@@ -38,7 +39,7 @@ public class DocumentScan {
         this.poImage = new RImageInfo(instance);
         this.poApi = new GCircleApi(instance);
         this.poToken = new AppTokenManager(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
     }
 
     public String getMessage() {

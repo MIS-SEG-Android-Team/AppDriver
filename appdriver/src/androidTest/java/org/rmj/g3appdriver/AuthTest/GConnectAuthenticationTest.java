@@ -16,10 +16,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.Config.AppStatusConfig;
-import org.rmj.g3appdriver.lib.Account.AccountMaster;
+import org.rmj.g3appdriver.lib.Account.GAuthentication;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
+import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -29,7 +29,7 @@ public class GConnectAuthenticationTest {
 
     private Application instance;
 
-    private AccountMaster poAccount;
+    private GAuthentication poAccount;
     private iAuth poSys;
 
     private boolean isSuccess = false;
@@ -40,8 +40,8 @@ public class GConnectAuthenticationTest {
         this.instance = ApplicationProvider.getApplicationContext();
         AppConfig.getInstance(instance).setProductID("GuanzonApp");
         AppStatusConfig.getInstance(instance).setTestStatus(false);
-        this.poAccount = new AccountMaster(instance);
-        this.poSys = poAccount.initGuanzonApp().getInstance(Auth.AUTHENTICATE);
+        this.poAccount = new GAuthentication(instance);
+        this.poSys = poAccount.initAppAuthentication().getInstance(Auth.AUTHENTICATE);
     }
 
     @After
@@ -51,7 +51,7 @@ public class GConnectAuthenticationTest {
 
     @Test
     public void test01LoginAccount() {
-        UserAuthInfo loInfo = new UserAuthInfo("mikegarcia8748@gmail.com", "123456", "09171870011");
+        LoginCredentials loInfo = new LoginCredentials("mikegarcia8748@gmail.com", "123456", "09171870011");
         int lnResult = poSys.DoAction(loInfo);
         if(lnResult == 1){
             isSuccess = true;

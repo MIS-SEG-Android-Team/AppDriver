@@ -22,11 +22,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcModelPrice;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcModelPrice;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -35,17 +35,15 @@ import java.util.Objects;
 public class RMcModelPrice {
     private static final String TAG = RMcModelPrice.class.getSimpleName();
 
-    private final DMcModelPrice poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DMcModelPrice poDao;
 
     private String message;
 
     public RMcModelPrice(Application instance) {
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).McModelPriceDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -72,9 +70,9 @@ public class RMcModelPrice {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportMcModelPrice(),
+                    new GCircleApi(instance).getUrlImportMcModelPrice(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

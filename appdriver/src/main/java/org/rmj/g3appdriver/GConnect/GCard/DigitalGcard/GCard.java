@@ -15,7 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Account.ClientSession;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DGcardApp;
 import org.rmj.g3appdriver.GConnect.room.Entities.EGcardApp;
@@ -31,7 +32,7 @@ public class GCard {
     private static final String TAG = GCard.class.getSimpleName();
 
     private final DGcardApp poDao;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final GConnectApi poApi;
     private final ClientSession poSession;
     private final AppConfigPreference poConfig;
@@ -45,7 +46,7 @@ public class GCard {
 
     public GCard(Application instance) {
         this.poDao = GGC_GConnectDB.getInstance(instance).EGcardAppDao();
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GConnectApi(instance);
         this.poSession = ClientSession.getInstance(instance);
         this.poConfig = AppConfigPreference.getInstance(instance);

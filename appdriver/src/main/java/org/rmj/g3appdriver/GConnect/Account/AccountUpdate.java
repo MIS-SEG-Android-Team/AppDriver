@@ -7,7 +7,8 @@ import android.app.Application;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GConnect.room.Entities.EClientInfo;
 import org.rmj.g3appdriver.etc.AppConstants;
@@ -15,13 +16,13 @@ import org.rmj.g3appdriver.etc.AppConstants;
 public class AccountUpdate {
     private static final String TAG = AccountUpdate.class.getSimpleName();
 
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final GConnectApi poApi;
 
     private String message;
 
     public AccountUpdate(Application instance) {
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GConnectApi(instance);
     }
 

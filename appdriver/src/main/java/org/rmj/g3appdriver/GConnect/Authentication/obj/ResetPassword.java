@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.gConnect.obj;
+package org.rmj.g3appdriver.GConnect.Authentication.obj;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
@@ -11,7 +11,7 @@ import android.util.Patterns;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Account.Model.iAuth;
 
@@ -19,15 +19,11 @@ public class ResetPassword implements iAuth {
     private static final String TAG = ResetPassword.class.getSimpleName();
 
     private final Application instance;
-    private final GConnectApi poApi;
-    private final HttpHeaders poHeaders;
 
     private String message;
 
     public ResetPassword(Application instance) {
         this.instance = instance;
-        this.poApi = new GConnectApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     @Override
@@ -54,9 +50,9 @@ public class ResetPassword implements iAuth {
             params.put("email", lsEmail);
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getRetrievePasswordAPI(),
+                    new GConnectApi(instance).getRetrievePasswordAPI(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return 0;
