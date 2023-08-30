@@ -13,9 +13,9 @@ import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 
-public class ResetPassword implements iAuth {
+public class ResetPassword implements iAuthenticate {
     private static final String TAG = ResetPassword.class.getSimpleName();
 
     private final Application instance;

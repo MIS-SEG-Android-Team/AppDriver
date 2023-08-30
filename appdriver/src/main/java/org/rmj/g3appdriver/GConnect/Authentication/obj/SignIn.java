@@ -15,10 +15,10 @@ import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConfigPreference;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
 
-public class SignIn implements iAuth {
+public class SignIn implements iAuthenticate {
     private static final String TAG = SignIn.class.getSimpleName();
 
     private final Application instance;

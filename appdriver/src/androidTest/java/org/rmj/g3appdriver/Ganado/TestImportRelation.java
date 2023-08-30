@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERelation;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 import org.rmj.g3appdriver.lib.Etc.Relation;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class TestImportRelation {
 
     private Application instance;
 
-    private iAuth poAuth;
+    private iAuthenticate poAuth;
     private Relation poSys;
 
     @Rule

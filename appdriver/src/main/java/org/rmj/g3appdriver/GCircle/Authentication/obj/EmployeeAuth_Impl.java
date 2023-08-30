@@ -21,12 +21,12 @@ import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.dev.Device.Telephony;
 import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 import org.rmj.g3appdriver.lib.Version.AppVersion;
 
-public class EmployeeAuthentication implements iAuth {
-    private static final String TAG = EmployeeAuthentication.class.getSimpleName();
+public class EmployeeAuth_Impl implements iAuthenticate {
+    private static final String TAG = EmployeeAuth_Impl.class.getSimpleName();
 
     private final DEmployeeInfo poDao;
     private final DEmployeeRole roleDao;
@@ -39,7 +39,7 @@ public class EmployeeAuthentication implements iAuth {
 
     private String message;
 
-    public EmployeeAuthentication(Application instance) {
+    public EmployeeAuth_Impl(Application instance) {
         this.poDao = GGC_GCircleDB.getInstance(instance).EmployeeDao();
         this.roleDao = GGC_GCircleDB.getInstance(instance).employeeRoleDao();
         this.poSession = EmployeeSession.getInstance(instance);
@@ -54,8 +54,9 @@ public class EmployeeAuthentication implements iAuth {
     public int DoAction(Object args) {
         try{
             LoginCredentials loInfo = (LoginCredentials) args;
-            if(!loInfo.isAuthInfoValid()){
-                message = loInfo.getMessage();
+            LoginCredentials.EntryValidator loValidator = new LoginCredentials.EntryValidator();
+            if(!loValidator.isDataValid(loInfo)){
+                message = loValidator.getMessage();
                 return 0;
             }
 

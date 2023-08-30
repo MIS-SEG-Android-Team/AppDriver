@@ -3,8 +3,8 @@ package org.rmj.g3appdriver.lib.Account;
 import android.app.Application;
 import android.util.Log;
 
-import org.rmj.g3appdriver.lib.Account.Model.iAccount;
-import org.rmj.g3appdriver.GCircle.Authentication.gCircleAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthentication;
+import org.rmj.g3appdriver.GCircle.Authentication.GCircleAccount_Impl;
 import org.rmj.g3appdriver.GConnect.Authentication.gConnectAuth;
 import org.rmj.g3appdriver.etc.AppConfigPreference;
 
@@ -19,11 +19,11 @@ public class GAuthentication {
         this.poConfig = AppConfigPreference.getInstance(instance);
     }
 
-    public iAccount initAppAuthentication(){
+    public iAuthentication initAppAuthentication(){
         String lsProdctID = poConfig.ProducID();
         if ("gRider".equals(lsProdctID)) {
             Log.d(TAG, "Initialize employee authentication");
-            return new gCircleAuth(instance);
+            return new GCircleAccount_Impl(instance);
         }
         Log.d(TAG, "Initialize client account");
         return new gConnectAuth(instance);

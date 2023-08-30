@@ -1,6 +1,6 @@
 package org.rmj.g3appdriver.lib.Account.Model;
 
-public interface iAuth {
+public interface iAuthenticate {
 
     /**
      *

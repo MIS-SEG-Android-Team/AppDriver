@@ -18,7 +18,7 @@ import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.lib.Account.GAuthentication;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 import org.rmj.g3appdriver.lib.Account.pojo.AccountInfo;
 
 
@@ -30,7 +30,7 @@ public class GCircleSignupTest {
     private Application instance;
 
     private GAuthentication poAccount;
-    private iAuth poSys;
+    private iAuthenticate poSys;
 
     private boolean isSuccess = false;
     private String message;

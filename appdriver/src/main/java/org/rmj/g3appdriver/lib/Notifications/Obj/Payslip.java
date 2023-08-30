@@ -14,10 +14,12 @@ import androidx.lifecycle.LiveData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DPayslip;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationMaster;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationRecipient;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 import org.rmj.g3appdriver.lib.Notifications.Obj.Receiver.NMM_Regular;
@@ -120,12 +122,12 @@ public class Payslip extends NMM_Regular {
 
     public boolean ImportPayslipNotifications(){
         try{
-            String lsAddress = poApi.getImportPayslip();
+            String lsAddress = new GCircleApi(instance).getImportPayslip();
 
             String lsResponse = WebClient.sendRequest(
                     lsAddress,
                     new JSONObject().toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

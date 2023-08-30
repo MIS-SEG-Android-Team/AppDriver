@@ -11,13 +11,13 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DNotificationReceiver;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationMaster;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationRecipient;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationUser;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 import org.rmj.g3appdriver.lib.Notifications.RemoteMessageParser;
@@ -32,16 +32,15 @@ import java.util.Locale;
 public class NMM_MPOrderStatus implements iNotification {
     private static final String TAG = NMM_MPOrderStatus.class.getSimpleName();
 
+    private final Application instance;
+
     private final DNotificationReceiver poDao;
-    private final HttpHeaders poHeaders;
-    private final GCircleApi poApi;
 
     private String message;
 
     public NMM_MPOrderStatus(Application instance) {
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).ntfReceiverDao();
-        this.poHeaders = HttpHeaders.getInstance(instance);
-        this.poApi = new GCircleApi(instance);
     }
 
     @Override
@@ -126,9 +125,10 @@ public class NMM_MPOrderStatus implements iNotification {
             params.put("infox", "");
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlSendResponse(),
+                    new GCircleApi(instance).getUrlSendResponse(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
+
             if(lsResponse == null){
                 message = "Server no response while sending response.";
                 return null;

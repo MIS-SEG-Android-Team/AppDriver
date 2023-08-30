@@ -4,14 +4,14 @@ import android.app.Application;
 import android.util.Log;
 
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAccount;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthentication;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 import org.rmj.g3appdriver.GConnect.Authentication.obj.ResetPassword;
 import org.rmj.g3appdriver.GConnect.Authentication.obj.SignIn;
 import org.rmj.g3appdriver.GConnect.Authentication.obj.SignUp;
 import org.rmj.g3appdriver.GConnect.Authentication.obj.UpdatePassword;
 
-public class gConnectAuth implements iAccount {
+public class gConnectAuth implements iAuthentication {
     private static final String TAG = gConnectAuth.class.getSimpleName();
 
     private final Application instance;
@@ -21,7 +21,7 @@ public class gConnectAuth implements iAccount {
     }
 
     @Override
-    public iAuth getInstance(Auth params) {
+    public iAuthenticate getInstance(Auth params) {
         switch (params){
             case AUTHENTICATE:
                 Log.d(TAG, "Initialize client sign in.");

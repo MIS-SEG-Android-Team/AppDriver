@@ -18,7 +18,7 @@ import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.lib.Account.GAuthentication;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
@@ -28,7 +28,7 @@ public class AccountTerminationTest {
     private Application instance;
 
     private GAuthentication poAccount;
-    private iAuth poSys;
+    private iAuthenticate poSys;
 
     private boolean isSuccess = false;
     private String message;

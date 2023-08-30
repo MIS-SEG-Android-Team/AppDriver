@@ -4,41 +4,41 @@ import android.app.Application;
 import android.util.Log;
 
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAccount;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.GCircle.Authentication.obj.ChangePassword;
-import org.rmj.g3appdriver.GCircle.Authentication.obj.EmployeeAuthentication;
-import org.rmj.g3appdriver.GCircle.Authentication.obj.ForgotPassword;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthentication;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
+import org.rmj.g3appdriver.GCircle.Authentication.obj.ChangePassword_Impl;
+import org.rmj.g3appdriver.GCircle.Authentication.obj.EmployeeAuth_Impl;
+import org.rmj.g3appdriver.GCircle.Authentication.obj.ForgotPassword_Impl;
 import org.rmj.g3appdriver.GCircle.Authentication.obj.Register;
 import org.rmj.g3appdriver.GCircle.Authentication.obj.TerminateAccount;
 
-public class gCircleAuth implements iAccount {
-    private static final String TAG = gCircleAuth.class.getSimpleName();
+public class GCircleAccount_Impl implements iAuthentication {
+    private static final String TAG = GCircleAccount_Impl.class.getSimpleName();
 
     private final Application instance;
 
-    public gCircleAuth(Application instance) {
+    public GCircleAccount_Impl(Application instance) {
         this.instance = instance;
     }
 
     @Override
-    public iAuth getInstance(Auth params) {
+    public iAuthenticate getInstance(Auth params) {
         switch (params){
             case AUTHENTICATE:
                 Log.d(TAG, "Initialize employee authentication.");
-                return new EmployeeAuthentication(instance);
+                return new EmployeeAuth_Impl(instance);
             case CREATE_ACCOUNT:
                 Log.d(TAG, "Initialize account registration.");
                 return new Register(instance);
             case CHANGE_PASSWORD:
                 Log.d(TAG, "Initialize account update.");
-                return new ChangePassword(instance);
+                return new ChangePassword_Impl(instance);
             case DEACTIVATE:
                 Log.d(TAG, "Initialize account deactivate.");
                 return new TerminateAccount(instance);
             default:
                 Log.d(TAG, "Initialize forgot password.");
-                return new ForgotPassword(instance);
+                return new ForgotPassword_Impl(instance);
         }
     }
 }

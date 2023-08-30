@@ -20,7 +20,7 @@ import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcModel;
 import org.rmj.g3appdriver.lib.Account.GAuthentication;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
 import org.rmj.g3appdriver.lib.Ganado.Obj.ProductInquiry;
 import org.rmj.g3appdriver.lib.Ganado.pojo.InstallmentInfo;
@@ -34,7 +34,7 @@ public class TestProductInquiry {
 
     private Application instance;
 
-    private iAuth poAuth;
+    private iAuthenticate poAuth;
     private ProductInquiry poSys;
 
     @Rule

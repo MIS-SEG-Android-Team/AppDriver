@@ -11,10 +11,10 @@ import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 import org.rmj.g3appdriver.lib.Account.pojo.PasswordUpdate;
 
-public class UpdatePassword implements iAuth {
+public class UpdatePassword implements iAuthenticate {
     private static final String TAG = UpdatePassword.class.getSimpleName();
 
     private final Application instance;
