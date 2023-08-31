@@ -1,11 +1,10 @@
 package org.rmj.g3appdriver.GCircle.Notification.NMM;
 
+import static org.rmj.g3appdriver.GCircle.Notification.NMM.UniqueIDGenerator.CreateUniqueID;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 
 import android.app.Application;
-
-import androidx.lifecycle.LiveData;
 
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -21,16 +20,14 @@ import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 import org.rmj.g3appdriver.lib.Notifications.RemoteMessageParser;
-import org.rmj.g3appdriver.lib.Notifications.model.iNotification;
-import org.rmj.g3appdriver.lib.Notifications.pojo.NotificationItemList;
+import org.rmj.g3appdriver.lib.Notifications.model.NMM_Factory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-public class NMM_Events implements iNotification {
-    private static final String TAG = NMM_Events.class.getSimpleName();
+public class GCC_EventFactoryImpl implements NMM_Factory {
+    private static final String TAG = GCC_EventFactoryImpl.class.getSimpleName();
 
     private final Application instance;
 
@@ -38,7 +35,7 @@ public class NMM_Events implements iNotification {
 
     private String message;
 
-    public NMM_Events(Application instance) {
+    public GCC_EventFactoryImpl(Application instance) {
         this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).ntfReceiverDao();
     }
@@ -53,7 +50,9 @@ public class NMM_Events implements iNotification {
                 poDao.updateNotificationStatusFromOtherDevice(lsMesgIDx, lsStatus);
             } else {
                 ENotificationMaster loMaster = new ENotificationMaster();
-                loMaster.setTransNox(CreateUniqueID());
+
+                String lsTransNo = CreateUniqueID(poDao.GetNotificationCountForID());
+
                 loMaster.setMesgIDxx(loParser.getValueOf("transno"));
                 loMaster.setParentxx(loParser.getValueOf("parent"));
                 loMaster.setCreatedx(loParser.getValueOf("stamp"));
@@ -164,30 +163,7 @@ public class NMM_Events implements iNotification {
     }
 
     @Override
-    public LiveData<List<NotificationItemList>> GetNotificationList() {
-        return null;
-    }
-
-    @Override
     public String getMessage() {
         return message;
-    }
-
-    private String CreateUniqueID(){
-        String lsUniqIDx = "";
-        try{
-            String lsBranchCd = "MX01";
-            String lsCrrYear = new SimpleDateFormat("yy", Locale.getDefault()).format(new Date());
-            StringBuilder loBuilder = new StringBuilder(lsBranchCd);
-            loBuilder.append(lsCrrYear);
-
-            int lnLocalID = poDao.GetNotificationCountForID() + 1;
-            String lsPadNumx = String.format("%05d", lnLocalID);
-            loBuilder.append(lsPadNumx);
-            lsUniqIDx = loBuilder.toString();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return lsUniqIDx;
     }
 }

@@ -3,7 +3,7 @@ package org.rmj.g3appdriver.lib.Notifications.model;
 import android.app.Application;
 
 import org.rmj.g3appdriver.Config.AppConfig;
-import org.rmj.g3appdriver.GCircle.Notification.GCCNotification_Impl;
+import org.rmj.g3appdriver.GCircle.Notification.GCC_NotificationProvider_Impl;
 import org.rmj.g3appdriver.GConnect.Notification.GCTNotification_Impl;
 
 public class NotificationFactoryProvider {
@@ -29,7 +29,7 @@ public class NotificationFactoryProvider {
         String lsProdctID = AppConfig.getInstance(instance).getProductID();
         switch (lsProdctID){
             case "gRider":
-                return new GCCNotification_Impl(instance);
+                return new GCC_NotificationProvider_Impl(instance);
             case "GuanzonApp":
                 return new GCTNotification_Impl(instance);
             default:
