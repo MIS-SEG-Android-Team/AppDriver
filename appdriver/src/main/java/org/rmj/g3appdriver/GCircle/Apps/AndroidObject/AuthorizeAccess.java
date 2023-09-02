@@ -7,6 +7,8 @@ import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 import android.app.Application;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
@@ -18,9 +20,12 @@ import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 
 import java.util.Date;
+import java.util.List;
 
 public class AuthorizeAccess {
-    private static final String TAG = "AuthorizeAccess";
+    private static final String TAG = "A" +
+            "" +
+            "uthorizeAccess";
 
     private final Application instance;
 
@@ -98,5 +103,13 @@ public class AuthorizeAccess {
             message = getLocalMessage(e);
             return false;
         }
+    }
+
+    public LiveData<List<EEmployeeRole>> getAuthorizeAccess(){
+        return poDao.getEmployeeRoles();
+    }
+
+    public LiveData<List<EEmployeeRole>> getChildRoles(){
+        return poDao.getChildRoles();
     }
 }
