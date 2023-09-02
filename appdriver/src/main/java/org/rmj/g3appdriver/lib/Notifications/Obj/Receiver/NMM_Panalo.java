@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+@Deprecated
 public class NMM_Panalo implements iNotification {
     private static final String TAG = NMM_Panalo.class.getSimpleName();
 

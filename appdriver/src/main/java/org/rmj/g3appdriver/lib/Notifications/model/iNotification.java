@@ -10,6 +10,7 @@ import org.rmj.g3appdriver.lib.Notifications.pojo.NotificationItemList;
 
 import java.util.List;
 
+@Deprecated
 public interface iNotification {
     String Save(RemoteMessage foVal);
 

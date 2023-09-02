@@ -15,6 +15,7 @@ import org.rmj.g3appdriver.lib.Notifications.Obj.Receiver.NMM_Regular;
 import org.rmj.g3appdriver.lib.Notifications.Obj.Receiver.NMM_TableUpdate;
 import org.rmj.g3appdriver.lib.Notifications.RemoteMessageParser;
 
+@Deprecated
 public class NMM {
     private static final String TAG = NMM.class.getSimpleName();
 

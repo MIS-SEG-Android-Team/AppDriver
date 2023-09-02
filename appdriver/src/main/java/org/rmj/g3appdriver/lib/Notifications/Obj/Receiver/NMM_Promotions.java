@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+@Deprecated
 public class NMM_Promotions implements iNotification {
     private static final String TAG = NMM_Promotions.class.getSimpleName();
 
