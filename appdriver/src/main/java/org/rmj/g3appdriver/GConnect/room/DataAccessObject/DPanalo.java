@@ -7,7 +7,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.rmj.g3appdriver.GConnect.room.Entities.EGuanzonPanalo;
-import org.rmj.g3appdriver.GConnect.room.Entities.EPanaloReward;
+import org.rmj.g3appdriver.lib.Panalo.data.Entity.EPanaloReward;
 
 @Dao
 public interface DPanalo {

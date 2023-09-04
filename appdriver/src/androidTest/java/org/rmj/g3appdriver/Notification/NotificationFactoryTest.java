@@ -14,8 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.Config.AppConfig;
-import org.rmj.g3appdriver.lib.Notifications.model.NotificationFactory;
-import org.rmj.g3appdriver.lib.Notifications.model.NotificationFactoryProvider;
+import org.rmj.g3appdriver.lib.Notifications.Factory.NotificationFactory;
+import org.rmj.g3appdriver.lib.Notifications.Factory.NotificationFactoryProvider;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)

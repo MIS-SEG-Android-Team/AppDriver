@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
-import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationRecipient;
+import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationRecipient;
 
 import java.util.List;
 

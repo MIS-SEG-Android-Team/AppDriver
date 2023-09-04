@@ -13,16 +13,16 @@ import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DNotificationReceiver;
-import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationMaster;
-import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationRecipient;
-import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationUser;
+import org.rmj.g3appdriver.lib.Notifications.data.DataAccessObject.DNotificationReceiver;
+import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationMaster;
+import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationRecipient;
+import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationUser;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 import org.rmj.g3appdriver.lib.Notifications.RemoteMessageParser;
 
-import org.rmj.g3appdriver.lib.Notifications.model.iNotification;
+import org.rmj.g3appdriver.lib.Notifications.Factory.iNotification;
 import org.rmj.g3appdriver.lib.Notifications.pojo.NotificationItemList;
 
 import java.text.SimpleDateFormat;

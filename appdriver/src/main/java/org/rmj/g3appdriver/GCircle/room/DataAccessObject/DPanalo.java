@@ -5,7 +5,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import org.rmj.g3appdriver.GCircle.room.Entities.EPanaloReward;
+import org.rmj.g3appdriver.lib.Panalo.data.Entity.EPanaloReward;
 
 @Dao
 public interface DPanalo {

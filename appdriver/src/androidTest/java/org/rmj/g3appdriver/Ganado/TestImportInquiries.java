@@ -17,7 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.GCircle.room.Entities.EGanadoOnline;
+import org.rmj.g3appdriver.lib.Ganado.data.Entity.EGanadoOnline;
 import org.rmj.g3appdriver.lib.Ganado.Obj.Ganado;
 
 import java.util.List;

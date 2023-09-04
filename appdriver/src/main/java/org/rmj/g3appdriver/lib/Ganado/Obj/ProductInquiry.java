@@ -6,7 +6,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DGanadoOnline;
+import org.rmj.g3appdriver.lib.Ganado.data.DataAccessObject.DGanadoOnline;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMCColor;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcBrand;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMcModel;

@@ -4,9 +4,9 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DNotification;
-import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationMaster;
-import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationRecipient;
+import org.rmj.g3appdriver.lib.Notifications.data.DataAccessObject.DNotification;
+import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationMaster;
+import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationRecipient;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 import org.rmj.g3appdriver.lib.Notifications.Obj.Receiver.NMM_Regular;

@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Notifications.Obj.Receiver;
+package org.rmj.g3appdriver.lib.Notifications.Factory.FactoryImpl;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
@@ -6,33 +6,29 @@ import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 import android.app.Application;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
-import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Notifications.data.DataAccessObject.DNotificationReceiver;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchOpenMonitor;
 import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationMaster;
 import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationRecipient;
 import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationUser;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 import org.rmj.g3appdriver.lib.Notifications.RemoteMessageParser;
-import org.rmj.g3appdriver.lib.Notifications.Factory.iNotification;
-import org.rmj.g3appdriver.lib.Notifications.pojo.NotificationItemList;
+import org.rmj.g3appdriver.lib.Notifications.Factory.NMM_Factory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-@Deprecated
-public class NMM_Regular implements iNotification {
-    private static final String TAG = NMM_Regular.class.getSimpleName();
+
+public class RegularNMMFactoryImpl implements NMM_Factory {
+    private static final String TAG = RegularNMMFactoryImpl.class.getSimpleName();
 
     private final Application instance;
 
@@ -40,7 +36,7 @@ public class NMM_Regular implements iNotification {
 
     protected String message;
 
-    public NMM_Regular(Application instance) {
+    public RegularNMMFactoryImpl(Application instance) {
         this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).ntfReceiverDao();
     }
@@ -205,11 +201,6 @@ public class NMM_Regular implements iNotification {
             this.message = getLocalMessage(e);
             return false;
         }
-    }
-
-    @Override
-    public LiveData<List<NotificationItemList>> GetNotificationList() {
-        return null;
     }
 
     @Override
