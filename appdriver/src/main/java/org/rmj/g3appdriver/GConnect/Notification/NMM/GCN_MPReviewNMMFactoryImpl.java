@@ -1,19 +1,15 @@
-package org.rmj.g3appdriver.GCircle.Notification.NMM;
+package org.rmj.g3appdriver.GConnect.Notification.NMM;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-import androidx.sqlite.db.SimpleSQLiteQuery;
-
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DNotificationReceiver;
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchOpenMonitor;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationMaster;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationRecipient;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENotificationUser;
@@ -23,16 +19,14 @@ import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 import org.rmj.g3appdriver.lib.Notifications.RemoteMessageParser;
-import org.rmj.g3appdriver.lib.Notifications.model.iNotification;
-import org.rmj.g3appdriver.lib.Notifications.pojo.NotificationItemList;
+import org.rmj.g3appdriver.lib.Notifications.model.NMM_Factory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-public class NMM_TableUpdate implements iNotification {
-    private static final String TAG = NMM_TableUpdate.class.getSimpleName();
+public class GCN_MPReviewNMMFactoryImpl implements NMM_Factory {
+    private static final String TAG = GCN_MPReviewNMMFactoryImpl.class.getSimpleName();
 
     private final Application instance;
 
@@ -40,7 +34,7 @@ public class NMM_TableUpdate implements iNotification {
 
     private String message;
 
-    public NMM_TableUpdate(Application instance) {
+    public GCN_MPReviewNMMFactoryImpl(Application instance) {
         this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).ntfReceiverDao();
     }
@@ -87,23 +81,6 @@ public class NMM_TableUpdate implements iNotification {
                     if (poDao.CheckIfUserExist(loParser.getValueOf("srceid")) == null) {
                         poDao.insert(loUser);
                     }
-                }
-
-                String lsData = loParser.getValueOf("infox");
-
-                JSONObject loJson = new JSONObject(lsData);
-
-                String lsModule = loJson.getString("module");
-
-                switch (lsModule){
-                    case "00001":
-                        SaveTableUpdate(lsData);
-                        break;
-                    case "00002":
-                        SaveBranchOpening(lsData);
-                        break;
-                    default:
-                        break;
                 }
             }
             return lsMesgIDx;
@@ -182,11 +159,6 @@ public class NMM_TableUpdate implements iNotification {
     }
 
     @Override
-    public LiveData<List<NotificationItemList>> GetNotificationList() {
-        return null;
-    }
-
-    @Override
     public String getMessage() {
         return message;
     }
@@ -207,38 +179,5 @@ public class NMM_TableUpdate implements iNotification {
             e.printStackTrace();
         }
         return lsUniqIDx;
-    }
-
-    private boolean SaveTableUpdate(String args){
-        try{
-            JSONObject loJson = new JSONObject(args);
-            JSONObject loData = loJson.getJSONObject("data");
-            String lsTblUpdte = loData.getString("");
-            SimpleSQLiteQuery query = new SimpleSQLiteQuery(lsTblUpdte);
-            poDao.ExecuteTableUpdateQuery(query);
-            return true;
-        } catch (Exception e){
-            e.printStackTrace();
-            message = getLocalMessage(e);
-            return false;
-        }
-    }
-
-    private boolean SaveBranchOpening(String args){
-        try{
-            JSONObject loJson = new JSONObject(args);
-            JSONObject loData = loJson.getJSONObject("data");
-            EBranchOpenMonitor loDetail = new EBranchOpenMonitor();
-            loDetail.setBranchCD(loData.getString("sBranchCD"));
-            loDetail.setTransact(loData.getString("dTransact"));
-            loDetail.setTimeOpen(loData.getString("sTimeOpen"));
-            loDetail.setOpenNowx(loData.getString("sOpenNowx"));
-            poDao.SaveBranchOpening(loDetail);
-            return true;
-        } catch (Exception e){
-            e.printStackTrace();
-            message = getLocalMessage(e);
-            return false;
-        }
     }
 }

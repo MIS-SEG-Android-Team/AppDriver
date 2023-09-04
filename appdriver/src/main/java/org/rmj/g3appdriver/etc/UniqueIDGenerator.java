@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.GCircle.Notification.NMM;
+package org.rmj.g3appdriver.etc;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

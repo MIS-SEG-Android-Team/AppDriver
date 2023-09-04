@@ -8,4 +8,6 @@ import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 public interface NotificationFactory {
 
     NMM_Factory getInstance(RemoteMessage remoteMessage);
+
+    String getApplicationInstance();
 }

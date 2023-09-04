@@ -5,8 +5,6 @@ import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONObject;
@@ -21,16 +19,14 @@ import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.lib.Notifications.NOTIFICATION_STATUS;
 import org.rmj.g3appdriver.lib.Notifications.RemoteMessageParser;
-import org.rmj.g3appdriver.lib.Notifications.model.iNotification;
-import org.rmj.g3appdriver.lib.Notifications.pojo.NotificationItemList;
+import org.rmj.g3appdriver.lib.Notifications.model.NMM_Factory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-public class NMM_Promotions implements iNotification {
-    private static final String TAG = NMM_Promotions.class.getSimpleName();
+public class GCC_PromoNMMFactoryImpl implements NMM_Factory {
+    private static final String TAG = GCC_PromoNMMFactoryImpl.class.getSimpleName();
 
     private final Application instance;
 
@@ -38,7 +34,7 @@ public class NMM_Promotions implements iNotification {
 
     private String message;
 
-    public NMM_Promotions(Application instance) {
+    public GCC_PromoNMMFactoryImpl(Application instance) {
         this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).ntfReceiverDao();
     }
@@ -160,11 +156,6 @@ public class NMM_Promotions implements iNotification {
             this.message = getLocalMessage(e);
             return false;
         }
-    }
-
-    @Override
-    public LiveData<List<NotificationItemList>> GetNotificationList() {
-        return null;
     }
 
     @Override
