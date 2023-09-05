@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.pojo;
+package org.rmj.g3appdriver.lib.account.pojo;
 
 public class AccountCredentials{
     private String sUserName = "";

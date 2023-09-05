@@ -10,8 +10,8 @@ import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
-import org.rmj.g3appdriver.lib.Account.pojo.AccountCredentials;
+import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.account.pojo.AccountCredentials;
 
 public class SignUp implements iAuthenticate {
     private static final String TAG = SignUp.class.getSimpleName();

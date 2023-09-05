@@ -15,10 +15,10 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAddressRequest;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMobileRequest;
-import org.rmj.g3appdriver.GCircle.room.Entities.EAddressUpdate;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMobileUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.dao.DAddressRequest;
+import org.rmj.g3appdriver.lib.addressbook.data.dao.DMobileRequest;
+import org.rmj.g3appdriver.lib.addressbook.data.entity.EAddressUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.entity.EMobileUpdate;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 
 import java.util.List;

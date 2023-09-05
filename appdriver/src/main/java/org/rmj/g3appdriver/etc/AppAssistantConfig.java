@@ -40,7 +40,7 @@ public class AppAssistantConfig {
     private static final String HELP_SYSUPDATE_NOTICE = "DCP_Instruction_Notice";
     private static final String HELP_KNOX_NOTICE = "DCP_Instruction_Notice";
 
-    private static AppAssistantConfig mAppConfigPreference;
+    private static AppAssistantConfig poInstance;
 
     private AppAssistantConfig(Context context){
         int priv_Mode = 0;
@@ -49,10 +49,10 @@ public class AppAssistantConfig {
     }
 
     public static AppAssistantConfig getInstance(Context context){
-        if(mAppConfigPreference == null){
-            mAppConfigPreference = new AppAssistantConfig(context);
+        if(poInstance == null){
+            poInstance = new AppAssistantConfig(context);
         }
-        return mAppConfigPreference;
+        return poInstance;
     }
 
     public boolean getHELP_AUTH_NOTICE(){

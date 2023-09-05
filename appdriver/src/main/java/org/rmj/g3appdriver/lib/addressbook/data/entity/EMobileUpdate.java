@@ -9,7 +9,7 @@
  * project file last modified : 4/24/21 3:18 PM
  */
 
-package org.rmj.g3appdriver.GCircle.room.Entities;
+package org.rmj.g3appdriver.lib.addressbook.data.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

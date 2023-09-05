@@ -9,13 +9,14 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.rmj.g3appdriver.Config.AppConfig;
+import org.rmj.g3appdriver.Config.AppVersionConfig;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeInfo;
 import org.rmj.g3appdriver.dev.Device.Telephony;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.List;
 public class AppVersion {
     private static final String TAG = AppVersion.class.getSimpleName();
 
-    private final AppConfigPreference poConfig;
+    private final Application instance;
     private final Telephony poTlphony;
     private final GCircleApi poApi;
     private final HttpHeaderProvider poHeaders;
@@ -33,7 +34,7 @@ public class AppVersion {
     private String message;
 
     public AppVersion(Application instance) {
-        this.poConfig = AppConfigPreference.getInstance(instance);
+        this.instance = instance;
         this.poTlphony = new Telephony(instance);
         this.poApi = new GCircleApi(instance);
         this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
@@ -49,9 +50,9 @@ public class AppVersion {
             EEmployeeInfo loUser = poUser.getUserNonLiveData();
             JSONObject params = new JSONObject();
             params.put("sUserIDxx", loUser.getUserIDxx());
-            params.put("sProdctID", poConfig.ProducID());
+            params.put("sProdctID", AppConfig.getInstance(instance).getProductID());
             params.put("sIMEINoxx", poTlphony.getDeviceID());
-            params.put("sAppVersn", poConfig.getVersionCode());
+            params.put("sAppVersn", AppVersionConfig.getInstance(instance).getVersionCode());
 
             String lsAddress = poApi.getUrlSubmitAppVersion();
 
@@ -119,7 +120,7 @@ public class AppVersion {
                 loInfo.setsVrsionNm(lsVersnNme);
                 loInfo.setsVrsnNote(lsAppNotes);
                 if(x == 0){
-                    int lsVernCd = poConfig.getVersionCode();
+                    int lsVernCd = AppVersionConfig.getInstance(instance).getVersionCode();
                     if(lsVersnCde > lsVernCd){
                         loInfo.setcNewUpdte("1");
                     }
@@ -140,7 +141,7 @@ public class AppVersion {
             String lsAddress = poApi.getUrlCheckUpdate();
 
             JSONObject params = new JSONObject();
-            params.put("sVersnCde", poConfig.getVersionCode());
+            params.put("sVersnCde", AppVersionConfig.getInstance(instance).getVersionCode());
 
             String lsResponse = WebClient.sendRequest(
                     lsAddress,
@@ -173,7 +174,7 @@ public class AppVersion {
                 loInfo.setsVrsionNm(lsVersnNme);
                 loInfo.setsVrsnNote(lsAppNotes);
                 if(x == 0){
-                    int lsVernCd = poConfig.getVersionCode();
+                    int lsVernCd = AppVersionConfig.getInstance(instance).getVersionCode();
                     if(lsVersnCde > lsVernCd){
                         loInfo.setcNewUpdte("1");
                     }
@@ -189,6 +190,6 @@ public class AppVersion {
     }
 
     public String GetVersionName(){
-        return poConfig.getVersionName();
+        return AppVersionConfig.getInstance(instance).getVersionName();
     }
 }

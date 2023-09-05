@@ -19,7 +19,6 @@ import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.dev.encryp.CodeGenerator;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 
 import java.util.List;
 
@@ -30,7 +29,6 @@ public class GCardLedger {
     private final HttpHeaderProvider poHeaders;
     private final GConnectApi poApi;
     private final ClientSession poSession;
-    private final AppConfigPreference poConfig;
 
     private String message;
 
@@ -39,7 +37,6 @@ public class GCardLedger {
         this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GConnectApi(instance);
         this.poSession = ClientSession.getInstance(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
     }
 
     public String getMessage() {

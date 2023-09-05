@@ -9,9 +9,10 @@ import android.os.Build;
 import android.util.Log;
 
 import org.json.JSONObject;
+import org.rmj.g3appdriver.Config.DeviceConfig;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
-import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
+import org.rmj.g3appdriver.lib.account.pojo.LoginCredentials;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
@@ -19,9 +20,8 @@ import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeRole;
 import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.dev.Device.Telephony;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
+import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 import org.rmj.g3appdriver.lib.Version.AppVersion;
 
@@ -33,7 +33,7 @@ public class EmployeeAuth_Impl implements iAuthenticate {
     private final EmployeeSession poSession;
     private final GCircleApi poApi;
     private final HttpHeaderProvider poHeaders;
-    private final AppConfigPreference poConfig;
+    private final DeviceConfig poConfig;
     private final Telephony poDevID;
     private final AppVersion poVersion;
 
@@ -43,7 +43,7 @@ public class EmployeeAuth_Impl implements iAuthenticate {
         this.poDao = GGC_GCircleDB.getInstance(instance).EmployeeDao();
         this.roleDao = GGC_GCircleDB.getInstance(instance).employeeRoleDao();
         this.poSession = EmployeeSession.getInstance(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
+        this.poConfig = DeviceConfig.getInstance(instance);
         this.poApi = new GCircleApi(instance);
         this.poVersion = new AppVersion(instance);
         this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
@@ -60,8 +60,8 @@ public class EmployeeAuth_Impl implements iAuthenticate {
                 return 0;
             }
 
-            if(poConfig.getMobileNo().isEmpty()){
-                poConfig.setMobileNo(loInfo.getMobileNo());
+            if(poConfig.getMobileNO().isEmpty()){
+                poConfig.setMobileNO(loInfo.getMobileNo());
                 Log.d(TAG, "Mobile number has been initialized.");
             }
 
@@ -103,7 +103,7 @@ public class EmployeeAuth_Impl implements iAuthenticate {
             employeeInfo.setEmployID(loResponse.getString("sEmployID"));
             employeeInfo.setDeviceID(poDevID.getDeviceID());
             employeeInfo.setModelIDx(Build.MODEL);
-            employeeInfo.setMobileNo(poConfig.getMobileNo());
+            employeeInfo.setMobileNo(poConfig.getMobileNO());
             employeeInfo.setLoginxxx(AppConstants.DATE_MODIFIED());
             employeeInfo.setSessionx(AppConstants.CURRENT_DATE());
             poDao.RemoveSessions();

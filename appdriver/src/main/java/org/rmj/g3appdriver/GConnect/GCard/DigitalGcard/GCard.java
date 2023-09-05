@@ -13,6 +13,7 @@ import androidx.lifecycle.LiveData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.rmj.g3appdriver.Config.DeviceConfig;
 import org.rmj.g3appdriver.GConnect.Account.ClientSession;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
@@ -23,7 +24,6 @@ import org.rmj.g3appdriver.GConnect.room.Entities.EGcardApp;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
 import org.rmj.g3appdriver.GConnect.GCard.DigitalGcard.pojo.GcardCredentials;
 import org.rmj.g3appdriver.dev.encryp.CodeGenerator;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.etc.AppConstants;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class GCard {
     private final HttpHeaderProvider poHeaders;
     private final GConnectApi poApi;
     private final ClientSession poSession;
-    private final AppConfigPreference poConfig;
+    private final DeviceConfig poConfig;
 
     private String message;
 
@@ -49,7 +49,7 @@ public class GCard {
         this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GConnectApi(instance);
         this.poSession = ClientSession.getInstance(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
+        this.poConfig = DeviceConfig.getInstance(instance);
     }
 
     public String getMessage() {
@@ -249,7 +249,7 @@ public class GCard {
             String lsDevcID = poConfig.getDeviceID();
             String lsCardNo = poDao.GetGCardNumber();
             String lsUserID = poSession.getUserID();
-            String lsMobNox = poConfig.getMobileNo();
+            String lsMobNox = poConfig.getMobileNO();
             String lsDateTm = AppConstants.GCARD_DATE_TIME();
             double lsCardPt;
             if(poDao.getRedeemItemPoints() > 0){

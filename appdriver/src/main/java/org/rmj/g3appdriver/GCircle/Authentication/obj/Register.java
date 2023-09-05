@@ -12,8 +12,8 @@ import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
-import org.rmj.g3appdriver.lib.Account.pojo.AccountInfo;
+import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.account.pojo.AccountInfo;
 
 public class Register implements iAuthenticate {
     private static final String TAG = Register.class.getSimpleName();

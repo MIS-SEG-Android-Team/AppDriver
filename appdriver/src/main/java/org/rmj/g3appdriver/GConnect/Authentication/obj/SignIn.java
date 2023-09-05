@@ -7,6 +7,7 @@ import android.app.Application;
 import android.util.Log;
 
 import org.json.JSONObject;
+import org.rmj.g3appdriver.Config.DeviceConfig;
 import org.rmj.g3appdriver.GConnect.Account.ClientSession;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DClientInfo;
@@ -14,23 +15,22 @@ import org.rmj.g3appdriver.GConnect.room.Entities.EClientInfo;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
-import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
-import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
+import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.account.pojo.LoginCredentials;
 
 public class SignIn implements iAuthenticate {
     private static final String TAG = SignIn.class.getSimpleName();
 
     private final Application instance;
     private final DClientInfo poDao;
-    private final AppConfigPreference poConfig;
+    private final DeviceConfig poConfig;
 
     private String message;
 
     public SignIn(Application instance) {
         this.instance = instance;
         this.poDao = GGC_GConnectDB.getInstance(instance).EClientDao();
-        this.poConfig = AppConfigPreference.getInstance(instance);
+        this.poConfig = DeviceConfig.getInstance(instance);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class SignIn implements iAuthenticate {
                 return 0;
             }
 
-            if(poConfig.getMobileNo().isEmpty()){
-                poConfig.setMobileNo(loInfo.getMobileNo());
+            if(poConfig.getMobileNO().isEmpty()){
+                poConfig.setMobileNO(loInfo.getMobileNo());
                 Log.d(TAG, "Mobile number has been initialized.");
             }
 

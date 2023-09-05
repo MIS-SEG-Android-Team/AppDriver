@@ -1,11 +1,11 @@
-package org.rmj.g3appdriver.GCircle.room.DataAccessObject;
+package org.rmj.g3appdriver.lib.addressbook.data.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import org.rmj.g3appdriver.GCircle.room.Entities.EMobileUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.entity.EMobileUpdate;
 
 import java.util.List;
 

@@ -3,9 +3,9 @@ package org.rmj.g3appdriver.GCircle.Authentication;
 import android.app.Application;
 import android.util.Log;
 
-import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuthentication;
-import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
+import org.rmj.g3appdriver.lib.account.factory.Auth;
+import org.rmj.g3appdriver.lib.account.factory.iAuthentication;
+import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
 import org.rmj.g3appdriver.GCircle.Authentication.obj.ChangePassword_Impl;
 import org.rmj.g3appdriver.GCircle.Authentication.obj.EmployeeAuth_Impl;
 import org.rmj.g3appdriver.GCircle.Authentication.obj.ForgotPassword_Impl;

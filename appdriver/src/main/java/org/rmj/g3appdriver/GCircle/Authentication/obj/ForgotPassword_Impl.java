@@ -14,7 +14,7 @@ import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
+import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
 
 public class ForgotPassword_Impl implements iAuthenticate {
     private static final String TAG = ForgotPassword_Impl.class.getSimpleName();

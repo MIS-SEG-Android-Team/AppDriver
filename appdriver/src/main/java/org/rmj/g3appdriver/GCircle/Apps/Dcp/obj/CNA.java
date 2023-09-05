@@ -11,8 +11,8 @@ import org.rmj.g3appdriver.GCircle.Apps.Dcp.model.LRDcp;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.AddressUpdate;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.CustomerNotAround;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.MobileUpdate;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAddressUpdate;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMobileUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.dao.DAddressUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.dao.DMobileUpdate;
 import org.rmj.g3appdriver.GCircle.room.Entities.EDCPCollectionDetail;
 import org.rmj.g3appdriver.etc.AppConstants;
 

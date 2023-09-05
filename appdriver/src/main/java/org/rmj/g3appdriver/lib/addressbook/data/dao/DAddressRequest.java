@@ -9,14 +9,14 @@
  * project file last modified : 4/24/21 3:18 PM
  */
 
-package org.rmj.g3appdriver.GCircle.room.DataAccessObject;
+package org.rmj.g3appdriver.lib.addressbook.data.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import org.rmj.g3appdriver.GCircle.room.Entities.EAddressUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.entity.EAddressUpdate;
 
 import java.util.List;
 

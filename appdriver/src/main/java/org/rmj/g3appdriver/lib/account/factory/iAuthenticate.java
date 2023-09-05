@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.Model;
+package org.rmj.g3appdriver.lib.account.factory;
 
 public interface iAuthenticate {
 

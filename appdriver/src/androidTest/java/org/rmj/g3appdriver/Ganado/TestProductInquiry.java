@@ -18,10 +18,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcModel;
-import org.rmj.g3appdriver.lib.Account.GAuthentication;
-import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
-import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
+import org.rmj.g3appdriver.lib.account.GAuthentication;
+import org.rmj.g3appdriver.lib.account.factory.Auth;
+import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.account.pojo.LoginCredentials;
 import org.rmj.g3appdriver.lib.Inquiry.obj.ProductInquiry;
 import org.rmj.g3appdriver.lib.Inquiry.pojo.InstallmentInfo;
 

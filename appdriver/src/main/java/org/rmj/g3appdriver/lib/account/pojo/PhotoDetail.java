@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.Account.pojo;
+package org.rmj.g3appdriver.lib.account.pojo;
 
 import org.rmj.g3appdriver.dev.Http.WebFileServer;
 
