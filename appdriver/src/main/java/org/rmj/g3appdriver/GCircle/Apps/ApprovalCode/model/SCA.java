@@ -2,7 +2,7 @@ package org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.model;
 
 import androidx.lifecycle.LiveData;
 
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.pojo.CreditAppInfo;
 
 import java.util.List;

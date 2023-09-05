@@ -1,7 +1,7 @@
 package org.rmj.g3appdriver.GCircle.Apps.TeleMarketing.pojo;
 
 import org.json.JSONObject;
-import org.rmj.g3appdriver.lib.Ganado.pojo.InquiryInfo;
+import org.rmj.g3appdriver.lib.Inquiry.pojo.InquiryInfo;
 
 public class CallInquiry {
 

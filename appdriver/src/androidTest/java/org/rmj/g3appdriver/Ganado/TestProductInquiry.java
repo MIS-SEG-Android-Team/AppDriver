@@ -17,13 +17,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.Config.AppConfig;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcModel;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcModel;
 import org.rmj.g3appdriver.lib.Account.GAuthentication;
 import org.rmj.g3appdriver.lib.Account.Model.Auth;
 import org.rmj.g3appdriver.lib.Account.Model.iAuthenticate;
 import org.rmj.g3appdriver.lib.Account.pojo.LoginCredentials;
-import org.rmj.g3appdriver.lib.Ganado.Obj.ProductInquiry;
-import org.rmj.g3appdriver.lib.Ganado.pojo.InstallmentInfo;
+import org.rmj.g3appdriver.lib.Inquiry.obj.ProductInquiry;
+import org.rmj.g3appdriver.lib.Inquiry.pojo.InstallmentInfo;
 
 import java.util.List;
 

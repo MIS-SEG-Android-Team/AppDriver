@@ -13,17 +13,17 @@ package org.rmj.g3appdriver.GCircle.ImportData.Obj;
 
 import android.app.Application;
 
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcTermCategory;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCTermCategory;
 import org.rmj.g3appdriver.GCircle.ImportData.model.ImportDataCallback;
 import org.rmj.g3appdriver.GCircle.ImportData.model.ImportInstance;
 
 public class ImportMcTermCategory implements ImportInstance {
     public static final String TAG = ImportMcTermCategory.class.getSimpleName();
 
-    private final RMcTermCategory poSys;
+    private final MCTermCategory poSys;
 
     public ImportMcTermCategory(Application application){
-        this.poSys = new RMcTermCategory(application);
+        this.poSys = new MCTermCategory(application);
     }
 
     @Override

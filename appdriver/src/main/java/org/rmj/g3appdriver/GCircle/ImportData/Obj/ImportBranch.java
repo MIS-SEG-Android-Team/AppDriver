@@ -13,7 +13,7 @@ package org.rmj.g3appdriver.GCircle.ImportData.Obj;
 
 import android.app.Application;
 
-import org.rmj.g3appdriver.lib.Etc.Branch;
+import org.rmj.g3appdriver.lib.Branch.Branch;
 import org.rmj.g3appdriver.GCircle.ImportData.model.ImportDataCallback;
 import org.rmj.g3appdriver.GCircle.ImportData.model.ImportInstance;
 

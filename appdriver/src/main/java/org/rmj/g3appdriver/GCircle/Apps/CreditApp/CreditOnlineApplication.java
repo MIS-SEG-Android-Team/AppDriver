@@ -30,18 +30,18 @@ import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DCreditApplication;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcModel;
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.dao.DMcModel;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchLoanApplication;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECreditApplicantInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECreditApplication;
-import org.rmj.g3appdriver.GCircle.room.Entities.ELoanTerm;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcBrand;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcModel;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.ELoanTerm;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcBrand;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcModel;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.lib.Etc.Branch;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcBrand;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcModel;
+import org.rmj.g3appdriver.lib.Branch.Branch;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCBrand;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCModel;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
@@ -73,8 +73,8 @@ public class CreditOnlineApplication {
     private final EmployeeMaster poUser;
 
     private final Branch poBranch;
-    private final RMcBrand poBrand;
-    private final RMcModel poModel;
+    private final MCBrand poBrand;
+    private final MCModel poModel;
     private final Pricelist poPrice;
 
     private final EmployeeSession poSession;
@@ -91,8 +91,8 @@ public class CreditOnlineApplication {
         this.poApi = new GCircleApi(instance);
         this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poBranch = new Branch(instance);
-        this.poBrand = new RMcBrand(instance);
-        this.poModel = new RMcModel(instance);
+        this.poBrand = new MCBrand(instance);
+        this.poModel = new MCModel(instance);
         this.poPrice = PriceFactory.make(PriceFactory.ProductType.MOTORCYCLE);
     }
 

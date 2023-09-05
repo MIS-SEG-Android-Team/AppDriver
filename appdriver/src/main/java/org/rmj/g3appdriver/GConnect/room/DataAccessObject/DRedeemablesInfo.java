@@ -57,7 +57,7 @@ public interface DRedeemablesInfo {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT c.sReferNox, c.dOrderedx, b.sBranchNm, b.sAddressx, SUM(c.nPointsxx) as TotAmnt " +
             "FROM Redeem_Item c " +
-            "LEFT JOIN BranchInfo b ON c.sBranchCd = b.sBranchCd " +
+            "LEFT JOIN Branch_Info b ON c.sBranchCd = b.sBranchCd " +
             "LEFT JOIN Redeemables a ON a.sTransNox = c.sPromoIDx " +
             "WHERE c.sGCardNox =:GCardNox " +
             "AND c.cPlcOrder = '1' " +

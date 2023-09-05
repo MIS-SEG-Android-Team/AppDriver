@@ -28,7 +28,7 @@ import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DApprovalCode;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DBankInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DBarangayInfo;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.dao.DBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DBranchLoanApplication;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DBranchOpeningMonitor;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DBranchPerformance;
@@ -49,7 +49,7 @@ import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeLeave;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeRole;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DFileCode;
-import org.rmj.g3appdriver.lib.Ganado.data.DataAccessObject.DGanadoOnline;
+import org.rmj.g3appdriver.lib.Inquiry.data.dao.DGanadoOnline;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DImageInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DInventoryDao;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DInventoryDetail;
@@ -57,27 +57,28 @@ import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DInventoryMaster;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DItinerary;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DLRDcp;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DLocatorSysLog;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcBrand;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcCategory;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcModel;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcModelPrice;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMcTermCategory;
+import org.rmj.g3appdriver.lib.Panalo.data.entity.EGuanzonPanalo;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.dao.DMcBrand;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.dao.DMcCategory;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.dao.DMcModel;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.dao.DMcModelPrice;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.dao.DMcTermCategory;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMessages;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMobileRequest;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMobileUpdate;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DNNDMRequest;
-import org.rmj.g3appdriver.lib.Notifications.data.DataAccessObject.DNotification;
-import org.rmj.g3appdriver.lib.Notifications.data.DataAccessObject.DNotificationDetail;
-import org.rmj.g3appdriver.lib.Notifications.data.DataAccessObject.DNotificationMaster;
-import org.rmj.g3appdriver.lib.Notifications.data.DataAccessObject.DNotificationReceiver;
-import org.rmj.g3appdriver.lib.Notifications.data.DataAccessObject.DNotificationUser;
+import org.rmj.g3appdriver.lib.Notifications.data.dao.DNotification;
+import org.rmj.g3appdriver.lib.Notifications.data.dao.DNotificationDetail;
+import org.rmj.g3appdriver.lib.Notifications.data.dao.DNotificationMaster;
+import org.rmj.g3appdriver.lib.Notifications.data.dao.DNotificationReceiver;
+import org.rmj.g3appdriver.lib.Notifications.data.dao.DNotificationUser;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DOccupationInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DPacita;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DPanalo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DPayslip;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DProvinceInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DRaffleInfo;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DRaffleStatus;
+import org.rmj.g3appdriver.lib.Panalo.data.dao.DPanalo;
+import org.rmj.g3appdriver.lib.Panalo.data.dao.DRaffleStatus;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DRawDao;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DRelation;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DRemittanceAccounts;
@@ -85,14 +86,13 @@ import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DSelfieLog;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DSysConfig;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DToken;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DTownInfo;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DUncapturedClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DevTool;
 import org.rmj.g3appdriver.GCircle.room.Entities.EAddressUpdate;
 import org.rmj.g3appdriver.GCircle.room.Entities.EAppConfig;
 import org.rmj.g3appdriver.GCircle.room.Entities.EAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBankInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBarangayInfo;
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchLoanApplication;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchOpenMonitor;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchPerformance;
@@ -115,32 +115,32 @@ import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeLeave;
 import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeRole;
 import org.rmj.g3appdriver.GCircle.room.Entities.EFileCode;
 import org.rmj.g3appdriver.GCircle.room.Entities.EGLocatorSysLog;
-import org.rmj.g3appdriver.lib.Ganado.data.Entity.EGanadoOnline;
+import org.rmj.g3appdriver.lib.Inquiry.data.entity.EGanadoOnline;
 import org.rmj.g3appdriver.GCircle.room.Entities.EImageInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EInventoryDetail;
 import org.rmj.g3appdriver.GCircle.room.Entities.EInventoryMaster;
 import org.rmj.g3appdriver.GCircle.room.Entities.EItinerary;
-import org.rmj.g3appdriver.GCircle.room.Entities.ELoanTerm;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMCColor;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMCModelCashPrice;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcBrand;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcCategory;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcModel;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcModelPrice;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcTermCategory;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.ELoanTerm;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMCColor;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMCModelCashPrice;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcBrand;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcCategory;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcModel;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcModelPrice;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcTermCategory;
 import org.rmj.g3appdriver.GCircle.room.Entities.EMobileUpdate;
 import org.rmj.g3appdriver.GCircle.room.Entities.ENNDMRequest;
-import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationMaster;
-import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationRecipient;
-import org.rmj.g3appdriver.lib.Notifications.data.Entity.ENotificationUser;
+import org.rmj.g3appdriver.lib.Notifications.data.entity.ENotificationMaster;
+import org.rmj.g3appdriver.lib.Notifications.data.entity.ENotificationRecipient;
+import org.rmj.g3appdriver.lib.Notifications.data.entity.ENotificationUser;
 import org.rmj.g3appdriver.GCircle.room.Entities.EOccupationInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EPacitaEvaluation;
 import org.rmj.g3appdriver.GCircle.room.Entities.EPacitaRule;
-import org.rmj.g3appdriver.lib.Panalo.data.Entity.EPanaloReward;
+import org.rmj.g3appdriver.lib.Panalo.data.entity.EPanaloReward;
 import org.rmj.g3appdriver.GCircle.room.Entities.EProvinceInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERaffleBasis;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERaffleInfo;
-import org.rmj.g3appdriver.GCircle.room.Entities.ERaffleStatus;
+import org.rmj.g3appdriver.lib.Panalo.data.entity.ERaffleStatus;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERelation;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERemittanceAccounts;
 import org.rmj.g3appdriver.GCircle.room.Entities.ESCA_Request;
@@ -148,7 +148,6 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ESelfieLog;
 import org.rmj.g3appdriver.GCircle.room.Entities.ESysConfig;
 import org.rmj.g3appdriver.GCircle.room.Entities.ETokenInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
-import org.rmj.g3appdriver.GCircle.room.Entities.EUncapturedClient;
 
 @Database(entities = {
         EBranchInfo.class,
@@ -188,7 +187,6 @@ import org.rmj.g3appdriver.GCircle.room.Entities.EUncapturedClient;
         EBankInfo.class,
         ESelfieLog.class,
         EBranchLoanApplication.class,
-        EUncapturedClient.class,
         ECIEvaluation.class,
         EDCP_Remittance.class,
         ERemittanceAccounts.class,
@@ -206,13 +204,14 @@ import org.rmj.g3appdriver.GCircle.room.Entities.EUncapturedClient;
         EInventoryDetail.class,
         ECreditOnlineApplicationCI.class,
         EItinerary.class,
-        EPanaloReward.class,
         ERaffleStatus.class,
         EPacitaRule.class,
         EPacitaEvaluation.class,
         ELoanTerm.class,
         EGanadoOnline.class,
-        EMCModelCashPrice.class}, version = 40, exportSchema = false)
+        EMCModelCashPrice.class,
+        EPanaloReward.class,
+        EGuanzonPanalo.class}, version = 40, exportSchema = false)
 public abstract class GGC_GCircleDB extends RoomDatabase {
     private static final String TAG = "GhostRider_DB_Manager";
     private static GGC_GCircleDB instance;
@@ -253,7 +252,6 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
     public abstract DSelfieLog SelfieDao();
     public abstract DInventoryDao InventoryDao();
     public abstract DBranchLoanApplication CreditAppDocsDao();
-    public abstract DUncapturedClient UncapturedDao();
     public abstract DCIEvaluation CIDao();
     public abstract DRelation RelDao();
     public abstract DDCP_Remittance DCPRemitanceDao();

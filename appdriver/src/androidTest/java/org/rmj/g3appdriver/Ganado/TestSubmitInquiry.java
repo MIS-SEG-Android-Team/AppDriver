@@ -15,9 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.lib.Ganado.Obj.Ganado;
-import org.rmj.g3appdriver.lib.Ganado.pojo.ClientInfo;
-import org.rmj.g3appdriver.lib.Ganado.pojo.InquiryInfo;
+import org.rmj.g3appdriver.lib.Inquiry.obj.Ganado;
+import org.rmj.g3appdriver.lib.Inquiry.pojo.ClientInfo;
+import org.rmj.g3appdriver.lib.Inquiry.pojo.InquiryInfo;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
