@@ -12,7 +12,7 @@ import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
-import org.rmj.g3appdriver.lib.account.pojo.PhotoDetail;
+import org.rmj.g3appdriver.lib.authentication.pojo.PhotoDetail;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.dev.Http.WebFileServer;

@@ -16,9 +16,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.Config.AppStatusConfig;
-import org.rmj.g3appdriver.lib.account.GAuthentication;
-import org.rmj.g3appdriver.lib.account.factory.Auth;
-import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.GAuthentication;
+import org.rmj.g3appdriver.lib.authentication.factory.Auth;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)

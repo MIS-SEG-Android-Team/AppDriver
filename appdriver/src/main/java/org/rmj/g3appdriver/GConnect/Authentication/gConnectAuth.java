@@ -3,9 +3,9 @@ package org.rmj.g3appdriver.GConnect.Authentication;
 import android.app.Application;
 import android.util.Log;
 
-import org.rmj.g3appdriver.lib.account.factory.Auth;
-import org.rmj.g3appdriver.lib.account.factory.iAuthentication;
-import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.factory.Auth;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthentication;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
 import org.rmj.g3appdriver.GConnect.Authentication.obj.ResetPassword;
 import org.rmj.g3appdriver.GConnect.Authentication.obj.SignIn;
 import org.rmj.g3appdriver.GConnect.Authentication.obj.SignUp;

@@ -15,8 +15,8 @@ import org.rmj.g3appdriver.GConnect.room.Entities.EClientInfo;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
-import org.rmj.g3appdriver.lib.account.pojo.LoginCredentials;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.pojo.LoginCredentials;
 
 public class SignIn implements iAuthenticate {
     private static final String TAG = SignIn.class.getSimpleName();

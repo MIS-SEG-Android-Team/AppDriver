@@ -1,10 +1,10 @@
-package org.rmj.g3appdriver.lib.account;
+package org.rmj.g3appdriver.lib.authentication;
 
 import android.app.Application;
 import android.util.Log;
 
 import org.rmj.g3appdriver.Config.AppConfig;
-import org.rmj.g3appdriver.lib.account.factory.iAuthentication;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthentication;
 import org.rmj.g3appdriver.GCircle.Authentication.GCircleAccount_Impl;
 import org.rmj.g3appdriver.GConnect.Authentication.gConnectAuth;
 

@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import org.rmj.g3appdriver.Config.DeviceConfig;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
-import org.rmj.g3appdriver.lib.account.pojo.LoginCredentials;
+import org.rmj.g3appdriver.lib.authentication.pojo.LoginCredentials;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
@@ -21,7 +21,7 @@ import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.dev.Device.Telephony;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 import org.rmj.g3appdriver.lib.Version.AppVersion;
 

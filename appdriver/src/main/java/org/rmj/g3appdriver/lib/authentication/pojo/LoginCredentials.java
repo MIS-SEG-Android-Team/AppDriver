@@ -1,4 +1,4 @@
-package org.rmj.g3appdriver.lib.account.pojo;
+package org.rmj.g3appdriver.lib.authentication.pojo;
 
 public class LoginCredentials {
     private final String Email;

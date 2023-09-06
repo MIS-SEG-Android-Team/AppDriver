@@ -11,8 +11,8 @@ import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
-import org.rmj.g3appdriver.lib.account.pojo.PasswordUpdate;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.pojo.PasswordUpdate;
 
 public class UpdatePassword implements iAuthenticate {
     private static final String TAG = UpdatePassword.class.getSimpleName();

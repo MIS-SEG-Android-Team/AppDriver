@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERelation;
-import org.rmj.g3appdriver.lib.account.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
 import org.rmj.g3appdriver.lib.Etc.Relation;
 
 import java.util.List;
