@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'org.rmj.guanzongroup.androida_ppdriver'
+    namespace 'org.rmj.guanzongroup.appdriver'
     compileSdk 33
 
     defaultConfig {
-        applicationId "org.rmj.guanzongroup.androida_ppdriver"
+        applicationId "org.rmj.guanzongroup.appdriver"
         minSdk 24
         targetSdk 33
         versionCode 1

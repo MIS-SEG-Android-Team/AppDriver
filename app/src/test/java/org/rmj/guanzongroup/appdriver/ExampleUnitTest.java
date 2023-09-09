@@ -1,4 +1,4 @@
-package org.rmj.guanzongroup.androida_ppdriver;
+package org.rmj.guanzongroup.appdriver;
 
 import org.junit.Test;
 
