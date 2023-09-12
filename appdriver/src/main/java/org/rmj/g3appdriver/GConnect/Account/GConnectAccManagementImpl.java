@@ -1,54 +1,51 @@
-package org.rmj.g3appdriver.GCircle.Authentication.obj;
+package org.rmj.g3appdriver.GConnect.Account;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 
 import android.app.Application;
-import android.util.Log;
 
 import org.json.JSONObject;
-import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
+import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
-import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.accountmanagement.factory.AccountManagement;
 import org.rmj.g3appdriver.lib.authentication.pojo.PasswordCredentials;
 
-public class ChangePassword_Impl implements iAuthenticate {
-    private static final String TAG = ChangePassword_Impl.class.getSimpleName();
+public class GConnectAccManagementImpl implements AccountManagement {
+    private static final String TAG = "GConnectAccManagementIm";
 
     private final Application instance;
 
     private String message;
 
-    public ChangePassword_Impl(Application instance) {
+    public GConnectAccManagementImpl(Application instance) {
         this.instance = instance;
     }
 
     @Override
-    public int DoAction(Object args) {
+    public boolean changePassword(PasswordCredentials foPassword) {
         try{
-            PasswordCredentials loInfo = (PasswordCredentials) args;
             PasswordCredentials.PasswordValidator loValidator = new PasswordCredentials.PasswordValidator();
-            if(!loValidator.isDataValid(loInfo)){
+
+            if(!loValidator.isDataValid(foPassword)){
                 message = loValidator.getMessage();
-                return 0;
+                return false;
             }
 
             JSONObject params = new JSONObject();
-            params.put("oldpswd", loInfo.getOldPassword());
-            params.put("newpswd", loInfo.getNewPassword());
-
-            HttpHeaderProvider loHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
+            params.put("oldpswd", foPassword.getOldPassword());
+            params.put("newpswd", foPassword.getNewPassword());
 
             String lsResponse = WebClient.sendRequest(
-                    new GCircleApi(instance).getUrlChangePassword(),
+                    new GConnectApi(instance).getChangePasswordAPI(),
                     params.toString(),
-                    loHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
+
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
-                return 0;
+                return false;
             }
 
             JSONObject loResponse = new JSONObject(lsResponse);
@@ -56,17 +53,27 @@ public class ChangePassword_Impl implements iAuthenticate {
             if (lsResult.equalsIgnoreCase("error")) {
                 JSONObject loError = loResponse.getJSONObject("error");
                 message = getErrorMessage(loError);
-                Log.e(TAG, message);
-                return 0;
+                return false;
             }
 
             message = "Password updated successfully.";
-            return 1;
+
+            return true;
         } catch (Exception e){
             e.printStackTrace();
             message = getLocalMessage(e);
-            return 0;
+            return false;
         }
+    }
+
+    @Override
+    public boolean deactivateAccount() {
+        return false;
+    }
+
+    @Override
+    public boolean reactivateAccount(String fsEmail) {
+        return false;
     }
 
     @Override

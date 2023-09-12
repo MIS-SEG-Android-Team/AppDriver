@@ -12,7 +12,7 @@ import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
-import org.rmj.g3appdriver.lib.authentication.pojo.PasswordUpdate;
+import org.rmj.g3appdriver.lib.authentication.pojo.PasswordCredentials;
 
 public class UpdatePassword implements iAuthenticate {
     private static final String TAG = UpdatePassword.class.getSimpleName();
@@ -28,9 +28,10 @@ public class UpdatePassword implements iAuthenticate {
     @Override
     public int DoAction(Object args) {
         try{
-            PasswordUpdate loInfo = (PasswordUpdate) args;
-            if(!loInfo.isDataValid()){
-                message = loInfo.getMessage();
+            PasswordCredentials loInfo = (PasswordCredentials) args;
+            PasswordCredentials.PasswordValidator loValidator = new PasswordCredentials.PasswordValidator();
+            if(!loValidator.isDataValid(loInfo)){
+                message = loValidator.getMessage();
                 return 0;
             }
 
