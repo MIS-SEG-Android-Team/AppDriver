@@ -13,22 +13,12 @@ import androidx.lifecycle.LiveData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.rmj.apprdiver.util.LRUtil;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.obj.RClientUpdate;
-import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.AddressUpdate;
-import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.CustomerNotAround;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.ImportParams;
-import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.LoanUnit;
-import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.MobileUpdate;
-import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.OtherRemCode;
-import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.PaidDCP;
-import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.PromiseToPay;
-import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.Remittance;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAddressUpdate;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DLRDcp;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMobileUpdate;
 import org.rmj.g3appdriver.GCircle.room.Entities.EClientUpdate;
 import org.rmj.g3appdriver.GCircle.room.Entities.EDCPCollectionDetail;
 import org.rmj.g3appdriver.GCircle.room.Entities.EDCPCollectionMaster;
@@ -37,12 +27,12 @@ import org.rmj.g3appdriver.GCircle.room.Entities.EImageInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RCollectionRemittance;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RImageInfo;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.dev.Device.Telephony;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.obj.DCPFileManager;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.obj.RAddressUpdate;
@@ -54,7 +44,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,9 +56,9 @@ public class LRDcp {
 
     protected final EmployeeMaster poUser;
 
-    protected final AppConfigPreference poConfig;
+    protected final AppStatusConfig poConfig;
     protected final GCircleApi poApi;
-    protected final HttpHeaders poHeaders;
+    protected final HttpHeaderProvider poHeaders;
     protected final EmployeeSession poSession;
     protected final Telephony poDevice;
     protected final RImageInfo poImage;
@@ -87,9 +76,9 @@ public class LRDcp {
         this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).DcpDao();
         this.poUser = new EmployeeMaster(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
+        this.poConfig = AppStatusConfig.getInstance(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poSession = EmployeeSession.getInstance(instance);
         this.poDevice = new Telephony(instance);
         this.poImage = new RImageInfo(instance);
@@ -264,7 +253,7 @@ public class LRDcp {
 
                         if(loImage != null){
 
-                            if(!poConfig.getTestStatus()){
+                            if(!poConfig.isTestMode()){
                                 loData.put("sImageNme", loImage.getImageNme());
                                 loData.put("sSourceCD", loImage.getSourceCD());
                                 loData.put("nLongitud", loImage.getLongitud());
@@ -300,7 +289,7 @@ public class LRDcp {
 
                         loImage = poImage.getDCPImageInfoForPosting(loMaster.getTransNox(), detail.getAcctNmbr());
                         if(loImage != null || loImage.getImageNme() != null) {
-                            if(!poConfig.getTestStatus()) {
+                            if(!poConfig.isTestMode()) {
                                 loData.put("sImageNme", loImage.getImageNme());
                                 loData.put("sSourceCD", loImage.getSourceCD());
                                 loData.put("nLongitud", loImage.getLongitud());
@@ -316,7 +305,7 @@ public class LRDcp {
 
                         if(loImage != null){
                             Log.d(TAG, "Not visited image found.");
-                            if(!poConfig.getTestStatus()){
+                            if(!poConfig.isTestMode()){
                                 loData.put("sImageNme", loImage.getImageNme());
                                 loData.put("sSourceCD", loImage.getSourceCD());
                                 loData.put("nLongitud", loImage.getLongitud());
@@ -789,7 +778,7 @@ public class LRDcp {
 
                         if(loImage != null){
 
-                            if(!poConfig.getTestStatus()){
+                            if(!poConfig.isTestMode()){
                                 loData.put("sImageNme", loImage.getImageNme());
                                 loData.put("sSourceCD", loImage.getSourceCD());
                                 loData.put("nLongitud", loImage.getLongitud());
@@ -825,7 +814,7 @@ public class LRDcp {
 
                         loImage = poImage.getDCPImageInfoForPosting(lsTransNo, detail.getAcctNmbr());
                         if(loImage != null || loImage.getImageNme() != null) {
-                            if(!poConfig.getTestStatus()) {
+                            if(!poConfig.isTestMode()) {
                                 loData.put("sImageNme", loImage.getImageNme());
                                 loData.put("sSourceCD", loImage.getSourceCD());
                                 loData.put("nLongitud", loImage.getLongitud());
@@ -841,7 +830,7 @@ public class LRDcp {
 
                         if(loImage != null){
                             Log.d(TAG, "Not visited image found.");
-                            if(!poConfig.getTestStatus()){
+                            if(!poConfig.isTestMode()){
                                 loData.put("sImageNme", loImage.getImageNme());
                                 loData.put("sSourceCD", loImage.getSourceCD());
                                 loData.put("nLongitud", loImage.getLongitud());

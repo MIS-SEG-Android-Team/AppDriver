@@ -12,23 +12,22 @@ import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
 import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DServiceInfo;
 import org.rmj.g3appdriver.GConnect.room.Entities.EServiceInfo;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.dev.encryp.CodeGenerator;
 
 public class MCService {
     private static final String TAG = MCService.class.getSimpleName();
 
+    private final Application instance;
+
     private final DServiceInfo poDao;
-    private final GConnectApi poApi;
-    private final HttpHeaders poHeaders;
 
     private String message;
 
     public MCService(Application instance) {
+        this.instance = instance;
         this.poDao = GGC_GConnectDB.getInstance(instance).EServiceDao();
-        this.poApi = new GConnectApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public boolean ImportServiceInfo(){
@@ -40,9 +39,9 @@ public class MCService {
             params.put("secureno", lsSecureNo);
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getServiceInfoAPI(),
+                    new GConnectApi(instance).getServiceInfoAPI(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if (lsResponse == null) {
                 message = SERVER_NO_RESPONSE;

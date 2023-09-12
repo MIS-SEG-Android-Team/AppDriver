@@ -15,14 +15,14 @@ import android.app.Application;
 
 import org.rmj.g3appdriver.GCircle.ImportData.model.ImportDataCallback;
 import org.rmj.g3appdriver.GCircle.ImportData.model.ImportInstance;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcModel;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCModel;
 
 public class ImportBrandModel implements ImportInstance {
     public static final String TAG = ImportBrandModel.class.getSimpleName();
-    private final RMcModel poSys;
+    private final MCModel poSys;
 
     public ImportBrandModel(Application instance){
-        this.poSys = new RMcModel(instance);
+        this.poSys = new MCModel(instance);
     }
 
     @Override

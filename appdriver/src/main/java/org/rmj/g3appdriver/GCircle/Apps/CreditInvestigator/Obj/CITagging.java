@@ -24,10 +24,11 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ECreditOnlineApplicationCI;
 import org.rmj.g3appdriver.GCircle.room.Entities.EImageInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RImageInfo;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 
 import java.util.Date;
@@ -41,7 +42,7 @@ public class CITagging {
 
     private final EmployeeMaster poUser;
 
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final EmployeeSession poSession;
     private final RImageInfo poImage;
     private final GCircleApi poApis;
@@ -56,7 +57,7 @@ public class CITagging {
     public CITagging(Application instance) {
         this.poDao = GGC_GCircleDB.getInstance(instance).creditEvaluationDao();
         this.poUser = new EmployeeMaster(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poSession = EmployeeSession.getInstance(instance);
         this.poImage = new RImageInfo(instance);
         this.poApis = new GCircleApi(instance);

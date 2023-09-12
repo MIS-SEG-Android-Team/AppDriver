@@ -17,9 +17,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import org.rmj.g3appdriver.GConnect.room.Entities.ENotificationMaster;
-import org.rmj.g3appdriver.GConnect.room.Entities.ENotificationRecipient;
-import org.rmj.g3appdriver.GConnect.room.Entities.ENotificationUser;
+import org.rmj.g3appdriver.lib.Notifications.data.entity.ENotificationMaster;
+import org.rmj.g3appdriver.lib.Notifications.data.entity.ENotificationRecipient;
+import org.rmj.g3appdriver.lib.Notifications.data.entity.ENotificationUser;
 
 import java.util.List;
 

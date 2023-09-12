@@ -21,7 +21,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
 
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -61,8 +61,7 @@ public class ConnectionUtil {
             }
 
             String lsAddress;
-            AppConfigPreference loConfig = AppConfigPreference.getInstance(context);
-            boolean isTestCase = loConfig.getTestStatus();
+            boolean isTestCase = AppStatusConfig.getInstance(context).isTestMode();
             if (isTestCase) {
                 lsAddress = LOCAL;
                 if (!isReachable(lsAddress)) {

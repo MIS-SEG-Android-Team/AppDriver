@@ -17,8 +17,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.room.Entities.EAreaPerformance;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.BullsEye.obj.AreaPerformance;
 
@@ -43,7 +43,7 @@ public class AreaPerformanceTest {
     @Before
     public void setUp() throws Exception {
         instance = ApplicationProvider.getApplicationContext();
-        AppConfigPreference.getInstance(instance).setTestCase(false);
+        AppStatusConfig.getInstance(instance).setTestStatus(false);
         this.poSys = new AreaPerformance(instance);
         this.poMaster = new EmployeeMaster(instance);
         if(poMaster.AuthenticateUser(new EmployeeMaster.UserAuthInfo("mikegarcia8748@gmail.com", "123456", "09171870011"))){

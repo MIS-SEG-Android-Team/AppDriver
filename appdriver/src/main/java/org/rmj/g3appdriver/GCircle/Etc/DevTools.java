@@ -6,10 +6,10 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DevTool;
 import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 
@@ -20,7 +20,7 @@ public class DevTools {
 
     private final DevTool poDao;
     private final EmployeeSession poSession;
-    private final AppConfigPreference poConfig;
+    private final AppStatusConfig poConfig;
     private final EmployeeMaster poUser;
 
     private String message;
@@ -29,7 +29,7 @@ public class DevTools {
         this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).devTool();
         this.poSession = EmployeeSession.getInstance(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
+        this.poConfig = AppStatusConfig.getInstance(instance);
         this.poUser = new EmployeeMaster(instance);
     }
 
@@ -68,12 +68,12 @@ public class DevTools {
     }
 
     public boolean GetTestStatus(){
-        return poConfig.getTestStatus();
+        return poConfig.isTestMode();
     }
 
     public boolean SetTestStatus(boolean isTest){
         try {
-            poConfig.setTestCase(isTest);
+            poConfig.setTestStatus(isTest);
             poUser.LogoutUserSession();
             return true;
         } catch (Exception e){

@@ -104,6 +104,15 @@ public class GConnectApi extends WebApi {
         super(instance);
     }
 
+    @Override
+    public String getAPI(String fsVal) {
+        switch (fsVal){
+            case "":
+                break;
+            default:
+        }
+        return super.getAPI(fsVal);
+    }
 
     public String getSIGN_IN() {
         if(isUnitTest()){

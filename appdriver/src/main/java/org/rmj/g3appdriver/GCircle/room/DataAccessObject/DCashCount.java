@@ -17,7 +17,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECashCount;
 
 import java.util.List;

@@ -10,19 +10,20 @@ import androidx.lifecycle.LiveData;
 
 import org.json.JSONObject;
 import org.rmj.appdriver.mob.lib.RequestApproval;
+import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.model.SCA;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.pojo.CreditAppInfo;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.pojo.ManualTimeLog;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DApprovalCode;
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECodeApproval;
 import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.lib.Etc.Branch;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.lib.Branch.Branch;
 
 import java.util.List;
 
@@ -30,24 +31,23 @@ public class ManualLog implements SCA {
 
     private final DApprovalCode poDao;
 
-    private final Branch poBranch;
-    private final AppConfigPreference poConfig;
+    private final Application instance;
+
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
     public ManualLog(Application instance) {
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).ApprovalDao();
-        this.poBranch = new Branch(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
     }
 
     @Override
     public LiveData<List<EBranchInfo>> GetBranchList() {
-        return poBranch.getAllBranchInfo();
+        return new Branch(instance).getAllBranchInfo();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ManualLog implements SCA {
                 message = "Invalid user record. Please re-login your account and try again.";
             }
 
-            String lsPackage = poConfig.getPackageName();
+            String lsPackage = AppConfig.getInstance(instance).getPackageName();
 
             RequestApproval loApp = new RequestApproval(lsPackage);
             loApp.setDeptIDxx(loUser.getDeptIDxx());

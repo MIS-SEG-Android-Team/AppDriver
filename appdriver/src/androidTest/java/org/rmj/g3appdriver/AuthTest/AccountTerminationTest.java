@@ -14,10 +14,11 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
-import org.rmj.g3appdriver.lib.Account.AccountMaster;
-import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
+import org.rmj.g3appdriver.Config.AppConfig;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
+import org.rmj.g3appdriver.lib.authentication.GAuthentication;
+import org.rmj.g3appdriver.lib.authentication.factory.Auth;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
@@ -26,8 +27,8 @@ public class AccountTerminationTest {
 
     private Application instance;
 
-    private AccountMaster poAccount;
-    private iAuth poSys;
+    private GAuthentication poAccount;
+    private iAuthenticate poSys;
 
     private boolean isSuccess = false;
     private String message;
@@ -35,10 +36,10 @@ public class AccountTerminationTest {
     @Before
     public void setUp() throws Exception {
         this.instance = ApplicationProvider.getApplicationContext();
-        AppConfigPreference.getInstance(instance).setProductID("gRider");
-        AppConfigPreference.getInstance(instance).setTestCase(false);
-        this.poAccount = new AccountMaster(instance);
-        this.poSys = poAccount.initGuanzonApp().getInstance(Auth.DEACTIVATE);
+        AppConfig.getInstance(instance).setProductID("gRider");
+        AppStatusConfig.getInstance(instance).setTestStatus(false);
+        this.poAccount = new GAuthentication(instance);
+        this.poSys = poAccount.initAppAuthentication().getInstance(Auth.DEACTIVATE);
     }
 
     @Test

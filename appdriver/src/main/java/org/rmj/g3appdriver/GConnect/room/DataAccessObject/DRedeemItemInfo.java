@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import org.rmj.g3appdriver.GConnect.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GConnect.room.Entities.ERedeemItemInfo;
 
 import java.util.List;
@@ -117,7 +117,7 @@ public interface DRedeemItemInfo {
             "WHERE a.sGCardNox = (SELECT sGCardNox FROM GCard_App_Master WHERE cActvStat = '1')")
     LiveData<List<GCardCartItem>> GetGCardCartItemList();
 
-    @Query("SELECT * FROM BranchInfo WHERE sBranchCd LIKE '%M%'")
+    @Query("SELECT * FROM Branch_Info WHERE sBranchCd LIKE '%M%'")
     List<EBranchInfo> GetMCBranchesForRedemption();
 
     @Query("SELECT COUNT(*) FROM Redeem_Item WHERE sGCardNox = (SELECT sGCardNox FROM GCard_App_Master WHERE cActvStat = '1')")

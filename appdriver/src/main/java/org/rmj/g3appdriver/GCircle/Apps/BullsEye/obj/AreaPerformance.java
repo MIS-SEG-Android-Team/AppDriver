@@ -13,8 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Apps.BullsEye.PerformancePeriod;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.Entities.EAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchPerformance;
@@ -28,18 +28,16 @@ import java.util.List;
 public class AreaPerformance extends ABPM {
     private static final String TAG = AreaPerformance.class.getSimpleName();
 
-    private final DAreaPerformance poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DAreaPerformance poDao;
 
     private String message;
 
     public AreaPerformance(Application instance) {
         super(instance);
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).AreaPerformanceDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -78,9 +76,9 @@ public class AreaPerformance extends ABPM {
                 params.put("areacd", lsAreaCode);
 
                 String lsRespones = WebClient.sendRequest(
-                        poApi.getImportAreaPerformance(),
+                        new GCircleApi(instance).getImportAreaPerformance(),
                         params.toString(),
-                        poHeaders.getHeaders());
+                        HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
                 if(lsRespones == null){
                     message = SERVER_NO_RESPONSE;

@@ -13,13 +13,14 @@ import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.model.SCA;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.pojo.CreditApp;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.pojo.CreditAppInfo;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DApprovalCode;
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECodeApproval;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.lib.Etc.Branch;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
+import org.rmj.g3appdriver.lib.Branch.Branch;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class LoanApproval implements SCA {
 
     private final Branch poBranch;
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
@@ -37,7 +38,7 @@ public class LoanApproval implements SCA {
         this.poDao = GGC_GCircleDB.getInstance(instance).ApprovalDao();
         this.poBranch = new Branch(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
     }
 
     @Override

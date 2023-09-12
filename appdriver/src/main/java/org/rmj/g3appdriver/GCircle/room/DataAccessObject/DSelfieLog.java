@@ -16,11 +16,9 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ESelfieLog;
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EImageInfo;
-import org.rmj.g3appdriver.GCircle.room.Entities.ESelfieLog;
 
 import java.util.List;
 

@@ -2,23 +2,22 @@ package org.rmj.g3appdriver.GConnect.Marketplace.Payment;
 
 import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
-import static org.rmj.g3appdriver.etc.AppConstants.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 
 import android.app.Application;
-import android.util.Log;
 
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GConnect.Account.ClientSession;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 
 public class MpPayment {
     private static final String TAG = MpPayment.class.getSimpleName();
 
     private final Application instance;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final GConnectApi poApi;
     private final ClientSession poSession;
 
@@ -26,7 +25,7 @@ public class MpPayment {
 
     public MpPayment(Application instance) {
         this.instance = instance;
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GConnectApi(instance);
         this.poSession = ClientSession.getInstance(instance);
     }

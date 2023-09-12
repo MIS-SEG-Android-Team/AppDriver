@@ -16,16 +16,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcBrand;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMcModel;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
-import org.rmj.g3appdriver.lib.Account.AccountMaster;
-import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
-import org.rmj.g3appdriver.lib.Etc.Relation;
-import org.rmj.g3appdriver.lib.Ganado.Obj.ProductInquiry;
-import org.rmj.g3appdriver.lib.Ganado.pojo.InstallmentInfo;
+import org.rmj.g3appdriver.Config.AppConfig;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.EMcModel;
+import org.rmj.g3appdriver.lib.authentication.GAuthentication;
+import org.rmj.g3appdriver.lib.authentication.factory.Auth;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.pojo.LoginCredentials;
+import org.rmj.g3appdriver.lib.Inquiry.obj.ProductInquiry;
+import org.rmj.g3appdriver.lib.Inquiry.pojo.InstallmentInfo;
 
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class TestProductInquiry {
 
     private Application instance;
 
-    private iAuth poAuth;
+    private iAuthenticate poAuth;
     private ProductInquiry poSys;
 
     @Rule
@@ -45,10 +43,10 @@ public class TestProductInquiry {
     @Before
     public void setUp() throws Exception {
         instance = ApplicationProvider.getApplicationContext();
-        AppConfigPreference.getInstance(instance).setProductID("gRider");
+        AppConfig.getInstance(instance).setProductID("gRider");
         this.poSys = new ProductInquiry(instance);
-        poAuth = new AccountMaster(instance).initGuanzonApp().getInstance(Auth.AUTHENTICATE);
-        poAuth.DoAction(new UserAuthInfo("mikegarcia8748@gmail.com", "123456", "09171870011"));
+        poAuth = new GAuthentication(instance).initAppAuthentication().getInstance(Auth.AUTHENTICATE);
+        poAuth.DoAction(new LoginCredentials("mikegarcia8748@gmail.com", "123456", "09171870011"));
     }
 
     @Test

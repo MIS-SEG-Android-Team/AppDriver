@@ -23,14 +23,14 @@ import androidx.lifecycle.LiveData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.Entities.EAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.GCircle.Apps.BullsEye.PerformancePeriod;
 import org.rmj.g3appdriver.GCircle.Etc.DeptCode;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +40,15 @@ public class RAreaPerformance {
 
     private final DAreaPerformance poDao;
 
-    private final AppConfigPreference poConfig;
     private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
 
     private String message;
 
     public RAreaPerformance(Application instance) {
         this.poDao = GGC_GCircleDB.getInstance(instance).AreaPerformanceDao();
-        this.poConfig = AppConfigPreference.getInstance(instance);
         this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
     }
 
     public String getMessage() {

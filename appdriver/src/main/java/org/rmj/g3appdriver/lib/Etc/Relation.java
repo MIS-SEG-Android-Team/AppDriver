@@ -24,11 +24,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DRelation;
 import org.rmj.g3appdriver.GCircle.room.Entities.ERelation;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -37,17 +37,15 @@ import java.util.Objects;
 public class Relation {
     private static final String TAG = Relation.class.getSimpleName();
 
-    private final DRelation poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final DRelation poDao;
 
     private String message;
 
     public Relation(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).RelDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -70,9 +68,9 @@ public class Relation {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlDownloadRelation(),
+                    new GCircleApi(instance).getUrlDownloadRelation(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

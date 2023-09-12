@@ -7,12 +7,12 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
 
+import org.rmj.g3appdriver.Config.DeviceConfig;
 import org.rmj.g3appdriver.GConnect.GCard.Redemption.pojo.CartItem;
 import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DRedeemItemInfo;
 import org.rmj.g3appdriver.GConnect.room.Entities.ERedeemItemInfo;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
 import org.rmj.g3appdriver.dev.encryp.CodeGenerator;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.etc.AppConstants;
 
 import java.text.SimpleDateFormat;
@@ -120,10 +120,10 @@ public class GCardRedemption {
         try {
             CodeGenerator loCode = new CodeGenerator();
             String lsTranTpe = "PREORDER";
-            String lsDevIDxx = AppConfigPreference.getInstance(instance).getDeviceID();
+            String lsDevIDxx = DeviceConfig.getInstance(instance).getDeviceID();
             String lsCardNox = poDao.GetGCardNumber();
             String lsUserIDx = poDao.GetUserID();
-            String lsMobilex = AppConfigPreference.getInstance(instance).getMobileNo();
+            String lsMobilex = DeviceConfig.getInstance(instance).getMobileNO();
             String lsDteTime = AppConstants.GCARD_DATE_TIME();
             double lsCardPts = poDao.GetRemainingGcardPoints();
             String lsBuildxx = Build.MODEL;

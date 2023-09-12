@@ -9,10 +9,11 @@ import android.util.Log;
 
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.LRUtil;
+import org.rmj.g3appdriver.GCircle.Apps.Dcp.config.DCPConfig;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.model.LRDcp;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.PaidDCP;
 import org.rmj.g3appdriver.GCircle.room.Entities.EDCPCollectionDetail;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.etc.AppConstants;
 
 import java.util.Date;
@@ -20,8 +21,11 @@ import java.util.Date;
 public class PAY extends LRDcp {
     private static final String TAG = PAY.class.getSimpleName();
 
+    private Application instance;
+
     public PAY(Application instance) {
         super(instance);
+        this.instance = instance;
     }
 
     public String SavePaidTransaction(Object args) {
@@ -60,7 +64,11 @@ public class PAY extends LRDcp {
             loDetail.setTranStat("2");
             loDetail.setModified(AppConstants.DATE_MODIFIED());
             poDao.UpdateCollectionDetail(loDetail);
-            poConfig.setDCP_PRNox(loDetail.getPRNoxxxx());
+
+            if(loDetail.getPRNoxxxx() != null &&
+            !loDetail.getPRNoxxxx().isEmpty()){
+                DCPConfig.getInstance(instance).setDcpPrNumber(Integer.parseInt(loDetail.getPRNoxxxx()));
+            }
 
             Log.d(TAG, "Client payment has been save.");
             JSONObject loJson = new JSONObject();

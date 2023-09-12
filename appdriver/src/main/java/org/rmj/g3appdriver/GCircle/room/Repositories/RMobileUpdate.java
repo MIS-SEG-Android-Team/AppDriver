@@ -8,8 +8,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import org.json.JSONObject;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DMobileUpdate;
-import org.rmj.g3appdriver.GCircle.room.Entities.EMobileUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.dao.DMobileUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.entity.EMobileUpdate;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.MobileUpdate;

@@ -24,11 +24,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DProvinceInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EProvinceInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 import java.util.List;
@@ -36,17 +36,15 @@ import java.util.List;
 public class Province {
     private static final String TAG = Province.class.getSimpleName();
 
-    private DProvinceInfo poDao;
+    private final Application instance;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private DProvinceInfo poDao;
 
     private String message;
 
     public Province(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).ProvinceDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -92,9 +90,9 @@ public class Province {
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportProvince(),
+                    new GCircleApi(instance).getUrlImportProvince(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

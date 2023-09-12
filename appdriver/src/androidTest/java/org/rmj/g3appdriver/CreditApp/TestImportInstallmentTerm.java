@@ -16,8 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.GCircle.room.Entities.ELoanTerm;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.ELoanTerm;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.CreditApp.CreditOnlineApplication;
 
@@ -43,7 +43,7 @@ public class TestImportInstallmentTerm {
     @Before
     public void setUp() throws Exception {
         instance = (Application) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
         poUser = new EmployeeMaster(instance);
         poSys = new CreditOnlineApplication(instance);
 

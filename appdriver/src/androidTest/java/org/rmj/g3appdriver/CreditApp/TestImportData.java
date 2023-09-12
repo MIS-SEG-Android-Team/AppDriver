@@ -13,11 +13,11 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcBrand;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcCategory;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcModel;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcModelPrice;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcTermCategory;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCBrand;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCCategory;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCModel;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCModelPrice;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCTermCategory;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
@@ -34,7 +34,7 @@ public class TestImportData {
     @Test
     public void test01ImportBrands() {
         boolean isSuccess = false;
-        RMcBrand loSys = new RMcBrand(instance);
+        MCBrand loSys = new MCBrand(instance);
         if(!loSys.ImportMCBrands()){
             Log.e(TAG, loSys.getMessage());
         } else {
@@ -47,7 +47,7 @@ public class TestImportData {
     @Test
     public void test02ImportModels() {
         boolean isSuccess = false;
-        RMcModel loSys = new RMcModel(instance);
+        MCModel loSys = new MCModel(instance);
         if(!loSys.ImportMCModel()){
             Log.e(TAG, loSys.getMessage());
         } else {
@@ -60,7 +60,7 @@ public class TestImportData {
     @Test
     public void test03ImportModelPrice() {
         boolean isSuccess = false;
-        RMcModelPrice loSys = new RMcModelPrice(instance);
+        MCModelPrice loSys = new MCModelPrice(instance);
         if(!loSys.ImportMcModelPrice()){
             Log.e(TAG, loSys.getMessage());
         } else {
@@ -73,7 +73,7 @@ public class TestImportData {
     @Test
     public void test04ImportMCCategory() {
         boolean isSuccess = false;
-        RMcCategory loSys = new RMcCategory(instance);
+        MCCategory loSys = new MCCategory(instance);
         if(!loSys.ImportMcCategory()){
             Log.e(TAG, loSys.getMessage());
         } else {
@@ -86,7 +86,7 @@ public class TestImportData {
     @Test
     public void test05ImportMcTermCategory() {
         boolean isSuccess = false;
-        RMcTermCategory loSys = new RMcTermCategory(instance);
+        MCTermCategory loSys = new MCTermCategory(instance);
         if(!loSys.ImportMcTermCategory()){
             Log.e(TAG, loSys.getMessage());
         } else {
@@ -99,7 +99,7 @@ public class TestImportData {
     @Test
     public void test06ImportMcColor() {
         boolean isSuccess = false;
-        RMcModel loSys = new RMcModel(instance);
+        MCModel loSys = new MCModel(instance);
         if(!loSys.ImportModelColor()){
             Log.e(TAG, loSys.getMessage());
         } else {
@@ -113,7 +113,7 @@ public class TestImportData {
     @Test
     public void test06ImportMcPrices() {
         boolean isSuccess = false;
-        RMcModel loSys = new RMcModel(instance);
+        MCModel loSys = new MCModel(instance);
         if(!loSys.ImportCashPrices()){
             Log.e(TAG, loSys.getMessage());
         } else {

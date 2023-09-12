@@ -21,7 +21,7 @@ import androidx.room.Update;
 import org.rmj.g3appdriver.GCircle.room.Entities.EBranchLoanApplication;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECreditApplicantInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.ECreditApplication;
-import org.rmj.g3appdriver.GCircle.room.Entities.ELoanTerm;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.entity.ELoanTerm;
 
 import java.util.List;
 

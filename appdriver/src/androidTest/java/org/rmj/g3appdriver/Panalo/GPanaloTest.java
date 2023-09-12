@@ -7,16 +7,16 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
-import org.rmj.g3appdriver.lib.Panalo.Obj.GPanalo;
+import org.rmj.g3appdriver.lib.Panalo.obj.GPanalo;
 import org.rmj.g3appdriver.lib.Panalo.model.PanaloRewards;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class GPanaloTest {
         instance = ApplicationProvider.getApplicationContext();
         poUser = new EmployeeMaster(instance);
         poSys = new GPanalo(instance);
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
 
         EmployeeMaster.UserAuthInfo loAuth = new EmployeeMaster.UserAuthInfo("mikegarcia8748@gmail.com", "123456", "09171870011");
         assertTrue(poUser.AuthenticateUser(loAuth));

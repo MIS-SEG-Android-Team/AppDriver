@@ -13,24 +13,24 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RAreaPerformance;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RBankInfo;
 import org.rmj.g3appdriver.lib.Etc.Barangay;
-import org.rmj.g3appdriver.lib.Etc.Branch;
+import org.rmj.g3appdriver.lib.Branch.Branch;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RBranchPerformance;
 import org.rmj.g3appdriver.lib.Etc.Country;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RFileCode;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcBrand;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcCategory;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcModel;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcModelPrice;
-import org.rmj.g3appdriver.GCircle.room.Repositories.RMcTermCategory;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCBrand;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCCategory;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCModel;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCModelPrice;
+import org.rmj.g3appdriver.lib.ProductInquiry.data.repository.MCTermCategory;
 import org.rmj.g3appdriver.GCircle.room.Repositories.ROccupation;
 import org.rmj.g3appdriver.lib.Etc.Province;
 import org.rmj.g3appdriver.lib.Etc.Relation;
 import org.rmj.g3appdriver.GCircle.room.Repositories.RSysConfig;
 import org.rmj.g3appdriver.lib.Etc.Town;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.ApprovalCode.ApprovalCode;
 
@@ -47,7 +47,7 @@ public class ImportData {
     @Before
     public void setUp() throws Exception {
         instance = (Application) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class ImportData {
 
     @Test
     public void test08ImportBrand() {
-        RMcBrand loSys = new RMcBrand(instance);
+        MCBrand loSys = new MCBrand(instance);
         if(!loSys.ImportMCBrands()){
             message = loSys.getMessage();
             Log.e(TAG, message);
@@ -157,7 +157,7 @@ public class ImportData {
 
     @Test
     public void test09ImportMcModel() {
-        RMcModel loSys = new RMcModel(instance);
+        MCModel loSys = new MCModel(instance);
         if(!loSys.ImportMCModel()){
             message = loSys.getMessage();
             Log.e(TAG, message);
@@ -169,7 +169,7 @@ public class ImportData {
 
     @Test
     public void test10ImportMcCategory() {
-        RMcCategory loSys = new RMcCategory(instance);
+        MCCategory loSys = new MCCategory(instance);
         if(!loSys.ImportMcCategory()){
             message = loSys.getMessage();
             Log.e(TAG, message);
@@ -205,7 +205,7 @@ public class ImportData {
 
     @Test
     public void test13ImportMcModelPrice() {
-        RMcModelPrice loSys = new RMcModelPrice(instance);
+        MCModelPrice loSys = new MCModelPrice(instance);
         if(!loSys.ImportMcModelPrice()){
             message = loSys.getMessage();
             Log.e(TAG, message);
@@ -217,7 +217,7 @@ public class ImportData {
 
     @Test
     public void test14ImportTermCategory() {
-        RMcTermCategory loSys = new RMcTermCategory(instance);
+        MCTermCategory loSys = new MCTermCategory(instance);
         if(!loSys.ImportMcTermCategory()){
             message = loSys.getMessage();
             Log.e(TAG, message);

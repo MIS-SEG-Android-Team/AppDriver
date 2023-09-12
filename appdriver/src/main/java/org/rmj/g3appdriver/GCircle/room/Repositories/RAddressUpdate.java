@@ -8,8 +8,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import org.json.JSONObject;
-import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAddressUpdate;
-import org.rmj.g3appdriver.GCircle.room.Entities.EAddressUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.dao.DAddressUpdate;
+import org.rmj.g3appdriver.lib.addressbook.data.entity.EAddressUpdate;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.AddressUpdate;

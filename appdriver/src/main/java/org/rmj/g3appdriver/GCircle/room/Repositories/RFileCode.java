@@ -21,28 +21,28 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DFileCode;
 import org.rmj.g3appdriver.GCircle.room.Entities.EFileCode;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 
 import java.util.Date;
 
 public class RFileCode{
     private static final String TAG = RFileCode.class.getSimpleName();
-    private final DFileCode poDao;
 
-    private final GCircleApi poApi;
-    private final HttpHeaders poHeaders;
+    private final Application instance;
+
+    private final DFileCode poDao;
 
     private String message;
 
     public RFileCode(Application instance) {
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).FileCodeDao();
-        this.poApi = new GCircleApi(instance);
-        this.poHeaders = HttpHeaders.getInstance(instance);
     }
 
     public String getMessage() {
@@ -66,9 +66,9 @@ public class RFileCode{
             }
 
             String lsResponse = WebClient.sendRequest(
-                    poApi.getUrlImportFileCode(),
+                    new GCircleApi(instance).getUrlImportFileCode(),
                     params.toString(),
-                    poHeaders.getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = "Server no response";

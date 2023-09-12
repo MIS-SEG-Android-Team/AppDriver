@@ -24,17 +24,18 @@ import androidx.lifecycle.LiveData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
+import org.rmj.g3appdriver.Config.DeviceConfig;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeRole;
 import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EEmployeeRole;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.dev.Device.Telephony;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,8 +52,7 @@ public class EmployeeMaster {
     private final LiveData<EEmployeeInfo> employeeInfo;
     private final EmployeeSession poSession;
     private final GCircleApi webApi;
-    private final HttpHeaders headers;
-    private final AppConfigPreference poConfig;
+    private final HttpHeaderProvider poHeaders;
     private final Telephony poDevID;
     
     private String message;
@@ -63,9 +63,8 @@ public class EmployeeMaster {
         this.roleDao = GGC_GCircleDB.getInstance(instance).employeeRoleDao();
         this.employeeInfo = poDao.getEmployeeInfo();
         this.poSession = EmployeeSession.getInstance(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
         this.webApi = new GCircleApi(application);
-        this.headers = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poDevID = new Telephony(instance);
     }
     
@@ -130,7 +129,7 @@ public class EmployeeMaster {
             String lsResponse = WebClient.sendRequest(
                     webApi.getUrlAuthEmployee(),
                     params.toString(),
-                    headers.getHeaders());
+                    poHeaders.getHeaders());
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return false;
@@ -156,7 +155,7 @@ public class EmployeeMaster {
                     employeeInfo.setEmployID(loResponse.getString("sEmployID"));
                     employeeInfo.setDeviceID(poDevID.getDeviceID());
                     employeeInfo.setModelIDx(Build.MODEL);
-                    employeeInfo.setMobileNo(poConfig.getMobileNo());
+                    employeeInfo.setMobileNo(DeviceConfig.getInstance(instance).getMobileNO());
                     employeeInfo.setLoginxxx(AppConstants.DATE_MODIFIED());
                     employeeInfo.setSessionx(AppConstants.CURRENT_DATE());
                     poDao.SaveNewEmployeeSession(employeeInfo);
@@ -195,7 +194,7 @@ public class EmployeeMaster {
             String lsResponse = WebClient.sendRequest(
                     webApi.getRequestUserAccess(),
                     params.toString(),
-                    headers.getHeaders());
+                    poHeaders.getHeaders());
             if (lsResponse == null) {
                 message = SERVER_NO_RESPONSE;
                 return false;

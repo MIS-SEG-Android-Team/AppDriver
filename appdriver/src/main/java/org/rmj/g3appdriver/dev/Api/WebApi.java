@@ -14,12 +14,12 @@ package org.rmj.g3appdriver.dev.Api;
 import android.app.Application;
 import android.util.Log;
 
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 
 public abstract class WebApi {
     private static final String TAG = WebApi.class.getSimpleName();
 
-    private final AppConfigPreference poConfig;
+    private final AppStatusConfig poConfig;
 
     protected static final String LOCAL = "http://192.168.36.12/";
 
@@ -34,16 +34,28 @@ public abstract class WebApi {
     protected String LIVE;
 
     public WebApi(Application instance) {
-        this.poConfig = AppConfigPreference.getInstance(instance);
-        this.isUnitTest = poConfig.getTestStatus();
+        this.poConfig = AppStatusConfig.getInstance(instance);
+        this.isUnitTest = poConfig.isTestMode();
+
+
+        /*
+        Temporarily set as default to ensure the app will Run...
+         */
+        LIVE = PRIMARY_LIVE;
+
+        /*
+
+        THIS area of the code has been disabled and later on be remove or revise...
+
         boolean isLiveData = poConfig.isBackUpServer();
+
         if(isLiveData){
             Log.d(TAG, "Device connected to backup server.");
             LIVE = SECONDARY_LIVE;
         } else {
             Log.d(TAG, "Device connected to primary server.");
-            LIVE = PRIMARY_LIVE;
         }
+         */
     }
 
     protected boolean isUnitTest(){
@@ -59,5 +71,9 @@ public abstract class WebApi {
 
     public String getUrlDownloadTestUpdate() {
         return URL_DOWNLOAD_TEST_UPDATE;
+    }
+
+    public String getAPI(String fsVal){
+        return "";
     }
 }

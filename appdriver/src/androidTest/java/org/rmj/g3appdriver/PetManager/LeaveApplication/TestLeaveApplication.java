@@ -14,9 +14,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.PetManager.Obj.EmployeeLeave;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Apps.PetManager.pojo.LeaveApplication;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -37,7 +37,7 @@ public class TestLeaveApplication {
         instance = ApplicationProvider.getApplicationContext();
         poUser = new EmployeeMaster(instance);
         poSys = new EmployeeLeave(instance);
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
     }
 
     @Test

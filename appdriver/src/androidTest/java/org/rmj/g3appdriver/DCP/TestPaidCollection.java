@@ -13,8 +13,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.obj.PAY;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.pojo.ImportParams;
 import org.rmj.g3appdriver.GCircle.Apps.Dcp.model.LRDcp;
@@ -33,7 +33,7 @@ public class TestPaidCollection {
     @Before
     public void setUp() throws Exception {
         instance = (Application) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
     }
 
     @Test

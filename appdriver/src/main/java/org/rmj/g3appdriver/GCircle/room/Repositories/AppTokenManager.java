@@ -16,13 +16,12 @@ import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 import android.app.Application;
 import android.util.Log;
 
+import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DToken;
 import org.rmj.g3appdriver.GCircle.room.Entities.ETokenInfo;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
-import org.rmj.g3appdriver.dev.Api.WebFileServer;
+import org.rmj.g3appdriver.dev.Http.WebFileServer;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,16 +31,15 @@ import java.util.Locale;
 public class AppTokenManager {
     private static final String TAG = AppTokenManager.class.getSimpleName();
 
+    private final Application instance;
+
     private final DToken poDao;
 
-    private final AppConfigPreference poConfig;
-    private final EmployeeSession poSession;
     private String message;
 
     public AppTokenManager(Application instance){
+        this.instance = instance;
         this.poDao = GGC_GCircleDB.getInstance(instance).dToken();
-        this.poConfig = AppConfigPreference.getInstance(instance);
-        this.poSession = EmployeeSession.getInstance(instance);
     }
 
     public String getMessage() {
@@ -108,7 +106,8 @@ public class AppTokenManager {
                 Log.d(TAG, "Client token is not available.");
                 Log.d(TAG, "Generating client token...");
 
-                String lsClient = WebFileServer.RequestClientToken(poConfig.ProducID(),
+                String lsClient = WebFileServer.RequestClientToken(
+                        AppConfig.getInstance(instance).getProductID(),
                         poDao.GetClientID(),
                         poDao.GetUserID());
 
@@ -227,7 +226,8 @@ public class AppTokenManager {
         try{
             ETokenInfo loClientx = poDao.GetClientToken();
 
-            String lsClient = WebFileServer.RequestClientToken(poConfig.ProducID(),
+            String lsClient = WebFileServer.RequestClientToken(
+                    AppConfig.getInstance(instance).getProductID(),
                     poDao.GetClientID(),
                     poDao.GetUserID());
 

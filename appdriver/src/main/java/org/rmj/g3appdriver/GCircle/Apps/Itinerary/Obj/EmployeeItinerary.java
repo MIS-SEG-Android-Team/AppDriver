@@ -13,13 +13,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
-import org.rmj.g3appdriver.dev.Api.WebClient;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DEmployeeInfo;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DItinerary;
 import org.rmj.g3appdriver.GCircle.room.Entities.EItinerary;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.etc.AppConstants;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 
 import java.text.SimpleDateFormat;
@@ -104,7 +104,7 @@ public class EmployeeItinerary {
 
             String lsResponse = WebClient.sendRequest(loApi.getUrlSaveItinerary(),
                     params.toString(),
-                    HttpHeaders.getInstance(instance).getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return false;
@@ -171,7 +171,7 @@ public class EmployeeItinerary {
 
             String lsResponse = WebClient.sendRequest(loApi.getUrlDownloadItinerary(),
                     params.toString(),
-                    HttpHeaders.getInstance(instance).getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
@@ -225,7 +225,7 @@ public class EmployeeItinerary {
             GCircleApi loApi = new GCircleApi(instance);
             String lsResponse = WebClient.sendRequest(loApi.getUrlDownloadItineraryUsers(),
                     new JSONObject().toString(),
-                    HttpHeaders.getInstance(instance).getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return null;
@@ -263,7 +263,7 @@ public class EmployeeItinerary {
 
             String lsResponse = WebClient.sendRequest(loApi.getUrlDownloadItinerary(),
                     params.toString(),
-                    HttpHeaders.getInstance(instance).getHeaders());
+                    HttpHeaderManager.getInstance(instance).initializeHeader().getHeaders());
 
             if(lsResponse == null){
                 message = SERVER_NO_RESPONSE;

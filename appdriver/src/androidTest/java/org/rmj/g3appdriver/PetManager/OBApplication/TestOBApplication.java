@@ -1,7 +1,7 @@
 package org.rmj.g3appdriver.PetManager.OBApplication;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertTrue;
 
@@ -13,10 +13,10 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.etc.AppConstants;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.PetManager.Obj.EmployeeOB;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.GCircle.Apps.PetManager.pojo.OBApplication;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -38,7 +38,7 @@ public class TestOBApplication {
         instance = ApplicationProvider.getApplicationContext();
         poUser = new EmployeeMaster(instance);
         poSys = new EmployeeOB(instance);
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
     }
 
     @Test

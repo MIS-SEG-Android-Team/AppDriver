@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DInventoryMaster;
-import org.rmj.g3appdriver.GCircle.room.Entities.EBranchInfo;
+import org.rmj.g3appdriver.lib.Branch.entity.EBranchInfo;
 import org.rmj.g3appdriver.GCircle.room.Entities.EInventoryMaster;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 

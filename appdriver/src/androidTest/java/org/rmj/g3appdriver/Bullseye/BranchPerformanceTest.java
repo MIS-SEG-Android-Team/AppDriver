@@ -16,7 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.BullsEye.obj.BranchPerformance;
 
@@ -39,7 +39,7 @@ public class BranchPerformanceTest {
     @Before
     public void setUp() throws Exception {
         this.instance = ApplicationProvider.getApplicationContext();
-        AppConfigPreference.getInstance(instance).setTestCase(true);
+        AppStatusConfig.getInstance(instance).setTestStatus(true);
         this.poSys = new BranchPerformance(instance);
         this.poMaster = new EmployeeMaster(instance);
         if(poMaster.AuthenticateUser(new EmployeeMaster.UserAuthInfo("mikegarcia8748@gmail.com", "123456", "09171870011"))){

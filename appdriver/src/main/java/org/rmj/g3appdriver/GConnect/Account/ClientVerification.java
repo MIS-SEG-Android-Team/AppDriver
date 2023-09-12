@@ -8,14 +8,16 @@ import android.app.Application;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.rmj.g3appdriver.lib.Account.pojo.PhotoDetail;
+import org.rmj.g3appdriver.Config.AppConfig;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
+import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
+import org.rmj.g3appdriver.lib.authentication.pojo.PhotoDetail;
 import org.rmj.g3appdriver.GConnect.Api.GConnectApi;
-import org.rmj.g3appdriver.dev.Api.HttpHeaders;
-import org.rmj.g3appdriver.dev.Api.WebClient;
-import org.rmj.g3appdriver.dev.Api.WebFileServer;
+import org.rmj.g3appdriver.dev.Http.WebClient;
+import org.rmj.g3appdriver.dev.Http.WebFileServer;
 import org.rmj.g3appdriver.GConnect.room.DataAccessObject.DClientInfo;
 import org.rmj.g3appdriver.GConnect.room.GGC_GConnectDB;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.etc.AppConstants;
 
 import java.util.ArrayList;
@@ -24,18 +26,19 @@ import java.util.List;
 public class ClientVerification {
     private static final String TAG = ClientMaster.class.getSimpleName();
 
+    private final Application instance;
+
     private final DClientInfo poDao;
-    private final HttpHeaders poHeaders;
+    private final HttpHeaderProvider poHeaders;
     private final GConnectApi poApi;
-    private final AppConfigPreference poConfig;
 
     private String message;
 
     public ClientVerification(Application instance) {
+        this.instance = instance;
         this.poDao = GGC_GConnectDB.getInstance(instance).EClientDao();
-        this.poHeaders = HttpHeaders.getInstance(instance);
+        this.poHeaders = HttpHeaderManager.getInstance(instance).initializeHeader();
         this.poApi = new GConnectApi(instance);
-        this.poConfig = AppConfigPreference.getInstance(instance);
     }
 
     public String getMessage() {
@@ -44,11 +47,11 @@ public class ClientVerification {
 
     public boolean UploadVerificationImage(PhotoDetail foVal){
         try{
-            String lsProdct = poConfig.ProducID();
+            String lsProdct = AppConfig.getInstance(instance).getProductID();
             String lsClient = poDao.GetClientID();
             String lsUserID = poDao.GetUserID();
 
-            boolean isTestCase = poConfig.getTestStatus();
+            boolean isTestCase = AppStatusConfig.getInstance(instance).isTestMode();
             if(isTestCase){
                 message = "App on testing mode.";
                 return true;
