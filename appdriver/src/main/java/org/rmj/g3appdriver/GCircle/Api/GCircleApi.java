@@ -106,6 +106,10 @@ public class GCircleApi extends WebApi {
     private static final String URL_SUBMIT_INQUIRY = "gcircle/ganado/submit_inquiry.php";
     private static final String URL_DOWNLOAD_INQUIRIES = "gcircle/ganado/import_inquiries.php";
 
+    private static final String URL_GET_LEADS = "telemarketing_app/GetLeads.php";
+    private static final String URL_GET_CLIENTS = "telemarketing_app/CallClients.php";
+    private static final String URL_GET_MCINQ = "telemarketing_app/GetMCInquiry.php";
+
     public GCircleApi(Application instance) {
         super(instance);
     }
@@ -872,6 +876,16 @@ public class GCircleApi extends WebApi {
         }
         Log.d(TAG, "Initialize api:" + LIVE + URL_DOWNLOAD_INQUIRIES);
         return LIVE + URL_DOWNLOAD_INQUIRIES;
+    }
+
+    public String getURLLeadCalls(){
+        return URL_GET_LEADS;
+    }
+    public String getURLClientCalls(){
+        return URL_GET_CLIENTS;
+    }
+    public String getURLMCInq(){
+        return URL_GET_MCINQ;
     }
 
 }

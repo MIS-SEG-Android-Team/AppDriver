@@ -21,6 +21,12 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClient2Call;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOMCInquiry;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EClient2Call;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.ELeadCalls;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
 import org.rmj.g3appdriver.lib.addressbook.data.dao.DAddressRequest;
 import org.rmj.g3appdriver.lib.addressbook.data.dao.DAddressUpdate;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAppConfig;
@@ -211,7 +217,10 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
         EGanadoOnline.class,
         EMCModelCashPrice.class,
         EPanaloReward.class,
-        EGuanzonPanalo.class}, version = 40, exportSchema = false)
+        EGuanzonPanalo.class,
+        ELeadCalls.class,
+        EClient2Call.class,
+        EMCInquiry.class}, version = 40, exportSchema = false)
 public abstract class GGC_GCircleDB extends RoomDatabase {
     private static final String TAG = "GhostRider_DB_Manager";
     private static GGC_GCircleDB instance;
@@ -281,6 +290,9 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
     public abstract DNotification notificationDao();
     public abstract DPacita pacitaDao();
     public abstract DGanadoOnline ganadoDao();
+    public abstract DAOLeadCalls teleLeadsDao();
+    public abstract DAOClient2Call teleCallClientsDao();
+    public abstract DAOMCInquiry teleMCInquiry();
 
     public static synchronized GGC_GCircleDB getInstance(Context context){
         if(instance == null){
