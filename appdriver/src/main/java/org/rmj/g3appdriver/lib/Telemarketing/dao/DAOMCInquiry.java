@@ -8,6 +8,7 @@ import androidx.room.Update;
 
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao

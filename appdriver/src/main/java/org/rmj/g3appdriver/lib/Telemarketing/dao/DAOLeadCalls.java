@@ -16,7 +16,7 @@ public interface DAOLeadCalls {
             "WHERE (cTranStat = 0 OR (cTranStat = 1 AND sAgentIDx = :sAgentID))" +
             "AND :sSimClause AND sSourceCd = :sLeadsrc " +
             "ORDER BY dTransact ASC, cTranStat DESC, sAgentIDx DESC, sTransNox ASC")
-    LiveData<List<ELeadCalls>> GetLeadCalls(String sAgentID, String sSimClause, String sLeadsrc);
+    LiveData<List<ELeadCalls>> GetLiveLeadCalls(String sAgentID, String sSimClause, String sLeadsrc);
     @Query("SELECT COUNT(*) FROM Lead_Calls WHERE sTransNox = :sTransNoxx")
     int CountLeadTrans(String sTransNoxx);
     @Insert

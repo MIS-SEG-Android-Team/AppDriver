@@ -107,8 +107,9 @@ public class GCircleApi extends WebApi {
     private static final String URL_DOWNLOAD_INQUIRIES = "gcircle/ganado/import_inquiries.php";
 
     private static final String URL_GET_LEADS = "telemarketing_app/GetLeads.php";
-    private static final String URL_GET_CLIENTS = "telemarketing_app/CallClients.php";
+    private static final String URL_GET_CLIENTS = "telemarketing_app/GetCallClients.php";
     private static final String URL_GET_MCINQ = "telemarketing_app/GetMCInquiry.php";
+    private static final String URL_GET_CLIENT_MOBILE = "telemarketing_app/GetClientMobile.php";
 
     public GCircleApi(Application instance) {
         super(instance);
@@ -886,6 +887,9 @@ public class GCircleApi extends WebApi {
     }
     public String getURLMCInq(){
         return URL_GET_MCINQ;
+    }
+    public String getURLClientMobile(){
+        return URL_GET_CLIENT_MOBILE;
     }
 
 }

@@ -1,18 +1,11 @@
 package org.rmj.g3appdriver.GCircle.Apps.TeleMarketing;
 
-import static android.content.Context.TELEPHONY_SERVICE;
-
 import android.app.Application;
 import android.content.Context;
-import android.os.Build;
-import android.telephony.TelephonyManager;
-import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
-
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
+import org.rmj.g3appdriver.lib.Telemarketing.classobj.GSimSubscriber;
 import org.rmj.g3appdriver.lib.Telemarketing.classobj.GTeleApp;
 import org.rmj.g3appdriver.lib.Telemarketing.constants.GTeleConstants;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClient2Call;
@@ -27,87 +20,65 @@ import java.util.List;
 public class CallInteractManager {
     private static final String TAG = "CallInteractManager";
     private Context context;
-    private GTeleApp gTeleApp;
+    private GTeleApp poTeleApp;
     private EmployeeSession poSession;
     private DAOLeadCalls poDaoLeadCalls;
     private DAOClient2Call poDaoClient2Call;
     private DAOMCInquiry poDaomcInquiry;
-    private GTeleConstants teleConstants;
+    private GTeleConstants loConstants;
+    private GSimSubscriber loSubscriber;
     private String message;
     public CallInteractManager(Application instance) {
         this.context = instance.getApplicationContext();
 
-        this.gTeleApp = new GTeleApp(instance);
+        this.poTeleApp = new GTeleApp(instance);
         this.poSession = EmployeeSession.getInstance(instance);
         this.poDaoLeadCalls = GGC_GCircleDB.getInstance(instance.getApplicationContext()).teleLeadsDao();
         this.poDaoClient2Call = GGC_GCircleDB.getInstance(instance.getApplicationContext()).teleCallClientsDao();
-        this.poDaomcInquiry = GGC_GCircleDB.getInstance(instance.getApplicationContext()).teleMCInquiry();
-        this.teleConstants = new GTeleConstants();
+        this.poDaomcInquiry = GGC_GCircleDB.getInstance(instance.getApplicationContext()).teleMCInquiryDao();
+        this.loSubscriber = new GSimSubscriber(instance.getApplicationContext());
+        this.loConstants = new GTeleConstants();
     }
     public String getMessage(){
         return message;
     }
-    //REQUIRES DUAL SIM CARD SLOTS
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private String getSimSubscr(int simIndex){
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+    public void Init(){
+        String sUserID = poSession.getUserID();
 
-        //higher sdk version, dual sim slot
-        int simState = telephonyManager.getSimState(simIndex);
-
-        switch (simState){
-            case TelephonyManager.SIM_STATE_ABSENT:
-                message= "NO SIM CARD DETECTED FOR SLOT "+ simIndex;
-                return null;
-            case TelephonyManager.SIM_STATE_NOT_READY:
-                message= "SIM CARD NOT READY "+ simIndex;
-                return null;
-            case TelephonyManager.SIM_STATE_READY:
-                return telephonyManager.getSimOperatorName();
+        //IMPORT LEADS WITH CLIENT INFO
+        if (poTeleApp.ImportLeads(sUserID, CreateSimClause()) == false){
+            message = poTeleApp.getMessage(); //get error message from request
         }
-        return null;
     }
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private String CreateSimClause(){
-        //get simcard carrier names on each slot
-        String sim1 = getSimSubscr(1);
-        String sim2 = getSimSubscr(2);
+        //INITIALIZE SIM CARD NAMES
+        if (loSubscriber.InitSim() == false){
+            message = loSubscriber.getMessage();
+            return null;
+        }
 
-        //initiate condition of 'cSubscrbr' column for filtering data for clients to call
+        //GET SIM CARD NAMES EACH SLOT
+        String sim1 = loSubscriber.getSimSlot1();
+        String sim2 = loSubscriber.getSimSlot2();
+
+        //CREATE SQL CONDITION OF 'cSubscrbr' COLUMN FOR FILTERING OF CLIENTS TO BE IMPORTED
         String simCondition = null;
         if(sim1 != null && sim2 != null){
-            //sql condition if both slot have simcards
-            simCondition= "(cSubscrbr IN ("+teleConstants.getSimSubscriber(sim1)+","+teleConstants.getSimSubscriber(sim2)+"))";
+            simCondition= "(cSubscrbr IN ("+loConstants.getSimSubscriber(sim1)+","+loConstants.getSimSubscriber(sim2)+"))";
         }else {
-            //sql condition if one slot have simcard
             if (sim1 != null){
-                simCondition=  "(cSubscrbr = "+teleConstants.getSimSubscriber(sim1)+")";
+                simCondition=  "(cSubscrbr = "+loConstants.getSimSubscriber(sim1)+")";
             } else if (sim2 != null) {
-                simCondition=  "(cSubscrbr = "+teleConstants.getSimSubscriber(sim2)+")";
+                simCondition=  "(cSubscrbr = "+loConstants.getSimSubscriber(sim2)+")";
             }
         }
         return simCondition;
     }
-
-    //REQUIRES DUAL SIM CARD SLOTS
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void Init(){
-        String sUserID = poSession.getUserID();
-        //import leads with client info from (server tablename: Call_Outgoing)
-        if (gTeleApp.ImportLeads(sUserID, CreateSimClause()) == false){
-            message = gTeleApp.getMessage(); //get error message from request
-        }
-        //import mc inquiries from (server tablename: MC_Product_Inquiry)
-        if (gTeleApp.ImportMCInquiries() == false){
-            message = gTeleApp.getMessage(); //get error message from request
-        }
-    }
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<ELeadCalls>> GetLeads(String sLeadsrc){
-        return poDaoLeadCalls.GetLeadCalls(poSession.getUserID(), CreateSimClause(), teleConstants.getLeadsrc(sLeadsrc));
+        return poDaoLeadCalls.GetLiveLeadCalls(poSession.getUserID(), CreateSimClause(), loConstants.getLeadsrc(sLeadsrc));
     }
     public LiveData<List<EClient2Call>> GetClientsInfo(String sClientID){
-        return poDaoClient2Call.GetClientInfo(sClientID);
+        return poDaoClient2Call.GetLiveClientInfo(sClientID);
     }
     public LiveData<List<EMCInquiry>> GetMCInquiry(String sReferNox){
         return poDaomcInquiry.GetLiveMCInquiry(sReferNox);

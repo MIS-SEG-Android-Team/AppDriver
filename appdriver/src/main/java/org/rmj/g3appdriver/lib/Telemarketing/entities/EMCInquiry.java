@@ -11,57 +11,44 @@ public class EMCInquiry {
     @NonNull
     @ColumnInfo(name = "sTransNox")
     private String sTransNox;
-    @ColumnInfo(name = "dTransact")
-    private String dTransact;
+    @ColumnInfo(name = "dFollowUp")
+    private String dFollowUp;
     @ColumnInfo(name = "sClientID")
     private String sClientID;
+    @ColumnInfo(name = "sBrandIDx")
+    private String sBrandIDx;
     @ColumnInfo(name = "sModelIDx")
     private String sModelIDx;
     @ColumnInfo(name = "sColorIDx")
     private String sColorIDx;
-    @ColumnInfo(name = "sInquiryx")
-    private String sInquiryx;
+    @ColumnInfo(name = "nTerms")
+    private int nTerms;
     @ColumnInfo(name = "dTargetxx")
     private String dTargetxx;
-    @ColumnInfo(name = "dPurchase")
-    private String dPurchase;
-    @ColumnInfo(name = "dFollowUp")
-    private String dFollowUp;
-    @ColumnInfo(name = "sAgentIDx")
-    private String sAgentIDx;
-    @ColumnInfo(name = "cPurcType")
-    private String cPurcType;
-    @ColumnInfo(name = "sRemarks1")
-    private String sRemarks1;
-    @ColumnInfo(name = "sRemarks2")
-    private String sRemarks2;
-    @ColumnInfo(name = "sSourceNo")
-    private String sSourceNo;
-    @ColumnInfo(name = "sCreatedx")
-    private String sCreatedx;
-    @ColumnInfo(name = "dCreatedx")
-    private String dCreatedx;
-    @ColumnInfo(name = "cTranStat")
-    private String cTranStat;
-    @ColumnInfo(name = "sModified")
-    private String sModified;
-    @ColumnInfo(name = "dModified")
-    private String dModified;
+    @ColumnInfo(name = "nDownPaym")
+    private double nDownPaym;
+    @ColumnInfo(name = "nMonAmort")
+    private double nMonAmort;
+    @ColumnInfo(name = "nCashPrc")
+    private double nCashPrc;
+    @ColumnInfo(name = "sRelatnID")
+    private String sRelatnID;
 
+    @NonNull
     public String getsTransNox() {
         return sTransNox;
     }
 
-    public void setsTransNox(String sTransNox) {
+    public void setsTransNox(@NonNull String sTransNox) {
         this.sTransNox = sTransNox;
     }
 
-    public String getdTransact() {
-        return dTransact;
+    public String getdFollowUp() {
+        return dFollowUp;
     }
 
-    public void setdTransact(String dTransact) {
-        this.dTransact = dTransact;
+    public void setdFollowUp(String dFollowUp) {
+        this.dFollowUp = dFollowUp;
     }
 
     public String getsClientID() {
@@ -70,6 +57,14 @@ public class EMCInquiry {
 
     public void setsClientID(String sClientID) {
         this.sClientID = sClientID;
+    }
+
+    public String getsBrandIDx() {
+        return sBrandIDx;
+    }
+
+    public void setsBrandIDx(String sBrandIDx) {
+        this.sBrandIDx = sBrandIDx;
     }
 
     public String getsModelIDx() {
@@ -88,12 +83,12 @@ public class EMCInquiry {
         this.sColorIDx = sColorIDx;
     }
 
-    public String getsInquiryx() {
-        return sInquiryx;
+    public int getnTerms() {
+        return nTerms;
     }
 
-    public void setsInquiryx(String sInquiryx) {
-        this.sInquiryx = sInquiryx;
+    public void setnTerms(int nTerms) {
+        this.nTerms = nTerms;
     }
 
     public String getdTargetxx() {
@@ -104,99 +99,35 @@ public class EMCInquiry {
         this.dTargetxx = dTargetxx;
     }
 
-    public String getdPurchase() {
-        return dPurchase;
+    public double getnDownPaym() {
+        return nDownPaym;
     }
 
-    public void setdPurchase(String dPurchase) {
-        this.dPurchase = dPurchase;
+    public void setnDownPaym(double nDownPaym) {
+        this.nDownPaym = nDownPaym;
     }
 
-    public String getdFollowUp() {
-        return dFollowUp;
+    public double getnMonAmort() {
+        return nMonAmort;
     }
 
-    public void setdFollowUp(String dFollowUp) {
-        this.dFollowUp = dFollowUp;
+    public void setnMonAmort(double nMonAmort) {
+        this.nMonAmort = nMonAmort;
     }
 
-    public String getsAgentIDx() {
-        return sAgentIDx;
+    public double getnCashPrc() {
+        return nCashPrc;
     }
 
-    public void setsAgentIDx(String sAgentIDx) {
-        this.sAgentIDx = sAgentIDx;
+    public void setnCashPrc(double nCashPrc) {
+        this.nCashPrc = nCashPrc;
     }
 
-    public String getcPurcType() {
-        return cPurcType;
+    public String getsRelatnID() {
+        return sRelatnID;
     }
 
-    public void setcPurcType(String cPurcType) {
-        this.cPurcType = cPurcType;
-    }
-
-    public String getsRemarks1() {
-        return sRemarks1;
-    }
-
-    public void setsRemarks1(String sRemarks1) {
-        this.sRemarks1 = sRemarks1;
-    }
-
-    public String getsRemarks2() {
-        return sRemarks2;
-    }
-
-    public void setsRemarks2(String sRemarks2) {
-        this.sRemarks2 = sRemarks2;
-    }
-
-    public String getsSourceNo() {
-        return sSourceNo;
-    }
-
-    public void setsSourceNo(String sSourceNo) {
-        this.sSourceNo = sSourceNo;
-    }
-
-    public String getsCreatedx() {
-        return sCreatedx;
-    }
-
-    public void setsCreatedx(String sCreatedx) {
-        this.sCreatedx = sCreatedx;
-    }
-
-    public String getdCreatedx() {
-        return dCreatedx;
-    }
-
-    public void setdCreatedx(String dCreatedx) {
-        this.dCreatedx = dCreatedx;
-    }
-
-    public String getcTranStat() {
-        return cTranStat;
-    }
-
-    public void setcTranStat(String cTranStat) {
-        this.cTranStat = cTranStat;
-    }
-
-    public String getsModified() {
-        return sModified;
-    }
-
-    public void setsModified(String sModified) {
-        this.sModified = sModified;
-    }
-
-    public String getdModified() {
-        return dModified;
-    }
-
-    public void setdModified(String dModified) {
-        this.dModified = dModified;
+    public void setsRelatnID(String sRelatnID) {
+        this.sRelatnID = sRelatnID;
     }
 }
