@@ -17,6 +17,8 @@ public interface DAOMCInquiry {
     EMCInquiry GetMCInquiry(String sTransNox);
     @Query("SELECT * FROM MC_Inquiry WHERE sTransNox= :sTransNox")
     LiveData<List<EMCInquiry>> GetLiveMCInquiry(String sTransNox);
+    @Query("UPDATE MC_Inquiry SET dFollowUp= :dFollowUp WHERE sTransNox= :sTransNox")
+    void UpdateFollowUp(String dFollowUp, String sTransNox);
     @Insert
     void SaveMCInq(EMCInquiry emcInquiry);
     @Update

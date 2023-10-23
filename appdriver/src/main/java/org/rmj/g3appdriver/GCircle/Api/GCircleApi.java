@@ -110,6 +110,8 @@ public class GCircleApi extends WebApi {
     private static final String URL_GET_CLIENTS = "telemarketing_app/GetCallClients.php";
     private static final String URL_GET_MCINQ = "telemarketing_app/GetMCInquiry.php";
     private static final String URL_GET_CLIENT_MOBILE = "telemarketing_app/GetClientMobile.php";
+    private static final String URL_SEND_SCHEDULE = "telemarketing_app/SaveSchedule.php";
+    private static final String URL_SEND_CALL_STATUS = "telemarketing_app/SaveCallStat.php";
 
     public GCircleApi(Application instance) {
         super(instance);
@@ -890,6 +892,12 @@ public class GCircleApi extends WebApi {
     }
     public String getURLClientMobile(){
         return URL_GET_CLIENT_MOBILE;
+    }
+    public String getUrlSendSchedule(){
+        return URL_SEND_SCHEDULE;
+    }
+    public String getUrlSendCallStatus(){
+        return URL_SEND_CALL_STATUS;
     }
 
 }

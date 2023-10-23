@@ -13,6 +13,7 @@ import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
+import org.rmj.g3appdriver.lib.Telemarketing.constants.GTeleConstants;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClient2Call;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClientMobile;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
@@ -26,6 +27,7 @@ public class GTeleApp {
     private String message;
     private GCircleApi loApi;
     private HttpHeaderProvider poHeader;
+    private GTeleConstants loConstants;
     private DAOLeadCalls poDaoLeads;
     private DAOClient2Call poDaoClient;
     private DAOMCInquiry poDaoMcInq;
@@ -33,6 +35,7 @@ public class GTeleApp {
     public GTeleApp(Application instance){
         this.loApi = new GCircleApi(instance);
         this.poHeader = HttpHeaderManager.getInstance(instance).initializeHeader();
+        this.loConstants = new GTeleConstants();
         this.poDaoLeads = GGC_GCircleDB.getInstance(instance).teleLeadsDao();
         this.poDaoClient = GGC_GCircleDB.getInstance(instance).teleCallClientsDao();
         this.poDaoMcInq = GGC_GCircleDB.getInstance(instance).teleMCInquiryDao();
@@ -283,6 +286,86 @@ public class GTeleApp {
             return true;
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
+            return false;
+        }
+    }
+    public boolean UploadSchedule(String sTransNox, String sLeadsrc, String dFollowUp, String cTranstat, String sRemarks){
+        try{
+            //CREATE PARAMS USING JSON OBJECT
+            JSONObject jsonParam = new JSONObject();
+
+            jsonParam.put("sTransNox", sTransNox);
+            jsonParam.put("sLeadSrc", loConstants.GetLeadConstant(sLeadsrc));
+            jsonParam.put("dFollowUp", dFollowUp);
+            jsonParam.put("cTransStat", cTranstat);
+            jsonParam.put("sRemarks", sRemarks);
+            jsonParam.put("sUserID", sRemarks);
+
+            String lsResponse = WebClient.sendRequest(
+                    loApi.getUrlSendSchedule(),
+                    jsonParam.toString(),
+                    poHeader.getHeaders());
+
+            if (lsResponse == null) {
+                message = SERVER_NO_RESPONSE;
+                return false;
+            }
+
+            JSONObject loResponse = new JSONObject(lsResponse);
+            String lsResult = loResponse.getString("result");
+            if (lsResult.equalsIgnoreCase("error")) {
+                JSONObject loError = loResponse.getJSONObject("error");
+                message = getErrorMessage(loError);;
+                return false;
+            }
+
+            poDaoMcInq.UpdateFollowUp(dFollowUp, loResponse.getString("sTransNox"));
+            message = "Schedule has been updated!";
+            return true;
+        }catch (Exception e){
+            message = e.getMessage();
+            return false;
+        }
+    }
+    public boolean SendCallStatus(String sCallStat, String sReferNox, String cSubscrNM, String sApprvCd, String sUserID,
+                        String sClientID, String sMobileNo){
+        try {
+            //CREATE PARAMS USING JSON OBJECT
+            JSONObject jsonParam = new JSONObject();
+
+            jsonParam.put("sCallStat", loConstants.GetRemarks(sCallStat));
+            jsonParam.put("sReferNox", sReferNox);
+            jsonParam.put("cSubscr", loConstants.GetSimSubscriber(cSubscrNM));
+            jsonParam.put("sApprvCd", sApprvCd);
+            jsonParam.put("sUserID", sUserID);
+            jsonParam.put("sClientID", sClientID);
+            jsonParam.put("sMobileNo", sMobileNo);
+
+            String lsResponse = WebClient.sendRequest(
+                    loApi.getUrlSendCallStatus(),
+                    jsonParam.toString(),
+                    poHeader.getHeaders());
+
+            if (lsResponse == null) {
+                message = SERVER_NO_RESPONSE;
+                return false;
+            }
+
+            JSONObject loResponse = new JSONObject(lsResponse);
+            String lsResult = loResponse.getString("result");
+            if (lsResult.equalsIgnoreCase("error")) {
+                JSONObject loError = loResponse.getJSONObject("error");
+                message = getErrorMessage(loError);;
+                return false;
+            }
+
+            if (sCallStat.equals("POSSIBLE_SALES") || sCallStat.equals("NOT_NOW")){
+
+            }
+
+            return true;
+        }catch (Exception e){
+            message = e.getMessage();
             return false;
         }
     }

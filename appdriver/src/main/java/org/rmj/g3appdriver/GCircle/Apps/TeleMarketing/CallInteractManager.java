@@ -64,18 +64,18 @@ public class CallInteractManager {
         //CREATE SQL CONDITION OF 'cSubscrbr' COLUMN FOR FILTERING OF CLIENTS TO BE IMPORTED
         String simCondition = null;
         if(sim1 != null && sim2 != null){
-            simCondition= "(cSubscrbr IN ("+loConstants.getSimSubscriber(sim1)+","+loConstants.getSimSubscriber(sim2)+"))";
+            simCondition= "(cSubscrbr IN ("+loConstants.GetSimSubscriber(sim1)+","+loConstants.GetSimSubscriber(sim2)+"))";
         }else {
             if (sim1 != null){
-                simCondition=  "(cSubscrbr = "+loConstants.getSimSubscriber(sim1)+")";
+                simCondition=  "(cSubscrbr = "+loConstants.GetSimSubscriber(sim1)+")";
             } else if (sim2 != null) {
-                simCondition=  "(cSubscrbr = "+loConstants.getSimSubscriber(sim2)+")";
+                simCondition=  "(cSubscrbr = "+loConstants.GetSimSubscriber(sim2)+")";
             }
         }
         return simCondition;
     }
     public LiveData<List<ELeadCalls>> GetLeads(String sLeadsrc){
-        return poDaoLeadCalls.GetLiveLeadCalls(poSession.getUserID(), CreateSimClause(), loConstants.getLeadsrc(sLeadsrc));
+        return poDaoLeadCalls.GetLiveLeadCalls(poSession.getUserID(), CreateSimClause(), loConstants.GetLeadConstant(sLeadsrc));
     }
     public LiveData<List<EClient2Call>> GetClientsInfo(String sClientID){
         return poDaoClient2Call.GetLiveClientInfo(sClientID);
