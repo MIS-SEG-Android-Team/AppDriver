@@ -16,10 +16,12 @@ import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Telemarketing.constants.GTeleConstants;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClient2Call;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClientMobile;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOHoutlineOutgoing;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOMCInquiry;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EClient2Call;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EClientMobile;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EHotline_Outgoing;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.ELeadCalls;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
 public class GTeleApp {
@@ -32,6 +34,7 @@ public class GTeleApp {
     private DAOClient2Call poDaoClient;
     private DAOMCInquiry poDaoMcInq;
     private DAOClientMobile poDaoClientMobile;
+    private DAOHoutlineOutgoing poDaoHOutgoing;
     public GTeleApp(Application instance){
         this.loApi = new GCircleApi(instance);
         this.poHeader = HttpHeaderManager.getInstance(instance).initializeHeader();
@@ -40,19 +43,20 @@ public class GTeleApp {
         this.poDaoClient = GGC_GCircleDB.getInstance(instance).teleCallClientsDao();
         this.poDaoMcInq = GGC_GCircleDB.getInstance(instance).teleMCInquiryDao();
         this.poDaoClientMobile = GGC_GCircleDB.getInstance(instance).teleClientMobDao();
+        this.poDaoHOutgoing = GGC_GCircleDB.getInstance(instance).teleHOutgoingDao();
     }
     public String getMessage(){
         return message;
     }
-    private boolean ImportClients(String sClientID){
+    public boolean ImportClients(String sClientID){
         try {
             //create params on http using json object
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("sClientID", sClientID);
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("sClientID", sClientID);
 
             //send params and get result
             String loResponse = WebClient.sendRequest(loApi.getURLClientCalls(),
-                    jsonObject.toString(), poHeader.getHeaders());
+                    jsonParam.toString(), poHeader.getHeaders());
 
             //convert web server response to json object
             JSONObject loJson = new JSONObject(loResponse);
@@ -76,28 +80,27 @@ public class GTeleApp {
             eClient2Call.setsClientNM(loClient.getString("sMobileNox"));
 
             //get exisitng record on local database, if 0 then insert else update
-            if (poDaoClient.GetClientCall(sClientID) == null){
+            if (poDaoClient.GetClient2Call(sClientID) == null){
                 poDaoClient.SaveClients(eClient2Call);
             }else {
                 poDaoClient.UpdateClients(eClient2Call);
             }
-
             return true;
         } catch (Exception e) {
             message = e.getMessage();
             return false;
         }
     }
-    private boolean ImportMCInquiries(String sTransNox, String sLeadSrc){
+    public boolean ImportMCInquiries(String sTransNox, String sLeadSrc){
         try {
             //create params on http using json object
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("sTransNox", sTransNox);
-            jsonObject.put("sLeadSrc", sLeadSrc);
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("sTransNox", sTransNox);
+            jsonParam.put("sLeadSrc", sLeadSrc);
 
             //send params and get result
             String loResponse = WebClient.sendRequest(loApi.getURLMCInq(),
-                    jsonObject.toString(), poHeader.getHeaders());
+                    jsonParam.toString(), poHeader.getHeaders());
 
             //convert web server response to json object
             JSONObject loJson = new JSONObject(loResponse);
@@ -128,6 +131,7 @@ public class GTeleApp {
             emcInquiry.setnMonAmort(loInq.getDouble("nMonAmort"));
             emcInquiry.setnCashPrc(loInq.getDouble("nCashPrc"));
             emcInquiry.setsRelatnID(loInq.getString("sRelatnID"));
+            emcInquiry.setsTableNM(loInq.getString("sTableNM"));
 
             if (poDaoMcInq.GetMCInquiry(sTransNox) == null){
                 poDaoMcInq.SaveMCInq(emcInquiry);
@@ -143,13 +147,13 @@ public class GTeleApp {
     public boolean ImportCLientMobile(String sClientID, String sMobileNo){
         try {
             //CREATE PARAMS USING JSON OBJECT
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("sClientID", sClientID);
-            jsonObject.put("sMobileNo", sMobileNo);
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("sClientID", sClientID);
+            jsonParam.put("sMobileNo", sMobileNo);
 
             //SEND PARAMS AND GET RESULT
             String loResponse = WebClient.sendRequest(loApi.getURLLeadCalls(),
-                    jsonObject.toString(), poHeader.getHeaders());
+                    jsonParam.toString(), poHeader.getHeaders());
             if(loResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return false;
@@ -194,23 +198,22 @@ public class GTeleApp {
             }else {
                 poDaoClientMobile.UpdateClientMobile(eClientMobile);
             }
-
             return true;
         } catch (Exception e) {
-            Log.d(TAG, e.getMessage());
+            message= e.getMessage();
             return false;
         }
     }
     public boolean ImportLeads(String sUserID, String simSubscr){
         try {
             //CREATE PARAMS USING JSON OBJECT
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("sAgentIDx", sUserID);
-            jsonObject.put("cSubscrbr", simSubscr);
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("sAgentIDx", sUserID);
+            jsonParam.put("cSubscrbr", simSubscr);
 
             //SEND PARAMS AND GET RESULT
             String loResponse = WebClient.sendRequest(loApi.getURLLeadCalls(),
-                                                        jsonObject.toString(), poHeader.getHeaders());
+                    jsonParam.toString(), poHeader.getHeaders());
             if(loResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return false;
@@ -264,12 +267,12 @@ public class GTeleApp {
                 String sMobile = loResult.getString("sMobileNo");
 
                 //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
-                if (poDaoLeads.CountLeadTrans(stransNox) < 1){
+                if (poDaoLeads.GetLeadTrans(stransNox) == null){
                     poDaoLeads.SaveLeads(eLeadCalls);
-                    Log.d(TAG,sTransNox+" has been saved to local");
+                    message= sTransNox+" has been saved to local";
                 }else {
                     poDaoLeads.UpdateLeads(eLeadCalls);
-                    Log.d(TAG, sTransNox+" has been updated to local");
+                    message= sTransNox+" has been updated to local";
                 }
 
                 //CALL METHOD TO IMPORT CLIENT, INQUIRiES, MOBILE INFO BASED ON RETURNED LEADS
@@ -285,7 +288,7 @@ public class GTeleApp {
             }
             return true;
         } catch (Exception e) {
-            Log.d(TAG, e.getMessage());
+            message= e.getMessage();
             return false;
         }
     }
@@ -359,9 +362,51 @@ public class GTeleApp {
                 return false;
             }
 
-            if (sCallStat.equals("POSSIBLE_SALES") || sCallStat.equals("NOT_NOW")){
+            /*PARAMS SHOULD BE WEB RESPON*/
+            if (sCallStat.equals("POSSIBLE SALES") || sCallStat.equals("NOT NOW")){
 
+                EHotline_Outgoing eHotlineOutgoing = new EHotline_Outgoing();
+                eHotlineOutgoing.setsTransNox(loResponse.getString("sTransNox"));
+                eHotlineOutgoing.setdTransact(loResponse.getString("dTransact"));
+                eHotlineOutgoing.setsDivision("TLM");
+                eHotlineOutgoing.setsMobileNo(loResponse.getString("sMobileNo"));
+                eHotlineOutgoing.setsMessagex(loResponse.getString("sMessagex"));
+                eHotlineOutgoing.setcSubscrbr(loResponse.getString("cSubscr"));
+                eHotlineOutgoing.setdDueUntil(loResponse.getString("dDueDate"));
+                eHotlineOutgoing.setcSendStat(loResponse.getString("cSendStat"));
+                eHotlineOutgoing.setnNoRetryx(loResponse.getInt("nNoRetryx"));
+                eHotlineOutgoing.setsUDHeader(loResponse.getString("sUDHeader"));
+                eHotlineOutgoing.setsReferNox(loResponse.getString("sReferNox"));
+                eHotlineOutgoing.setsSourceCd(loResponse.getString("sSourceCd"));
+                eHotlineOutgoing.setcTranStat(loResponse.getString("cTranStat"));
+                eHotlineOutgoing.setnPriority(loResponse.getInt("nPriority"));
+                eHotlineOutgoing.setsModified(loResponse.getString("sUserID"));
+                eHotlineOutgoing.setdModified(loResponse.getString("dTransact"));
+
+                //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
+                String sTransNox = loResponse.getString("sTransNox");
+                if (poDaoHOutgoing.GetHotlineOutgoing(sTransNox) == null){
+                    poDaoHOutgoing.SaveHotlineOutgoing(eHotlineOutgoing);
+                    message= loResponse.getString("sTransNox")+" has been saved to local";
+                }else {
+                    poDaoHOutgoing.UpdateHotlineOutgoing(eHotlineOutgoing);
+                    message= sTransNox+" has been updated to local";
+                }
             }
+
+            //GET RECENT COUNTS FOR UNREACH STATUS
+            int nUnreachx = poDaoClientMobile.CountUnreachx(loResponse.getString("sClientID"),
+                                loResponse.getString("sMobileNo"));
+
+            //IF STATUS IS 'CANNOT EB REACHED' ADD 1 AGAIN
+            if (sCallStat.equals("CANNOT BE REACHED")) {
+                nUnreachx = nUnreachx + 1;
+            }
+            //UPDATE CLIENT_MOBILE LOCAL
+            poDaoClientMobile.UpdateClientMobile(loResponse.getString("sClientID"),
+                    loResponse.getString("sMobileNo"), loResponse.getString("dTransact"), nUnreachx);
+            //UPDATE LEAD CALL LOCAL
+            poDaoLeads.UpdateLeadCall(loResponse.getString("sReferNox"), loConstants.GetRemarks(sCallStat));
 
             return true;
         }catch (Exception e){

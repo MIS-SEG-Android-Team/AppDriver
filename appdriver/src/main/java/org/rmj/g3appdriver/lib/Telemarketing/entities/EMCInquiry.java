@@ -33,6 +33,8 @@ public class EMCInquiry {
     private double nCashPrc;
     @ColumnInfo(name = "sRelatnID")
     private String sRelatnID;
+    @ColumnInfo(name = "sTableNM")
+    private String sTableNM;
 
     @NonNull
     public String getsTransNox() {
@@ -129,5 +131,13 @@ public class EMCInquiry {
 
     public void setsRelatnID(String sRelatnID) {
         this.sRelatnID = sRelatnID;
+    }
+
+    public String getsTableNM() {
+        return sTableNM;
+    }
+
+    public void setsTableNM(String sTableNM) {
+        this.sTableNM = sTableNM;
     }
 }

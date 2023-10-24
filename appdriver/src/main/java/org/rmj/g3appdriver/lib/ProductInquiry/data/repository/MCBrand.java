@@ -63,6 +63,10 @@ public class MCBrand {
         return poDao.getAllMcBrand();
     }
 
+    public EMcBrand GetBrandName(String sBrandIDx){
+        return poDao.getMcBrandInfo(sBrandIDx);
+    }
+
     public boolean ImportMCBrands(){
         try{
             JSONObject params = new JSONObject();

@@ -882,22 +882,52 @@ public class GCircleApi extends WebApi {
     }
 
     public String getURLLeadCalls(){
-        return URL_GET_LEADS;
+        if(isUnitTest()) {
+            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_LEADS);
+            return LOCAL + URL_GET_LEADS;
+        }
+        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_LEADS);
+        return LIVE + URL_GET_LEADS;
     }
     public String getURLClientCalls(){
-        return URL_GET_CLIENTS;
+        if(isUnitTest()) {
+            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_CLIENTS);
+            return LOCAL + URL_GET_CLIENTS;
+        }
+        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_CLIENTS);
+        return LIVE + URL_GET_CLIENTS;
     }
     public String getURLMCInq(){
-        return URL_GET_MCINQ;
+        if(isUnitTest()) {
+            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_MCINQ);
+            return LOCAL + URL_GET_MCINQ;
+        }
+        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_MCINQ);
+        return LIVE + URL_GET_MCINQ;
     }
     public String getURLClientMobile(){
-        return URL_GET_CLIENT_MOBILE;
+        if(isUnitTest()) {
+            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_CLIENT_MOBILE);
+            return LOCAL + URL_GET_CLIENT_MOBILE;
+        }
+        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_CLIENT_MOBILE);
+        return LIVE + URL_GET_CLIENT_MOBILE;
     }
     public String getUrlSendSchedule(){
-        return URL_SEND_SCHEDULE;
+        if(isUnitTest()) {
+            Log.d(TAG, "Initialize api:" + LOCAL + URL_SEND_SCHEDULE);
+            return LOCAL + URL_SEND_SCHEDULE;
+        }
+        Log.d(TAG, "Initialize api:" + LIVE + URL_SEND_SCHEDULE);
+        return LIVE + URL_SEND_SCHEDULE;
     }
     public String getUrlSendCallStatus(){
-        return URL_SEND_CALL_STATUS;
+        if(isUnitTest()) {
+            Log.d(TAG, "Initialize api:" + LOCAL + URL_SEND_CALL_STATUS);
+            return LOCAL + URL_SEND_CALL_STATUS;
+        }
+        Log.d(TAG, "Initialize api:" + LIVE + URL_SEND_CALL_STATUS);
+        return LIVE + URL_SEND_CALL_STATUS;
     }
 
 }

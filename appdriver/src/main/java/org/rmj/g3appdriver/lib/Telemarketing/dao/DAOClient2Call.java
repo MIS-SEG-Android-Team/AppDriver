@@ -13,9 +13,7 @@ import java.util.List;
 @Dao
 public interface DAOClient2Call {
     @Query("SELECT * FROM Call_Client WHERE sClientID = :sClientID")
-    EClient2Call GetClientCall(String sClientID);
-    @Query("SELECT * FROM Call_Client WHERE sClientID = :sClientID")
-    LiveData<List<EClient2Call>> GetLiveClientInfo(String sClientID);
+    EClient2Call GetClient2Call(String sClientID);
     @Insert
     void SaveClients(EClient2Call eClient2Call);
     @Update

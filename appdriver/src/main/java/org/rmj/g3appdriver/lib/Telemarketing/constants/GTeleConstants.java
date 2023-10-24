@@ -7,7 +7,7 @@ public class GTeleConstants {
                 return "GNDO";
             case "MC CREDIT APPLICATION":
                 return "MCCA";
-            case "MC INQUIRY ":
+            case "MC INQUIRY":
                 return "INQR";
             case "LENDING":
                 return "LEND";
@@ -15,6 +15,20 @@ public class GTeleConstants {
                 return "MCSO";
             case "MOBILE PHONE INQUIRY":
                 return "MPIn";
+            case "RANDOM CALL":
+                return "TLMC";
+            case "REFERRAL":
+                return "RFRL";
+            case "OTHERS":
+                return "OTH";
+            case "BIYAHENG FIESTA":
+                return "GBF";
+            case "FREE SERVICE":
+                return "FSCU";
+            case "DISPLAY CARAVAN":
+                return "DC";
+            case "INCOMING CALL":
+                return "CALL";
             default:
                 return "";
         }

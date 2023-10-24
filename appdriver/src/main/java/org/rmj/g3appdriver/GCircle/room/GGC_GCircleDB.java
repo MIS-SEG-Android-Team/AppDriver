@@ -23,10 +23,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClient2Call;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClientMobile;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOHoutlineOutgoing;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOMCInquiry;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EClient2Call;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EClientMobile;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EHotline_Outgoing;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.ELeadCalls;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
 import org.rmj.g3appdriver.lib.addressbook.data.dao.DAddressRequest;
@@ -223,7 +225,8 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
         ELeadCalls.class,
         EClient2Call.class,
         EMCInquiry.class,
-        EClientMobile.class}, version = 40, exportSchema = false)
+        EClientMobile.class,
+        EHotline_Outgoing.class}, version = 40, exportSchema = false)
 public abstract class GGC_GCircleDB extends RoomDatabase {
     private static final String TAG = "GhostRider_DB_Manager";
     private static GGC_GCircleDB instance;
@@ -297,6 +300,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
     public abstract DAOClient2Call teleCallClientsDao();
     public abstract DAOMCInquiry teleMCInquiryDao();
     public abstract DAOClientMobile teleClientMobDao();
+    public abstract DAOHoutlineOutgoing teleHOutgoingDao();
 
     public static synchronized GGC_GCircleDB getInstance(Context context){
         if(instance == null){
