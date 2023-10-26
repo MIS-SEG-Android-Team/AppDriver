@@ -106,13 +106,6 @@ public class GCircleApi extends WebApi {
     private static final String URL_SUBMIT_INQUIRY = "gcircle/ganado/submit_inquiry.php";
     private static final String URL_DOWNLOAD_INQUIRIES = "gcircle/ganado/import_inquiries.php";
 
-    private static final String URL_GET_LEADS = "telemarketing_app/GetLeads.php";
-    private static final String URL_GET_CLIENTS = "telemarketing_app/GetCallClients.php";
-    private static final String URL_GET_MCINQ = "telemarketing_app/GetMCInquiry.php";
-    private static final String URL_GET_CLIENT_MOBILE = "telemarketing_app/GetClientMobile.php";
-    private static final String URL_SEND_SCHEDULE = "telemarketing_app/SaveSchedule.php";
-    private static final String URL_SEND_CALL_STATUS = "telemarketing_app/SaveCallStat.php";
-
     public GCircleApi(Application instance) {
         super(instance);
     }
@@ -879,55 +872,6 @@ public class GCircleApi extends WebApi {
         }
         Log.d(TAG, "Initialize api:" + LIVE + URL_DOWNLOAD_INQUIRIES);
         return LIVE + URL_DOWNLOAD_INQUIRIES;
-    }
-
-    public String getURLLeadCalls(){
-        if(isUnitTest()) {
-            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_LEADS);
-            return LOCAL + URL_GET_LEADS;
-        }
-        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_LEADS);
-        return LIVE + URL_GET_LEADS;
-    }
-    public String getURLClientCalls(){
-        if(isUnitTest()) {
-            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_CLIENTS);
-            return LOCAL + URL_GET_CLIENTS;
-        }
-        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_CLIENTS);
-        return LIVE + URL_GET_CLIENTS;
-    }
-    public String getURLMCInq(){
-        if(isUnitTest()) {
-            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_MCINQ);
-            return LOCAL + URL_GET_MCINQ;
-        }
-        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_MCINQ);
-        return LIVE + URL_GET_MCINQ;
-    }
-    public String getURLClientMobile(){
-        if(isUnitTest()) {
-            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_CLIENT_MOBILE);
-            return LOCAL + URL_GET_CLIENT_MOBILE;
-        }
-        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_CLIENT_MOBILE);
-        return LIVE + URL_GET_CLIENT_MOBILE;
-    }
-    public String getUrlSendSchedule(){
-        if(isUnitTest()) {
-            Log.d(TAG, "Initialize api:" + LOCAL + URL_SEND_SCHEDULE);
-            return LOCAL + URL_SEND_SCHEDULE;
-        }
-        Log.d(TAG, "Initialize api:" + LIVE + URL_SEND_SCHEDULE);
-        return LIVE + URL_SEND_SCHEDULE;
-    }
-    public String getUrlSendCallStatus(){
-        if(isUnitTest()) {
-            Log.d(TAG, "Initialize api:" + LOCAL + URL_SEND_CALL_STATUS);
-            return LOCAL + URL_SEND_CALL_STATUS;
-        }
-        Log.d(TAG, "Initialize api:" + LIVE + URL_SEND_CALL_STATUS);
-        return LIVE + URL_SEND_CALL_STATUS;
     }
 
 }
