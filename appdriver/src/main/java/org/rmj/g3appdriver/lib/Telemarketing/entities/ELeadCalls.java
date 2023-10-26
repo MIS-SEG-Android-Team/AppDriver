@@ -40,7 +40,7 @@ public class ELeadCalls {
     @ColumnInfo(name = "cCallStat")
     private int cCallStat = 0;
     @ColumnInfo(name = "cTLMStatx")
-    private int cTLMStatx = 0;
+    private String cTLMStatx = "";
     @ColumnInfo(name = "cSMSStatx")
     private int cSMSStatx = 0;
     @ColumnInfo(name = "nSMSSentx")
@@ -171,11 +171,11 @@ public class ELeadCalls {
         this.cCallStat = cCallStat;
     }
 
-    public int getcTLMStatx() {
+    public String getcTLMStatx() {
         return cTLMStatx;
     }
 
-    public void setcTLMStatx(int cTLMStatx) {
+    public void setcTLMStatx(String cTLMStatx) {
         this.cTLMStatx = cTLMStatx;
     }
 

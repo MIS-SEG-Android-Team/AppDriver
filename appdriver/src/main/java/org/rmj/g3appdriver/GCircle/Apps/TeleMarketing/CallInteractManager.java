@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import androidx.lifecycle.LiveData;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.rmj.apprdiver.util.SQLUtil;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeSession;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
@@ -29,76 +31,28 @@ public class CallInteractManager {
     private GTeleApp poTeleApp;
     private EmployeeSession poSession;
     private DAOLeadCalls poDaoLeadCalls;
-    private DAOClient2Call poDaoClient2Call;
-    private DAOMCInquiry poDaomcInquiry;
     private GTeleConstants loConstants;
     private GSimSubscriber loSubscriber;
+    private String sTransNox;
+    private String sLeadSrc;
+    private String sUserIDx;
+    private String sClientID;
+    private String sMobileNo;
+    private int cSubscr;
     private String message;
     public CallInteractManager(Application instance) {
         this.context = instance.getApplicationContext();
 
         this.poTeleApp = new GTeleApp(instance);
         this.poSession = EmployeeSession.getInstance(instance);
-
         this.poDaoLeadCalls = GGC_GCircleDB.getInstance(instance).teleLeadsDao();
-        this.poDaoClient2Call = GGC_GCircleDB.getInstance(instance).teleCallClientsDao();
-        this.poDaomcInquiry = GGC_GCircleDB.getInstance(instance).teleMCInquiryDao();
-
         this.loSubscriber = new GSimSubscriber(instance.getApplicationContext());
         this.loConstants = new GTeleConstants();
-    }
-    //1. GET LEADS FIRST (CLIENT_ID -> CLIENT INFO, STRANSNOX -> PRODUCT INQUIRY)
-    public LiveData<DAOLeadCalls.LeadInformation> GetLeads(){
-        String sUserID = poSession.getUserID();
-        String sSubscrFilter = CreateSimClause();
-        String dTransact= new
-                SimpleDateFormat("yyyy:MM:dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
-
-        /*LEADS ARE BASED ON DEFAULT PRIORITIES, REFERRED FROM VB.NET TELEMARKETING DESKTOP CODE*/
-        if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("GANADO")) > 0){ //GANADO SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("GANADO"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("MC CREDIT APPLICATION")) > 0){ //MC CREDIT APP SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("MC CREDIT APPLICATION"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("MC INQUIRY")) > 0){ //INQUIRY SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("MC INQUIRY"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("RANDOM CALL")) > 0){ //RANDOM CALL SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("RANDOM CALL"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("REFERRAL")) > 0){ //REFERRAL SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("REFERRAL"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("OTHERS")) > 0){ //OTHERS SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("OTHERS"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("BIYAHENG FIESTA")) > 0){ //BYAHENG SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("BIYAHENG FIESTA"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("FREE SERVICE")) > 0){ //FREE SERVICE SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("FREE SERVICE"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("DISPLAY CARAVAN")) > 0){ //DISPLAY CARAVAN SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("DISPLAY CARAVAN"), dTransact);
-        }else if (poDaoLeadCalls.CountLeads(sUserID,sSubscrFilter,
-                loConstants.GetLeadConstant("INCOMING CALL")) > 0){ //INCOMING SOURCE
-            return poDaoLeadCalls.GetLiveLeadCall(sUserID, sSubscrFilter, loConstants.GetLeadConstant("INCOMING CALL"), dTransact);
-        }
-        return null;
     }
     public String getMessage(){
         return message;
     }
-    public void ImportCalls(){
-        //IMPORT LEADS WITH CLIENT INFO
-        if (poTeleApp.ImportLeads(poSession.getUserID(), CreateSimClause()) == false){
-            message = poTeleApp.getMessage(); //get error message from request
-        }
-    }
-    private String CreateSimClause(){
-        //INITIALIZE SIM CARD NAMES
+    private String CreateSubscrCondition(){ //INITIALIZE SIM CARD NAMES
         if (loSubscriber.InitSim() == false){
             message = loSubscriber.getMessage();
             return null;
@@ -120,5 +74,98 @@ public class CallInteractManager {
             }
         }
         return simCondition;
+    }
+    public void ImportCalls(){ //IMPORT LEADS WITH CLIENT INFO, PRODUCT INQUIRY
+        if (poTeleApp.ImportLeads(poSession.getUserID(), CreateSubscrCondition()) == false){
+            message = poTeleApp.getMessage(); //get error message from request
+        }
+    }
+    /* REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO AND LEAD SOURCE, BEFORE CALLING METHODS BELOW*/
+    public void InitTransaction(String sTransNox){
+        ELeadCalls leadCalls = poTeleApp.GetLeadTrans(sTransNox);
+        this.sTransNox = sTransNox;
+        this.sLeadSrc = leadCalls.getsSourceCD();
+        this.sClientID = leadCalls.getsClientID();
+        this.sMobileNo = leadCalls.getsMobileNo();
+        this.cSubscr = leadCalls.getcSubscrbr();
+        this.sUserIDx = poSession.getUserID();
+    }
+    public boolean SaveCallStatus(String sCallStat, String sApprvCD){
+        try {
+            //validate first if transaction no is applied
+            if (sTransNox == null){
+                message = "No applied transaction no";
+                return false;
+            }
+
+            //send json params for web request and get response
+            JSONObject jsonResponse = poTeleApp.SendCallStatus(sCallStat, sTransNox, String.valueOf(cSubscr),
+                    sApprvCD, sUserIDx, sClientID, sMobileNo);
+
+            if (jsonResponse == null){
+                message = poTeleApp.getMessage();
+                return false;
+            }
+            String dTransact = jsonResponse.getString("dTransact");
+
+            //'POSSIBLE SALES' AND 'NOT NOW' STATUS, INSERT TO HOTLINE_OUTGOING
+            if (sCallStat == "POSSIBLE SALES" || sCallStat == "NOT NOW"){
+                poTeleApp.InsertHotlineOutgoing(jsonResponse.getString("sTransNox"),
+                        dTransact,
+                        "TLM",
+                        jsonResponse.getString("sMobileNo"),
+                        jsonResponse.getString("sMessagex"),
+                        jsonResponse.getString("cSubscr"),
+                        jsonResponse.getString("dDueDate"),
+                        jsonResponse.getString("cSendStat"),
+                        jsonResponse.getInt("nNoRetryx"),
+                        jsonResponse.getString("sUDHeader"),
+                        jsonResponse.getString("sReferNox"),
+                        jsonResponse.getString("sSourceCd"),
+                        jsonResponse.getString("cTranStat"),
+                        jsonResponse.getInt("nPriority"),
+                        jsonResponse.getString("sUserID"));
+            }
+
+            //UPDATE NUNREACHX, IF STATUS 'CANNOT BE REACHED', ELSE 0
+            if (sCallStat == "CANNOT BE REACHED"){
+                poTeleApp.UpdateCMobile(sClientID, sMobileNo, dTransact, 1);
+                message= poTeleApp.getMessage() + " Status: Unreachable";
+            }else {
+                poTeleApp.UpdateCMobile(sClientID, sMobileNo, dTransact, 0);
+                message= poTeleApp.getMessage();
+            }
+            //UPDATE LEAD'S CTLMSTATX TO SELECTED STATUS
+            poTeleApp.UpdateLeadCallStat(sTransNox, sCallStat);
+
+            return true;
+        } catch (JSONException e) {
+            message = e.getMessage();
+            return false;
+        }
+    }
+    public boolean SaveSchedule(String dFollowUp, String cTranstat, String sRemarks){
+        if (sTransNox == null){
+            message = "No applied transaction no";
+            return false;
+        }
+
+        if (dFollowUp == null){
+            message = "No schedule date applied";
+            return false;
+        }
+
+        return poTeleApp.UploadSchedule(sTransNox, sLeadSrc, dFollowUp, cTranstat, sRemarks, sUserIDx);
+    }
+    public LiveData<DAOLeadCalls.LeadInformation> GetLeads(String sLeadSrc){ //ON QUEUES, PRIORITY CALLS
+        return poDaoLeadCalls.GetLiveLeadCall(poSession.getUserID(), CreateSubscrCondition(), loConstants.GetLeadConstant(sLeadSrc));
+    }
+    public LiveData<DAOLeadCalls.LeadInformation> GetLeadsOnSched() { //ON SCHED, LEAST PRIORITY AFTER QUEUES
+        String dTransact = new
+                SimpleDateFormat("yyyy:MM:dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
+        return poDaoLeadCalls.GetLiveSchedCall(poSession.getUserID(), CreateSubscrCondition(), dTransact);
+    }
+    public LiveData<List<DAOLeadCalls.LeadHistory>> GetHistory(){
+        return poDaoLeadCalls.GetLeadHistory();
     }
 }

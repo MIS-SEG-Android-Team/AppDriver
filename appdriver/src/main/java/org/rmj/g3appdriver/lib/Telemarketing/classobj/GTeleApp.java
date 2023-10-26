@@ -255,7 +255,7 @@ public class GTeleApp {
                 eLeadCalls.setnNoRetryx(loResult.getInt("nNoRetryx"));
                 eLeadCalls.setcSubscrbr(loResult.getInt("cSubscrbr"));
                 eLeadCalls.setcCallStat(loResult.getInt("cCallStat"));
-                eLeadCalls.setcTLMStatx(loResult.getInt("cTLMStatx"));
+                eLeadCalls.setcTLMStatx(loResult.getString("cTLMStatx"));
                 eLeadCalls.setcSMSStatx(loResult.getInt("cSMSStatx"));
                 eLeadCalls.setnSMSSentx(loResult.getInt("nSMSSentx"));
                 eLeadCalls.setsModified(loResult.getString("sModified"));
@@ -292,7 +292,12 @@ public class GTeleApp {
             return false;
         }
     }
-    public boolean UploadSchedule(String sTransNox, String sLeadsrc, String dFollowUp, String cTranstat, String sRemarks){
+    public ELeadCalls GetLeadTrans(String sTransNox){
+        ELeadCalls eLeadCalls = poDaoLeads.GetLeadTrans(sTransNox);
+        return eLeadCalls;
+    }
+    public boolean UploadSchedule(String sTransNox, String sLeadsrc, String dFollowUp, String cTranstat,
+                                  String sRemarks, String sUserIDx){
         try{
             //CREATE PARAMS USING JSON OBJECT
             JSONObject jsonParam = new JSONObject();
@@ -302,7 +307,7 @@ public class GTeleApp {
             jsonParam.put("dFollowUp", dFollowUp);
             jsonParam.put("cTransStat", cTranstat);
             jsonParam.put("sRemarks", sRemarks);
-            jsonParam.put("sUserID", sRemarks);
+            jsonParam.put("sUserID", sUserIDx);
 
             String lsResponse = WebClient.sendRequest(
                     loApi.getUrlSendSchedule(),
@@ -322,6 +327,11 @@ public class GTeleApp {
                 return false;
             }
 
+            if (loResponse.getString("sTransNox") == null){
+                message = "No transaction no returned from server";
+                return false;
+            }
+
             poDaoMcInq.UpdateFollowUp(dFollowUp, loResponse.getString("sTransNox"));
             message = "Schedule has been updated!";
             return true;
@@ -330,7 +340,7 @@ public class GTeleApp {
             return false;
         }
     }
-    public boolean SendCallStatus(String sCallStat, String sReferNox, String cSubscrNM, String sApprvCd, String sUserID,
+    public JSONObject SendCallStatus(String sCallStat, String sReferNox, String cSubscr, String sApprvCd, String sUserID,
                         String sClientID, String sMobileNo){
         try {
             //CREATE PARAMS USING JSON OBJECT
@@ -338,7 +348,7 @@ public class GTeleApp {
 
             jsonParam.put("sCallStat", loConstants.GetRemarks(sCallStat));
             jsonParam.put("sReferNox", sReferNox);
-            jsonParam.put("cSubscr", loConstants.GetSimSubscriber(cSubscrNM));
+            jsonParam.put("cSubscr", cSubscr);
             jsonParam.put("sApprvCd", sApprvCd);
             jsonParam.put("sUserID", sUserID);
             jsonParam.put("sClientID", sClientID);
@@ -351,7 +361,7 @@ public class GTeleApp {
 
             if (lsResponse == null) {
                 message = SERVER_NO_RESPONSE;
-                return false;
+                return null;
             }
 
             JSONObject loResponse = new JSONObject(lsResponse);
@@ -359,59 +369,54 @@ public class GTeleApp {
             if (lsResult.equalsIgnoreCase("error")) {
                 JSONObject loError = loResponse.getJSONObject("error");
                 message = getErrorMessage(loError);;
-                return false;
+                return null;
             }
 
-            /*PARAMS SHOULD BE WEB RESPON*/
-            if (sCallStat.equals("POSSIBLE SALES") || sCallStat.equals("NOT NOW")){
-
-                EHotline_Outgoing eHotlineOutgoing = new EHotline_Outgoing();
-                eHotlineOutgoing.setsTransNox(loResponse.getString("sTransNox"));
-                eHotlineOutgoing.setdTransact(loResponse.getString("dTransact"));
-                eHotlineOutgoing.setsDivision("TLM");
-                eHotlineOutgoing.setsMobileNo(loResponse.getString("sMobileNo"));
-                eHotlineOutgoing.setsMessagex(loResponse.getString("sMessagex"));
-                eHotlineOutgoing.setcSubscrbr(loResponse.getString("cSubscr"));
-                eHotlineOutgoing.setdDueUntil(loResponse.getString("dDueDate"));
-                eHotlineOutgoing.setcSendStat(loResponse.getString("cSendStat"));
-                eHotlineOutgoing.setnNoRetryx(loResponse.getInt("nNoRetryx"));
-                eHotlineOutgoing.setsUDHeader(loResponse.getString("sUDHeader"));
-                eHotlineOutgoing.setsReferNox(loResponse.getString("sReferNox"));
-                eHotlineOutgoing.setsSourceCd(loResponse.getString("sSourceCd"));
-                eHotlineOutgoing.setcTranStat(loResponse.getString("cTranStat"));
-                eHotlineOutgoing.setnPriority(loResponse.getInt("nPriority"));
-                eHotlineOutgoing.setsModified(loResponse.getString("sUserID"));
-                eHotlineOutgoing.setdModified(loResponse.getString("dTransact"));
-
-                //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
-                String sTransNox = loResponse.getString("sTransNox");
-                if (poDaoHOutgoing.GetHotlineOutgoing(sTransNox) == null){
-                    poDaoHOutgoing.SaveHotlineOutgoing(eHotlineOutgoing);
-                    message= loResponse.getString("sTransNox")+" has been saved to local";
-                }else {
-                    poDaoHOutgoing.UpdateHotlineOutgoing(eHotlineOutgoing);
-                    message= sTransNox+" has been updated to local";
-                }
-            }
-
-            //GET RECENT COUNTS FOR UNREACH STATUS
-            int nUnreachx = poDaoClientMobile.CountUnreachx(loResponse.getString("sClientID"),
-                                loResponse.getString("sMobileNo"));
-
-            //IF STATUS IS 'CANNOT EB REACHED' ADD 1 AGAIN
-            if (sCallStat.equals("CANNOT BE REACHED")) {
-                nUnreachx = nUnreachx + 1;
-            }
-            //UPDATE CLIENT_MOBILE LOCAL
-            poDaoClientMobile.UpdateClientMobile(loResponse.getString("sClientID"),
-                    loResponse.getString("sMobileNo"), loResponse.getString("dTransact"), nUnreachx);
-            //UPDATE LEAD CALL LOCAL
-            poDaoLeads.UpdateLeadCall(loResponse.getString("sReferNox"), loConstants.GetRemarks(sCallStat));
-
-            return true;
+            return loResponse;
         }catch (Exception e){
             message = e.getMessage();
-            return false;
+            return null;
         }
+    }
+    public void InsertHotlineOutgoing(String sTransNox, String dTransact,String sDivision, String sMobileNo,
+                                      String sMessagex, String cSubscr, String dDueDate, String cSendStat,
+                                      int nNoRetryx, String sUDHeader, String sReferNox, String sSourceCd,
+                                      String cTranStat, int nPriority, String sUserID){
+
+        EHotline_Outgoing eHotlineOutgoing = new EHotline_Outgoing();
+        eHotlineOutgoing.setsTransNox(sTransNox);
+        eHotlineOutgoing.setdTransact(dTransact);
+        eHotlineOutgoing.setsDivision(sDivision);
+        eHotlineOutgoing.setsMobileNo(sMobileNo);
+        eHotlineOutgoing.setsMessagex(sMessagex);
+        eHotlineOutgoing.setcSubscrbr(cSubscr);
+        eHotlineOutgoing.setdDueUntil(dDueDate);
+        eHotlineOutgoing.setcSendStat(cSendStat);
+        eHotlineOutgoing.setnNoRetryx(nNoRetryx);
+        eHotlineOutgoing.setsUDHeader(sUDHeader);
+        eHotlineOutgoing.setsReferNox(sReferNox);
+        eHotlineOutgoing.setsSourceCd(sSourceCd);
+        eHotlineOutgoing.setcTranStat(cTranStat);
+        eHotlineOutgoing.setnPriority(nPriority);
+        eHotlineOutgoing.setsModified(sUserID);
+        eHotlineOutgoing.setdModified(dTransact);
+
+        //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
+        if (poDaoHOutgoing.GetHotlineOutgoing(sTransNox) == null){
+            poDaoHOutgoing.SaveHotlineOutgoing(eHotlineOutgoing);
+            message= sTransNox+" has been saved to local";
+        }else {
+            poDaoHOutgoing.UpdateHotlineOutgoing(eHotlineOutgoing);
+            message= sTransNox+" has been updated to local";
+        }
+
+    }
+    public void UpdateCMobile(String sClientID, String sMobileNo, String dTransact, int nUnreachx){
+        poDaoClientMobile.UpdateCallTrans(sClientID, sMobileNo, dTransact, nUnreachx);
+        message= sClientID+" has been updated to local.";
+    }
+    public void UpdateLeadCallStat(String sTransNox, String sCallStat){
+        poDaoLeads.UpdateLeadCall(sTransNox, loConstants.GetRemarks(sCallStat));
+        message= sTransNox+" has been updated to local.";
     }
 }
