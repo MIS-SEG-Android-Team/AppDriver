@@ -1,42 +1,46 @@
 package org.rmj.g3appdriver.lib.Telemarketing.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Hotline_Outgoing")
 public class EHotline_Outgoing {
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "sTransNox")
-    private String sTransNox;
+    public String sTransNox;
     @ColumnInfo(name = "dTransact")
-    private String dTransact;
+    public String dTransact;
     @ColumnInfo(name = "sDivision")
-    private String sDivision;
+    public String sDivision;
     @ColumnInfo(name = "sMobileNo")
-    private String sMobileNo;
+    public String sMobileNo;
     @ColumnInfo(name = "sMessagex")
-    private String sMessagex;
+    public String sMessagex;
     @ColumnInfo(name = "cSubscrbr")
-    private String cSubscrbr;
+    public String cSubscrbr;
     @ColumnInfo(name = "dDueUntil")
-    private String dDueUntil;
+    public String dDueUntil;
     @ColumnInfo(name = "cSendStat")
-    private String cSendStat;
+    public String cSendStat;
     @ColumnInfo(name = "nNoRetryx")
-    private int nNoRetryx;
+    public int nNoRetryx;
     @ColumnInfo(name = "sUDHeader")
-    private String sUDHeader;
+    public String sUDHeader;
     @ColumnInfo(name = "sReferNox")
-    private String sReferNox;
+    public String sReferNox;
     @ColumnInfo(name = "sSourceCd")
-    private String sSourceCd;
+    public String sSourceCd;
     @ColumnInfo(name = "cTranStat")
-    private String cTranStat;
+    public String cTranStat;
     @ColumnInfo(name = "nPriority")
-    private int nPriority;
+    public int nPriority;
     @ColumnInfo(name = "sModified")
-    private String sModified;
+    public String sModified;
     @ColumnInfo(name = "dModified")
-    private String dModified;
+    public String dModified;
 
     public String getsTransNox() {
         return sTransNox;

@@ -10,31 +10,31 @@ public class EMCInquiry {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "sTransNox")
-    private String sTransNox;
+    public String sTransNox;
     @ColumnInfo(name = "dFollowUp")
-    private String dFollowUp;
+    public String dFollowUp;
     @ColumnInfo(name = "sClientID")
-    private String sClientID;
+    public String sClientID;
     @ColumnInfo(name = "sBrandIDx")
-    private String sBrandIDx;
+    public String sBrandIDx;
     @ColumnInfo(name = "sModelIDx")
-    private String sModelIDx;
+    public String sModelIDx;
     @ColumnInfo(name = "sColorIDx")
-    private String sColorIDx;
+    public String sColorIDx;
     @ColumnInfo(name = "nTerms")
-    private int nTerms;
+    public int nTerms;
     @ColumnInfo(name = "dTargetxx")
-    private String dTargetxx;
+    public String dTargetxx;
     @ColumnInfo(name = "nDownPaym")
-    private double nDownPaym;
+    public double nDownPaym;
     @ColumnInfo(name = "nMonAmort")
-    private double nMonAmort;
+    public double nMonAmort;
     @ColumnInfo(name = "nCashPrc")
-    private double nCashPrc;
+    public double nCashPrc;
     @ColumnInfo(name = "sRelatnID")
-    private String sRelatnID;
+    public String sRelatnID;
     @ColumnInfo(name = "sTableNM")
-    private String sTableNM;
+    public String sTableNM;
 
     @NonNull
     public String getsTransNox() {

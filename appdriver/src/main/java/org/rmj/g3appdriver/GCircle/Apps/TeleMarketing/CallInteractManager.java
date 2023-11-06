@@ -80,7 +80,7 @@ public class CallInteractManager {
             message = poTeleApp.getMessage(); //get error message from request
         }
     }
-    /* REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO AND LEAD SOURCE, BEFORE CALLING METHODS BELOW*/
+    /* REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO, BEFORE SAVING TRANSACTIONS*/
     public void InitTransaction(String sTransNox){
         ELeadCalls leadCalls = poTeleApp.GetLeadTrans(sTransNox);
         this.sTransNox = sTransNox;

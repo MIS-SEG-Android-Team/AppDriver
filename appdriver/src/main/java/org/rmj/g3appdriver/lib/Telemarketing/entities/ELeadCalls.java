@@ -10,45 +10,45 @@ public class ELeadCalls {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "sTransNox")
-    private String sTransNox = "";
+    public String sTransNox = "";
     @ColumnInfo(name = "sAgentIDx")
-    private String sAgentIDx = "";
+    public String sAgentIDx = "";
     @ColumnInfo(name = "dTransact")
-    private String dTransact = "";
+    public String dTransact = "";
     @ColumnInfo(name = "sClientID")
-    private String sClientID = "";
+    public String sClientID = "";
     @ColumnInfo(name = "sMobileNo")
-    private String sMobileNo = "";
+    public String sMobileNo = "";
     @ColumnInfo(name = "sRemarksx")
-    private String sRemarksx = "";
+    public String sRemarksx = "";
     @ColumnInfo(name = "sReferNox")
-    private String sReferNox = "";
+    public String sReferNox = "";
     @ColumnInfo(name = "sSourceCD")
-    private String sSourceCD = "";
+    public String sSourceCD = "";
     @ColumnInfo(name = "sApprovCd")
-    private String sApprovCd = "";
+    public String sApprovCd = "";
     @ColumnInfo(name = "cTranStat")
-    private String cTranStat = "0";
+    public String cTranStat = "0";
     @ColumnInfo(name = "dCallStrt")
-    private String dCallStrt = "";
+    public String dCallStrt = "";
     @ColumnInfo(name = "dCallEndx")
-    private String dCallEndx = "";
+    public String dCallEndx = "";
     @ColumnInfo(name = "nNoRetryx")
-    private int nNoRetryx = 0;
+    public Integer nNoRetryx = 0;
     @ColumnInfo(name = "cSubscrbr")
-    private int cSubscrbr = 0;
+    public Integer cSubscrbr = 0;
     @ColumnInfo(name = "cCallStat")
-    private int cCallStat = 0;
+    public String cCallStat = "0";
     @ColumnInfo(name = "cTLMStatx")
-    private String cTLMStatx = "";
+    public String cTLMStatx = "";
     @ColumnInfo(name = "cSMSStatx")
-    private int cSMSStatx = 0;
+    public Integer cSMSStatx = 0;
     @ColumnInfo(name = "nSMSSentx")
     public int nSMSSentx = 0;
     @ColumnInfo(name = "sModified")
-    private String sModified = "";
+    public String sModified = "";
     @ColumnInfo(name = "dModified")
-    private String dModified = "";
+    public String dModified = "";
 
     @NonNull
     public String getsTransNox() {
@@ -147,27 +147,27 @@ public class ELeadCalls {
         this.dCallEndx = dCallEndx;
     }
 
-    public int getnNoRetryx() {
+    public Integer getnNoRetryx() {
         return nNoRetryx;
     }
 
-    public void setnNoRetryx(int nNoRetryx) {
+    public void setnNoRetryx(Integer nNoRetryx) {
         this.nNoRetryx = nNoRetryx;
     }
 
-    public int getcSubscrbr() {
+    public Integer getcSubscrbr() {
         return cSubscrbr;
     }
 
-    public void setcSubscrbr(int cSubscrbr) {
+    public void setcSubscrbr(Integer cSubscrbr) {
         this.cSubscrbr = cSubscrbr;
     }
 
-    public int getcCallStat() {
+    public String getcCallStat() {
         return cCallStat;
     }
 
-    public void setcCallStat(int cCallStat) {
+    public void setcCallStat(String cCallStat) {
         this.cCallStat = cCallStat;
     }
 
@@ -179,11 +179,11 @@ public class ELeadCalls {
         this.cTLMStatx = cTLMStatx;
     }
 
-    public int getcSMSStatx() {
+    public Integer getcSMSStatx() {
         return cSMSStatx;
     }
 
-    public void setcSMSStatx(int cSMSStatx) {
+    public void setcSMSStatx(Integer cSMSStatx) {
         this.cSMSStatx = cSMSStatx;
     }
 

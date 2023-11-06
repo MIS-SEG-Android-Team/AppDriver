@@ -1,44 +1,50 @@
 package org.rmj.g3appdriver.lib.Telemarketing.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Client_Mobile")
+import javax.persistence.UniqueConstraint;
+
+@Entity(tableName = "Client_Mobile", primaryKeys = {"sClientID"})
 public class EClientMobile {
+    @NonNull
     @ColumnInfo(name = "sClientID")
-    private String sClientID;
+    public String sClientID;
+    @NonNull
     @ColumnInfo(name = "sMobileNo")
-    private String sMobileNo;
+    public String sMobileNo;
     @ColumnInfo(name = "nEntryNox")
-    private int nEntryNox;
+    public int nEntryNox;
     @ColumnInfo(name = "nPriority")
-    private int nPriority;
+    public int nPriority;
     @ColumnInfo(name = "cIncdMktg")
-    private String cIncdMktg;
+    public String cIncdMktg;
     @ColumnInfo(name = "nUnreachx")
-    private int nUnreachx;
+    public int nUnreachx;
     @ColumnInfo(name = "dLastVeri")
-    private String dLastVeri;
+    public String dLastVeri;
     @ColumnInfo(name = "dInactive")
-    private String dInactive;
+    public String dInactive;
     @ColumnInfo(name = "nNoRetryx")
-    private int nNoRetryx;
+    public int nNoRetryx;
     @ColumnInfo(name = "cInvalidx")
-    private String cInvalidx;
+    public String cInvalidx;
     @ColumnInfo(name = "sIdleTime")
-    private String sIdleTime;
+    public String sIdleTime;
     @ColumnInfo(name = "cConfirmd")
-    private String cConfirmd;
+    public String cConfirmd;
     @ColumnInfo(name = "dConfirmd")
-    private String dConfirmd;
+    public String dConfirmd;
     @ColumnInfo(name = "cSubscr")
-    private String cSubscr;
+    public String cSubscr;
     @ColumnInfo(name = "dHoldMktg")
-    private String dHoldMktg;
+    public String dHoldMktg;
     @ColumnInfo(name = "dLastCall")
-    private String dLastCall;
+    public String dLastCall;
     @ColumnInfo(name = "cRecdStat")
-    private String cRecdStat;
+    public String cRecdStat;
 
     public String getsClientID() {
         return sClientID;

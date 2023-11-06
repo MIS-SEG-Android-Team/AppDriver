@@ -32,6 +32,9 @@ public class HttpHeaderManager {
             case "gRider":
                 Log.d(TAG, "Initialize headers for Guanzon Circle.");
                 return GCircleHeaders.getInstance(instance);
+            case "TeleMktg":
+                Log.d(TAG, "Initialize headers for Telemarketing App.");
+                return GCircleHeaders.getInstance(instance);
             case "GuanzonApp":
                 Log.d(TAG, "Initialize headers for Guanzon App.");
                 return GConnectHeaders.getInstance(instance);

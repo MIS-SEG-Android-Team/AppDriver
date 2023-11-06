@@ -10,15 +10,15 @@ public class EClient2Call {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "sClientID")
-    private String sClientID;
+    public String sClientID;
     @ColumnInfo(name = "sClientNM")
-    private String sClientNM;
+    public String sClientNM;
     @ColumnInfo(name = "xAddressx")
-    private String xAddressx;
+    public String xAddressx;
     @ColumnInfo(name = "sPhoneNox")
-    private String sPhoneNox;
+    public String sPhoneNox;
     @ColumnInfo(name = "sMobileNox")
-    private String sMobileNox;
+    public String sMobileNox;
 
     @NonNull
     public String getsClientID() {

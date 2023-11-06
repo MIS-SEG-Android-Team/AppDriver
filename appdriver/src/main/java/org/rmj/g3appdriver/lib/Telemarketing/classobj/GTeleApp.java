@@ -5,8 +5,8 @@ import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 
 import android.app.Application;
 import android.util.Log;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
@@ -47,6 +47,96 @@ public class GTeleApp {
     }
     public String getMessage(){
         return message;
+    }
+    public boolean ImportLeads(String sUserID, String simSubscr){
+        try {
+            //CREATE PARAMS USING JSON OBJECT
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("sAgentIDx", sUserID);
+            jsonParam.put("cSubscrbr", simSubscr);
+
+            //SEND PARAMS AND GET RESULT
+            String loResponse = WebClient.sendRequest(loApi.getURLLeadCalls(),
+                    jsonParam.toString(), poHeader.getHeaders());
+            if(loResponse == null){
+                message = SERVER_NO_RESPONSE;
+                return false;
+            }
+            //CONVERT WEB SERVER RESPONSE TO JSON
+            JSONObject loJson = new JSONObject(loResponse);
+
+            //GET ERROR RETURNED FROM SERVER
+            String lsResult = loJson.getString("result");
+            if(lsResult.equalsIgnoreCase("error")){
+                JSONObject loError = loJson.getJSONObject("error");
+                message = getErrorMessage(loError);
+                return false;
+            }
+
+            //CONVERT JSON RESPONSE TO JSON ARRAY
+            JSONArray loArray = loJson.getJSONArray("leadsload");
+
+            //ITERATE ROWS FROM RESPONSE
+            for (int i = 0; i < loArray.length(); i++){
+
+                JSONObject loResult = loArray.getJSONObject(i);//convert each array to json object
+
+                JSONObject jsonLeads = new JSONObject(loResult.getString("leads")); //convert each result to json object
+
+                String sTransNox = jsonLeads.getString("sTransNox");
+
+                //INITIALIZE ENTITY COLUMNS
+                ELeadCalls eLeadCalls = new ELeadCalls();
+                eLeadCalls.setsTransNox(sTransNox);
+                eLeadCalls.setsAgentIDx(jsonLeads.getString("sAgentIDx"));
+                eLeadCalls.setdTransact(jsonLeads.getString("dTransact"));
+                eLeadCalls.setsClientID(jsonLeads.getString("sClientID"));
+                eLeadCalls.setsMobileNo(jsonLeads.getString("sMobileNo"));
+                eLeadCalls.setsRemarksx(jsonLeads.getString("sRemarksx"));
+                eLeadCalls.setsReferNox(jsonLeads.getString("sReferNox"));
+                eLeadCalls.setsSourceCD(jsonLeads.getString("sSourceCD"));
+                eLeadCalls.setsApprovCd(jsonLeads.getString("sApprovCd"));
+                eLeadCalls.setcTranStat(jsonLeads.getString("cTranStat"));
+                eLeadCalls.setdCallStrt(jsonLeads.getString("dCallStrt"));
+                eLeadCalls.setdCallEndx(jsonLeads.getString("dCallEndx"));
+                eLeadCalls.setnNoRetryx(jsonLeads.getInt("nNoRetryx"));
+                eLeadCalls.setcSubscrbr(jsonLeads.getInt("cSubscrbr"));
+                eLeadCalls.setcCallStat(jsonLeads.getString("cCallStat"));
+                eLeadCalls.setcTLMStatx(jsonLeads.getString("cTLMStatx"));
+                eLeadCalls.setcSMSStatx(jsonLeads.getInt("cSMSStatx"));
+                eLeadCalls.setnSMSSentx(jsonLeads.getInt("nSMSSentx"));
+                eLeadCalls.setsModified(jsonLeads.getString("sModified"));
+                eLeadCalls.setdModified(jsonLeads.getString("dModified"));
+
+                String sClientId = jsonLeads.getString("sClientID");
+                String sLeadSrc = jsonLeads.getString("sSourceCD");
+                String sMobile = jsonLeads.getString("sMobileNo");
+
+                //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
+                if (poDaoLeads.GetLeadTrans(sTransNox) == null){
+                    poDaoLeads.SaveLeads(eLeadCalls);
+                    message= sTransNox+" has been saved to local";
+                }else {
+                    poDaoLeads.UpdateLeads(eLeadCalls);
+                    message= sTransNox+" has been updated to local";
+                }
+
+                //CALL METHOD TO IMPORT CLIENT, INQUIRiES, MOBILE INFO BASED ON RETURNED LEADS
+                /*if (ImportClients(sClientId) == false){
+                    return false;
+                }
+                if (ImportMCInquiries(sTransNox, sLeadSrc) == false){
+                    return false;
+                }
+                if (ImportCLientMobile(sClientId, sMobile) == false){
+                    return false;
+                }*/
+            }
+            return true;
+        } catch (Exception e) {
+            message= e.getMessage();
+            return false;
+        }
     }
     public boolean ImportClients(String sClientID){
         try {
@@ -197,94 +287,6 @@ public class GTeleApp {
                 poDaoClientMobile.SaveClientMobile(eClientMobile);
             }else {
                 poDaoClientMobile.UpdateClientMobile(eClientMobile);
-            }
-            return true;
-        } catch (Exception e) {
-            message= e.getMessage();
-            return false;
-        }
-    }
-    public boolean ImportLeads(String sUserID, String simSubscr){
-        try {
-            //CREATE PARAMS USING JSON OBJECT
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("sAgentIDx", sUserID);
-            jsonParam.put("cSubscrbr", simSubscr);
-
-            //SEND PARAMS AND GET RESULT
-            String loResponse = WebClient.sendRequest(loApi.getURLLeadCalls(),
-                    jsonParam.toString(), poHeader.getHeaders());
-            if(loResponse == null){
-                message = SERVER_NO_RESPONSE;
-                return false;
-            }
-            //CONVERT WEB SERVER RESPONSE TO JSON
-            JSONObject loJson = new JSONObject(loResponse);
-
-            //GET ERROR RETURNED FROM SERVER
-            String lsResult = loJson.getString("result");
-            if(lsResult.equalsIgnoreCase("error")){
-                JSONObject loError = loJson.getJSONObject("error");
-                message = getErrorMessage(loError);
-                return false;
-            }
-
-            //CONVERT JSON RESPONSE TO JSON ARRAY
-            JSONArray loArray = loJson.getJSONArray("leads");
-
-            //ITERATE ROWS FROM RESPONSE
-            for (int i = 0; i < loArray.length(); i++){
-                JSONObject loResult = loArray.getJSONObject(i);
-
-                String stransNox = loResult.getString("sTransNox");
-
-                //INITIALIZE ENTITY COLUMNS
-                ELeadCalls eLeadCalls = new ELeadCalls();
-                eLeadCalls.setsTransNox(stransNox);
-                eLeadCalls.setsAgentIDx(loResult.getString("sAgentIDx"));
-                eLeadCalls.setdTransact(loResult.getString("dTransact"));
-                eLeadCalls.setsClientID(loResult.getString("sClientID"));
-                eLeadCalls.setsMobileNo(loResult.getString("sMobileNo"));
-                eLeadCalls.setsRemarksx(loResult.getString("sRemarksx"));
-                eLeadCalls.setsReferNox(loResult.getString("sReferNox"));
-                eLeadCalls.setsSourceCD(loResult.getString("sSourceCD"));
-                eLeadCalls.setsApprovCd(loResult.getString("sApprovCd"));
-                eLeadCalls.setcTranStat(loResult.getString("cTranStat"));
-                eLeadCalls.setdCallStrt(loResult.getString("dCallStrt"));
-                eLeadCalls.setdCallEndx(loResult.getString("dCallEndx"));
-                eLeadCalls.setnNoRetryx(loResult.getInt("nNoRetryx"));
-                eLeadCalls.setcSubscrbr(loResult.getInt("cSubscrbr"));
-                eLeadCalls.setcCallStat(loResult.getInt("cCallStat"));
-                eLeadCalls.setcTLMStatx(loResult.getString("cTLMStatx"));
-                eLeadCalls.setcSMSStatx(loResult.getInt("cSMSStatx"));
-                eLeadCalls.setnSMSSentx(loResult.getInt("nSMSSentx"));
-                eLeadCalls.setsModified(loResult.getString("sModified"));
-                eLeadCalls.setdModified(loResult.getString("dModified"));
-
-                String sTransNox = loResult.getString("sTransNox");
-                String sClientId = loResult.getString("sClientID");
-                String sLeadSrc = loResult.getString("sSourceCD");
-                String sMobile = loResult.getString("sMobileNo");
-
-                //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
-                if (poDaoLeads.GetLeadTrans(stransNox) == null){
-                    poDaoLeads.SaveLeads(eLeadCalls);
-                    message= sTransNox+" has been saved to local";
-                }else {
-                    poDaoLeads.UpdateLeads(eLeadCalls);
-                    message= sTransNox+" has been updated to local";
-                }
-
-                //CALL METHOD TO IMPORT CLIENT, INQUIRiES, MOBILE INFO BASED ON RETURNED LEADS
-                if (ImportClients(sClientId) == false){
-                    return false;
-                }
-                if (ImportMCInquiries(sTransNox, sLeadSrc) == false){
-                    return false;
-                }
-                if (ImportCLientMobile(sClientId, sMobile) == false){
-                    return false;
-                }
             }
             return true;
         } catch (Exception e) {

@@ -226,7 +226,7 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
         EClient2Call.class,
         EMCInquiry.class,
         EClientMobile.class,
-        EHotline_Outgoing.class}, version = 40, exportSchema = false)
+        EHotline_Outgoing.class}, version = 41, exportSchema = false)
 public abstract class GGC_GCircleDB extends RoomDatabase {
     private static final String TAG = "GhostRider_DB_Manager";
     private static GGC_GCircleDB instance;
@@ -308,7 +308,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
                      GGC_GCircleDB.class, "GGC_ISysDBF.db")
                     .allowMainThreadQueries()
                     .addCallback(roomCallBack)
-                    .addMigrations(MIGRATION_V40)
+                    .addMigrations(MIGRATION_V40, MIGRATION_V41)
                     .build();
         }
         return instance;
@@ -325,7 +325,6 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
     static final Migration MIGRATION_V40 = new Migration(39, 40) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            // Add the new column
             database.execSQL("CREATE TABLE IF NOT EXISTS `MC_Cash_Price` " +
                     "(`sModelIDx` TEXT NOT NULL, `sMCCatNme` TEXT NOT NULL, " +
                     "`sModelNme` TEXT NOT NULL, `sBrandNme` TEXT, `nSelPrice` REAL, " +
@@ -333,8 +332,19 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
                     "`sBrandIDx` TEXT, `sMCCatIDx` TEXT, " +
                     "PRIMARY KEY(`sModelIDx`, `sMCCatNme`, `sModelNme`))");
 
-            database.execSQL("ALTER TABLE Ganado_Online ADD COLUMN nCashPrce REAL");
+            database.execSQL("ALTER TABLE  Ganado_Online ADD COLUMN nCashPrce REAL");
             database.execSQL("ALTER TABLE Ganado_Online ADD COLUMN dPricexxx TEXT");
+        }
+    };
+    static final Migration MIGRATION_V41 = new Migration(40, 41) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Lead_Calls` " +
+                    "(`sTransNox` TEXT NOT NULL, `sAgentIDx` TEXT, `dTransact` TEXT, " +
+                    "`sClientID` TEXT, `sMobileNo` TEXT, `sRemarksx` TEXT, `sReferNox` TEXT, " +
+                    "`sSourceCD` TEXT, `sApprovCd` TEXT, `cTranStat` TEXT, `dCallStrt` TEXT, `dCallEndx` TEXT, " +
+                    "`nNoRetryx` INTEGER, `cSubscrbr` INTEGER, `cCallStat` TEXT, `cTLMStatx` TEXT, `cSMSStatx` INTEGER, " +
+                    "`nSMSSentx` INTEGER NOT NULL, `sModified` TEXT, `dModified` TEXT, PRIMARY KEY(`sTransNox`))");
         }
     };
 }
