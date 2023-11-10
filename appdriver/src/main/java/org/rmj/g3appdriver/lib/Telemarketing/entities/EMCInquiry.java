@@ -22,15 +22,15 @@ public class EMCInquiry {
     @ColumnInfo(name = "sColorIDx")
     public String sColorIDx;
     @ColumnInfo(name = "nTerms")
-    public int nTerms;
+    public Integer nTerms;
     @ColumnInfo(name = "dTargetxx")
     public String dTargetxx;
     @ColumnInfo(name = "nDownPaym")
-    public double nDownPaym;
+    public Double nDownPaym;
     @ColumnInfo(name = "nMonAmort")
-    public double nMonAmort;
+    public Double nMonAmort;
     @ColumnInfo(name = "nCashPrc")
-    public double nCashPrc;
+    public Double nCashPrc;
     @ColumnInfo(name = "sRelatnID")
     public String sRelatnID;
     @ColumnInfo(name = "sTableNM")
@@ -85,11 +85,11 @@ public class EMCInquiry {
         this.sColorIDx = sColorIDx;
     }
 
-    public int getnTerms() {
+    public Integer getnTerms() {
         return nTerms;
     }
 
-    public void setnTerms(int nTerms) {
+    public void setnTerms(Integer nTerms) {
         this.nTerms = nTerms;
     }
 
@@ -101,27 +101,27 @@ public class EMCInquiry {
         this.dTargetxx = dTargetxx;
     }
 
-    public double getnDownPaym() {
+    public Double getnDownPaym() {
         return nDownPaym;
     }
 
-    public void setnDownPaym(double nDownPaym) {
+    public void setnDownPaym(Double nDownPaym) {
         this.nDownPaym = nDownPaym;
     }
 
-    public double getnMonAmort() {
+    public Double getnMonAmort() {
         return nMonAmort;
     }
 
-    public void setnMonAmort(double nMonAmort) {
+    public void setnMonAmort(Double nMonAmort) {
         this.nMonAmort = nMonAmort;
     }
 
-    public double getnCashPrc() {
+    public Double getnCashPrc() {
         return nCashPrc;
     }
 
-    public void setnCashPrc(double nCashPrc) {
+    public void setnCashPrc(Double nCashPrc) {
         this.nCashPrc = nCashPrc;
     }
 

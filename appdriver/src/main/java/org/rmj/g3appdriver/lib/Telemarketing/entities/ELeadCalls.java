@@ -12,43 +12,45 @@ public class ELeadCalls {
     @ColumnInfo(name = "sTransNox")
     public String sTransNox = "";
     @ColumnInfo(name = "sAgentIDx")
-    public String sAgentIDx = "";
+    public String sAgentIDx;
     @ColumnInfo(name = "dTransact")
-    public String dTransact = "";
+    public String dTransact;
     @ColumnInfo(name = "sClientID")
-    public String sClientID = "";
+    public String sClientID;
     @ColumnInfo(name = "sMobileNo")
-    public String sMobileNo = "";
+    public String sMobileNo;
     @ColumnInfo(name = "sRemarksx")
-    public String sRemarksx = "";
+    public String sRemarksx;
     @ColumnInfo(name = "sReferNox")
-    public String sReferNox = "";
+    public String sReferNox;
     @ColumnInfo(name = "sSourceCD")
-    public String sSourceCD = "";
+    public String sSourceCD;
     @ColumnInfo(name = "sApprovCd")
-    public String sApprovCd = "";
+    public String sApprovCd;
     @ColumnInfo(name = "cTranStat")
-    public String cTranStat = "0";
+    public String cTranStat;
     @ColumnInfo(name = "dCallStrt")
-    public String dCallStrt = "";
+    public String dCallStrt;
     @ColumnInfo(name = "dCallEndx")
-    public String dCallEndx = "";
+    public String dCallEndx;
     @ColumnInfo(name = "nNoRetryx")
-    public Integer nNoRetryx = 0;
+    public Integer nNoRetryx;
     @ColumnInfo(name = "cSubscrbr")
-    public Integer cSubscrbr = 0;
+    public String cSubscrbr;
     @ColumnInfo(name = "cCallStat")
-    public String cCallStat = "0";
+    public String cCallStat;
     @ColumnInfo(name = "cTLMStatx")
-    public String cTLMStatx = "";
+    public String cTLMStatx;
     @ColumnInfo(name = "cSMSStatx")
-    public Integer cSMSStatx = 0;
+    public String cSMSStatx;
     @ColumnInfo(name = "nSMSSentx")
-    public int nSMSSentx = 0;
+    public Integer nSMSSentx;
     @ColumnInfo(name = "sModified")
-    public String sModified = "";
+    public String sModified;
     @ColumnInfo(name = "dModified")
-    public String dModified = "";
+    public String dModified;
+
+    public ELeadCalls(){}
 
     @NonNull
     public String getsTransNox() {
@@ -155,11 +157,11 @@ public class ELeadCalls {
         this.nNoRetryx = nNoRetryx;
     }
 
-    public Integer getcSubscrbr() {
+    public String getcSubscrbr() {
         return cSubscrbr;
     }
 
-    public void setcSubscrbr(Integer cSubscrbr) {
+    public void setcSubscrbr(String cSubscrbr) {
         this.cSubscrbr = cSubscrbr;
     }
 
@@ -179,19 +181,19 @@ public class ELeadCalls {
         this.cTLMStatx = cTLMStatx;
     }
 
-    public Integer getcSMSStatx() {
+    public String getcSMSStatx() {
         return cSMSStatx;
     }
 
-    public void setcSMSStatx(Integer cSMSStatx) {
+    public void setcSMSStatx(String cSMSStatx) {
         this.cSMSStatx = cSMSStatx;
     }
 
-    public int getnSMSSentx() {
+    public Integer getnSMSSentx() {
         return nSMSSentx;
     }
 
-    public void setnSMSSentx(int nSMSSentx) {
+    public void setnSMSSentx(Integer nSMSSentx) {
         this.nSMSSentx = nSMSSentx;
     }
 

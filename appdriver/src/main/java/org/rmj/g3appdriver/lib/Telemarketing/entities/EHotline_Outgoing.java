@@ -26,7 +26,7 @@ public class EHotline_Outgoing {
     @ColumnInfo(name = "cSendStat")
     public String cSendStat;
     @ColumnInfo(name = "nNoRetryx")
-    public int nNoRetryx;
+    public Integer nNoRetryx;
     @ColumnInfo(name = "sUDHeader")
     public String sUDHeader;
     @ColumnInfo(name = "sReferNox")
@@ -36,17 +36,18 @@ public class EHotline_Outgoing {
     @ColumnInfo(name = "cTranStat")
     public String cTranStat;
     @ColumnInfo(name = "nPriority")
-    public int nPriority;
+    public Integer nPriority;
     @ColumnInfo(name = "sModified")
     public String sModified;
     @ColumnInfo(name = "dModified")
     public String dModified;
 
+    @NonNull
     public String getsTransNox() {
         return sTransNox;
     }
 
-    public void setsTransNox(String sTransNox) {
+    public void setsTransNox(@NonNull String sTransNox) {
         this.sTransNox = sTransNox;
     }
 
@@ -106,11 +107,11 @@ public class EHotline_Outgoing {
         this.cSendStat = cSendStat;
     }
 
-    public int getnNoRetryx() {
+    public Integer getnNoRetryx() {
         return nNoRetryx;
     }
 
-    public void setnNoRetryx(int nNoRetryx) {
+    public void setnNoRetryx(Integer nNoRetryx) {
         this.nNoRetryx = nNoRetryx;
     }
 
@@ -146,11 +147,11 @@ public class EHotline_Outgoing {
         this.cTranStat = cTranStat;
     }
 
-    public int getnPriority() {
+    public Integer getnPriority() {
         return nPriority;
     }
 
-    public void setnPriority(int nPriority) {
+    public void setnPriority(Integer nPriority) {
         this.nPriority = nPriority;
     }
 

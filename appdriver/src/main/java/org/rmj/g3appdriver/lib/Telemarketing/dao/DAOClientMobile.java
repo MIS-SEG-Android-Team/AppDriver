@@ -13,9 +13,9 @@ public interface DAOClientMobile {
     EClientMobile GetClientMobile(String sClientID, String sMobileNo);
     @Query("UPDATE Client_Mobile SET dLastCall= :dLastCall, nUnreachx= nUnreachx+ :nUnreachx " +
             "WHERE sClientID= :sClientID AND sMobileNo= :sMobileNo")
-    void UpdateCallTrans(String sClientID, String sMobileNo, String dLastCall,int nUnreachx);
+    int UpdateCallTrans(String sClientID, String sMobileNo, String dLastCall,int nUnreachx);
     @Insert
-    void SaveClientMobile(EClientMobile eClientMobile);
+    Long SaveClientMobile(EClientMobile eClientMobile);
     @Update
-    void UpdateClientMobile(EClientMobile eClientMobile);
+    int UpdateClientMobile(EClientMobile eClientMobile);
 }

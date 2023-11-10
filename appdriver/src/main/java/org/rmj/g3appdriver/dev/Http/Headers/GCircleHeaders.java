@@ -52,7 +52,7 @@ public class GCircleHeaders implements HttpHeaderProvider {
             String lsDevcIDx = DeviceConfig.getInstance(instance).getDeviceID();
             String lsDateTme = SQLUtil.dateFormat(calendar.getTime(), "yyyyMMddHHmmss");
             String lsDevcMdl = Build.MODEL;
-            String lsMobileN = DeviceConfig.getInstance(instance).getMobileNO();
+            String lsMobileN = "09270359402";//DeviceConfig.getInstance(instance).getMobileNO();
 
             if (lsTokenxx.isEmpty()) {
                 lsTokenxx = "f7qNSw8TRPWHSCga0g8YFF:APA91bG3i_lBPPWv9bbRasNzRH1XX1y0vzp6Ct8S_a-yMPDvSmud8FEVPMr26zZtBPHq2CmaIw9Rx0MZmf3sbuK44q3vQemUBoPPS4Meybw8pnTpcs3p0VbiTuoLHJtdncC6BgirJxt3";

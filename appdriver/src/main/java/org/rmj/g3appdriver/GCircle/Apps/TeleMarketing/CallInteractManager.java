@@ -38,7 +38,7 @@ public class CallInteractManager {
     private String sUserIDx;
     private String sClientID;
     private String sMobileNo;
-    private int cSubscr;
+    private String cSubscr;
     private String message;
     public CallInteractManager(Application instance) {
         this.context = instance.getApplicationContext();
@@ -68,9 +68,9 @@ public class CallInteractManager {
             simCondition= "(cSubscrbr IN ("+loConstants.GetSimSubscriber(sim1)+","+loConstants.GetSimSubscriber(sim2)+"))";
         }else {
             if (sim1 != null){
-                simCondition=  "(cSubscrbr = "+loConstants.GetSimSubscriber(sim1)+")";
+                simCondition=  "(cSubscrbr = '"+loConstants.GetSimSubscriber(sim1)+"')";
             } else if (sim2 != null) {
-                simCondition=  "(cSubscrbr = "+loConstants.GetSimSubscriber(sim2)+")";
+                simCondition=  "(cSubscrbr = '"+loConstants.GetSimSubscriber(sim2)+"')";
             }
         }
         return simCondition;
@@ -99,32 +99,32 @@ public class CallInteractManager {
             }
 
             //send json params for web request and get response
-            JSONObject jsonResponse = poTeleApp.SendCallStatus(sCallStat, sTransNox, String.valueOf(cSubscr),
+            JSONObject jsonResponse = poTeleApp.SendCallStatus(sCallStat, sTransNox, cSubscr,
                     sApprvCD, sUserIDx, sClientID, sMobileNo);
 
             if (jsonResponse == null){
                 message = poTeleApp.getMessage();
                 return false;
             }
-            String dTransact = jsonResponse.getString("dTransact");
+            String dTransact = jsonResponse.get("dTransact").toString();
 
             //'POSSIBLE SALES' AND 'NOT NOW' STATUS, INSERT TO HOTLINE_OUTGOING
             if (sCallStat == "POSSIBLE SALES" || sCallStat == "NOT NOW"){
-                poTeleApp.InsertHotlineOutgoing(jsonResponse.getString("sTransNox"),
+                poTeleApp.InsertHotlineOutgoing(jsonResponse.get("sTransNox").toString(),
                         dTransact,
                         "TLM",
-                        jsonResponse.getString("sMobileNo"),
-                        jsonResponse.getString("sMessagex"),
-                        jsonResponse.getString("cSubscr"),
-                        jsonResponse.getString("dDueDate"),
-                        jsonResponse.getString("cSendStat"),
-                        jsonResponse.getInt("nNoRetryx"),
-                        jsonResponse.getString("sUDHeader"),
-                        jsonResponse.getString("sReferNox"),
-                        jsonResponse.getString("sSourceCd"),
-                        jsonResponse.getString("cTranStat"),
-                        jsonResponse.getInt("nPriority"),
-                        jsonResponse.getString("sUserID"));
+                        jsonResponse.get("sMobileNo").toString(),
+                        jsonResponse.get("sMessagex").toString(),
+                        jsonResponse.get("cSubscr").toString(),
+                        jsonResponse.get("dDueDate").toString(),
+                        jsonResponse.get("cSendStat").toString(),
+                        Integer.valueOf(jsonResponse.get("nNoRetryx").toString()),
+                        jsonResponse.get("sUDHeader").toString(),
+                        jsonResponse.get("sReferNox").toString(),
+                        jsonResponse.get("sSourceCd").toString(),
+                        jsonResponse.get("cTranStat").toString(),
+                        Integer.valueOf(jsonResponse.get("nPriority").toString()),
+                        jsonResponse.get("sUserID").toString());
             }
 
             //UPDATE NUNREACHX, IF STATUS 'CANNOT BE REACHED', ELSE 0

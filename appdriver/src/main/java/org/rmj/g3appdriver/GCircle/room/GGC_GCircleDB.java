@@ -15,6 +15,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -308,7 +309,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
                      GGC_GCircleDB.class, "GGC_ISysDBF.db")
                     .allowMainThreadQueries()
                     .addCallback(roomCallBack)
-                    .addMigrations(MIGRATION_V40, MIGRATION_V41)
+                    .addMigrations(MIGRATION_V40,MIGRATION_V41)
                     .build();
         }
         return instance;
@@ -322,7 +323,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
         }
     };
 
-    static final Migration MIGRATION_V40 = new Migration(39, 40) {
+    public static final Migration MIGRATION_V40 = new Migration(39, 40) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS `MC_Cash_Price` " +
@@ -336,15 +337,59 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
             database.execSQL("ALTER TABLE Ganado_Online ADD COLUMN dPricexxx TEXT");
         }
     };
-    static final Migration MIGRATION_V41 = new Migration(40, 41) {
+    public static final Migration MIGRATION_V41 = new Migration(40, 41) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
+            //1. DROP all renamed old tables
+            database.execSQL("DROP TABLE IF EXISTS `Lead_Calls_Old`");
+            database.execSQL("DROP TABLE IF EXISTS `MC_Inquiry_Old`");
+            database.execSQL("DROP TABLE IF EXISTS `Client_Mobile_Old`");
+            database.execSQL("DROP TABLE IF EXISTS `Hotline_Outgoing_Old`");
+            database.execSQL("DROP TABLE IF EXISTS `Call_Client_Old`");
+            //2. RENAME current tables as old tables (as copy of old datas)
+            database.execSQL("ALTER TABLE `Lead_Calls` RENAME TO `Lead_Calls_Old`");
+            database.execSQL("ALTER TABLE `MC_Inquiry` RENAME TO `MC_Inquiry_Old`");
+            database.execSQL("ALTER TABLE `Client_Mobile` RENAME TO `Client_Mobile_Old`");
+            database.execSQL("ALTER TABLE `Hotline_Outgoing` RENAME TO `Hotline_Outgoing_Old`");
+            database.execSQL("ALTER TABLE `Call_Client` RENAME TO `Call_Client_Old`");
+            //3. CREATE TABLES
             database.execSQL("CREATE TABLE IF NOT EXISTS `Lead_Calls` " +
                     "(`sTransNox` TEXT NOT NULL, `sAgentIDx` TEXT, `dTransact` TEXT, " +
                     "`sClientID` TEXT, `sMobileNo` TEXT, `sRemarksx` TEXT, `sReferNox` TEXT, " +
                     "`sSourceCD` TEXT, `sApprovCd` TEXT, `cTranStat` TEXT, `dCallStrt` TEXT, `dCallEndx` TEXT, " +
                     "`nNoRetryx` INTEGER, `cSubscrbr` INTEGER, `cCallStat` TEXT, `cTLMStatx` TEXT, `cSMSStatx` INTEGER, " +
-                    "`nSMSSentx` INTEGER NOT NULL, `sModified` TEXT, `dModified` TEXT, PRIMARY KEY(`sTransNox`))");
+                    "`nSMSSentx` INTEGER, `sModified` TEXT, `dModified` TEXT, PRIMARY KEY(`sTransNox`))");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `MC_Inquiry` (`sTransNox` TEXT NOT NULL, `dFollowUp` TEXT, " +
+                    "`sClientID` TEXT, `sBrandIDx` TEXT, `sModelIDx` TEXT, `sColorIDx` TEXT, `nTerms` INTEGER, `dTargetxx` TEXT, " +
+                    "`nDownPaym` REAL, `nMonAmort` REAL, `nCashPrc` REAL, `sRelatnID` TEXT, `sTableNM` TEXT, PRIMARY KEY(`sTransNox`))");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Client_Mobile` " +
+                    "(`sClientID` TEXT NOT NULL, `sMobileNo` TEXT NOT NULL, `nEntryNox` INTEGER, " +
+                    "`nPriority` INTEGER, `cIncdMktg` TEXT, `nUnreachx` INTEGER, `dLastVeri` TEXT, `dInactive` TEXT, " +
+                    "`nNoRetryx` INTEGER, `cInvalidx` TEXT, `sIdleTime` TEXT, `cConfirmd` TEXT, `dConfirmd` TEXT, `cSubscr` TEXT, " +
+                    "`dHoldMktg` TEXT, `dLastCall` TEXT, `cRecdStat` TEXT, PRIMARY KEY(`sClientID`, `sMobileNo`))");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Hotline_Outgoing` (`sTransNox` TEXT NOT NULL, `dTransact` TEXT, " +
+                    "`sDivision` TEXT, `sMobileNo` TEXT, `sMessagex` TEXT, `cSubscrbr` TEXT, `dDueUntil` TEXT, `cSendStat` TEXT, " +
+                    "`nNoRetryx` INTEGER, `sUDHeader` TEXT, `sReferNox` TEXT, `sSourceCd` TEXT, `cTranStat` TEXT, `nPriority` INTEGER, " +
+                    "`sModified` TEXT, `dModified` TEXT, PRIMARY KEY(`sTransNox`))");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Call_Client` (`sClientID` TEXT NOT NULL, `sClientNM` TEXT, " +
+                    "`xAddressx` TEXT, `sPhoneNox` TEXT, `sMobileNox` TEXT, PRIMARY KEY(`sClientID`))");
+
+            //4. COPY old data to created new tables
+            database.execSQL("INSERT INTO `Lead_Calls` SELECT * FROM `Lead_Calls_Old`");
+            database.execSQL("INSERT INTO `MC_Inquiry` SELECT * FROM `MC_Inquiry_Old`");
+            database.execSQL("INSERT INTO `Client_Mobile` SELECT * FROM `Client_Mobile_Old`");
+            database.execSQL("INSERT INTO `Hotline_Outgoing` SELECT * FROM `Hotline_Outgoing_Old`");
+            database.execSQL("INSERT INTO `Call_Client` SELECT * FROM `Call_Client_Old`");
+            //5. DROP renamed old tables
+            database.execSQL("DROP TABLE IF EXISTS `Lead_Calls_Old`");
+            database.execSQL("DROP TABLE IF EXISTS `MC_Inquiry_Old`");
+            database.execSQL("DROP TABLE IF EXISTS `Client_Mobile_Old`");
+            database.execSQL("DROP TABLE IF EXISTS `Hotline_Outgoing_Old`");
+            database.execSQL("DROP TABLE IF EXISTS `Call_Client_Old`");
         }
     };
 }

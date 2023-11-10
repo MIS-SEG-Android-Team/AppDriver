@@ -13,13 +13,25 @@ package org.rmj.g3appdriver;
 
 import android.content.Context;
 
-import androidx.test.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.room.testing.MigrationTestHelper;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 
 import static org.junit.Assert.assertEquals;
+import static org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB.MIGRATION_V40;
+import static org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB.MIGRATION_V41;
+
+import java.io.IOException;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -28,11 +40,31 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+    private static final Migration[] ALL_MIGRATIONS = new Migration[]{
+            MIGRATION_V40, MIGRATION_V41};
+    @Rule
+    public MigrationTestHelper helper;
+    @Before
+    public void setUp(){
+        helper = new MigrationTestHelper(InstrumentationRegistry.getInstrumentation(),
+                GGC_GCircleDB.class.getCanonicalName(),
+                new FrameworkSQLiteOpenHelperFactory());
+    }
+    /*TEST LOCAL DB IF MIGRATING SUCCESSFULLY*/
     @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+    public void MigrateDB() throws IOException {
+        // Create earliest version of the database.
+        SupportSQLiteDatabase db = helper.createDatabase("TEST_DB", 41);
+        db.close();
 
-        assertEquals("org.rmj.g3appdriver.test", appContext.getPackageName());
+        // Open latest version of the database. Room validates the schema
+        // once all migrations execute.
+        GGC_GCircleDB appDb = Room.databaseBuilder(
+                        InstrumentationRegistry.getInstrumentation().getTargetContext(),
+                        GGC_GCircleDB.class,
+                        "TEST_DB")
+                .addMigrations(ALL_MIGRATIONS).build();
+        appDb.getOpenHelper().getWritableDatabase();
+        appDb.close();
     }
 }

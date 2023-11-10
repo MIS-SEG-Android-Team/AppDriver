@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 import javax.persistence.UniqueConstraint;
 
-@Entity(tableName = "Client_Mobile", primaryKeys = {"sClientID"})
+@Entity(tableName = "Client_Mobile", primaryKeys = {"sClientID", "sMobileNo"})
 public class EClientMobile {
     @NonNull
     @ColumnInfo(name = "sClientID")
@@ -16,19 +16,19 @@ public class EClientMobile {
     @ColumnInfo(name = "sMobileNo")
     public String sMobileNo;
     @ColumnInfo(name = "nEntryNox")
-    public int nEntryNox;
+    public Integer nEntryNox;
     @ColumnInfo(name = "nPriority")
-    public int nPriority;
+    public Integer nPriority;
     @ColumnInfo(name = "cIncdMktg")
     public String cIncdMktg;
     @ColumnInfo(name = "nUnreachx")
-    public int nUnreachx;
+    public Integer nUnreachx;
     @ColumnInfo(name = "dLastVeri")
     public String dLastVeri;
     @ColumnInfo(name = "dInactive")
     public String dInactive;
     @ColumnInfo(name = "nNoRetryx")
-    public int nNoRetryx;
+    public Integer nNoRetryx;
     @ColumnInfo(name = "cInvalidx")
     public String cInvalidx;
     @ColumnInfo(name = "sIdleTime")
@@ -46,35 +46,37 @@ public class EClientMobile {
     @ColumnInfo(name = "cRecdStat")
     public String cRecdStat;
 
+    @NonNull
     public String getsClientID() {
         return sClientID;
     }
 
-    public void setsClientID(String sClientID) {
+    public void setsClientID(@NonNull String sClientID) {
         this.sClientID = sClientID;
     }
 
+    @NonNull
     public String getsMobileNo() {
         return sMobileNo;
     }
 
-    public void setsMobileNo(String sMobileNo) {
+    public void setsMobileNo(@NonNull String sMobileNo) {
         this.sMobileNo = sMobileNo;
     }
 
-    public int getnEntryNox() {
+    public Integer getnEntryNox() {
         return nEntryNox;
     }
 
-    public void setnEntryNox(int nEntryNox) {
+    public void setnEntryNox(Integer nEntryNox) {
         this.nEntryNox = nEntryNox;
     }
 
-    public int getnPriority() {
+    public Integer getnPriority() {
         return nPriority;
     }
 
-    public void setnPriority(int nPriority) {
+    public void setnPriority(Integer nPriority) {
         this.nPriority = nPriority;
     }
 
@@ -86,11 +88,11 @@ public class EClientMobile {
         this.cIncdMktg = cIncdMktg;
     }
 
-    public int getnUnreachx() {
+    public Integer getnUnreachx() {
         return nUnreachx;
     }
 
-    public void setnUnreachx(int nUnreachx) {
+    public void setnUnreachx(Integer nUnreachx) {
         this.nUnreachx = nUnreachx;
     }
 
@@ -110,11 +112,11 @@ public class EClientMobile {
         this.dInactive = dInactive;
     }
 
-    public int getnNoRetryx() {
+    public Integer getnNoRetryx() {
         return nNoRetryx;
     }
 
-    public void setnNoRetryx(int nNoRetryx) {
+    public void setnNoRetryx(Integer nNoRetryx) {
         this.nNoRetryx = nNoRetryx;
     }
 

@@ -79,58 +79,61 @@ public class GTeleApp {
             //ITERATE ROWS FROM RESPONSE
             for (int i = 0; i < loArray.length(); i++){
 
-                JSONObject loResult = loArray.getJSONObject(i);//convert each array to json object
-
-                JSONObject jsonLeads = new JSONObject(loResult.getString("leads")); //convert each result to json object
-
-                String sTransNox = jsonLeads.getString("sTransNox");
+                JSONObject jsonLeads = loArray.getJSONObject(i).getJSONObject("leads");//convert each array to json object
+                String sTransNox = jsonLeads.get("sTransNox").toString();
 
                 //INITIALIZE ENTITY COLUMNS
                 ELeadCalls eLeadCalls = new ELeadCalls();
                 eLeadCalls.setsTransNox(sTransNox);
-                eLeadCalls.setsAgentIDx(jsonLeads.getString("sAgentIDx"));
-                eLeadCalls.setdTransact(jsonLeads.getString("dTransact"));
-                eLeadCalls.setsClientID(jsonLeads.getString("sClientID"));
-                eLeadCalls.setsMobileNo(jsonLeads.getString("sMobileNo"));
-                eLeadCalls.setsRemarksx(jsonLeads.getString("sRemarksx"));
-                eLeadCalls.setsReferNox(jsonLeads.getString("sReferNox"));
-                eLeadCalls.setsSourceCD(jsonLeads.getString("sSourceCD"));
-                eLeadCalls.setsApprovCd(jsonLeads.getString("sApprovCd"));
-                eLeadCalls.setcTranStat(jsonLeads.getString("cTranStat"));
-                eLeadCalls.setdCallStrt(jsonLeads.getString("dCallStrt"));
-                eLeadCalls.setdCallEndx(jsonLeads.getString("dCallEndx"));
-                eLeadCalls.setnNoRetryx(jsonLeads.getInt("nNoRetryx"));
-                eLeadCalls.setcSubscrbr(jsonLeads.getInt("cSubscrbr"));
-                eLeadCalls.setcCallStat(jsonLeads.getString("cCallStat"));
-                eLeadCalls.setcTLMStatx(jsonLeads.getString("cTLMStatx"));
-                eLeadCalls.setcSMSStatx(jsonLeads.getInt("cSMSStatx"));
-                eLeadCalls.setnSMSSentx(jsonLeads.getInt("nSMSSentx"));
-                eLeadCalls.setsModified(jsonLeads.getString("sModified"));
-                eLeadCalls.setdModified(jsonLeads.getString("dModified"));
+                eLeadCalls.setsAgentIDx(jsonLeads.get("sAgentIDx").toString());
+                eLeadCalls.setdTransact(jsonLeads.get("dTransact").toString());
+                eLeadCalls.setsClientID(jsonLeads.get("sClientID").toString());
+                eLeadCalls.setsMobileNo(jsonLeads.get("sMobileNo").toString());
+                eLeadCalls.setsRemarksx(jsonLeads.get("sRemarksx").toString());
+                eLeadCalls.setsReferNox(jsonLeads.get("sReferNox").toString());
+                eLeadCalls.setsSourceCD(jsonLeads.get("sSourceCD").toString());
+                eLeadCalls.setsApprovCd(jsonLeads.get("sApprovCd").toString());
+                eLeadCalls.setcTranStat(jsonLeads.get("cTranStat").toString());
+                eLeadCalls.setdCallStrt(jsonLeads.get("dCallStrt").toString());
+                eLeadCalls.setdCallEndx(jsonLeads.get("dCallEndx").toString());
+                eLeadCalls.setnNoRetryx(Integer.valueOf(jsonLeads.get("nNoRetryx").toString()));
+                eLeadCalls.setcSubscrbr(jsonLeads.get("cSubscrbr").toString());
+                eLeadCalls.setcCallStat(jsonLeads.get("cCallStat").toString());
+                eLeadCalls.setcTLMStatx(jsonLeads.get("cTLMStatx").toString());
+                eLeadCalls.setcSMSStatx(jsonLeads.get("cSMSStatx").toString());
+                eLeadCalls.setnSMSSentx(Integer.valueOf(jsonLeads.get("nSMSSentx").toString()));
+                eLeadCalls.setsModified(jsonLeads.get("sModified").toString());
+                eLeadCalls.setdModified(jsonLeads.get("dModified").toString());
 
-                String sClientId = jsonLeads.getString("sClientID");
-                String sLeadSrc = jsonLeads.getString("sSourceCD");
-                String sMobile = jsonLeads.getString("sMobileNo");
+                String sClientId = jsonLeads.get("sClientID").toString();
+                String sLeadSrc = jsonLeads.get("sSourceCD").toString();
+                String sMobile = jsonLeads.get("sMobileNo").toString();
 
                 //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
                 if (poDaoLeads.GetLeadTrans(sTransNox) == null){
-                    poDaoLeads.SaveLeads(eLeadCalls);
+                    if (poDaoLeads.SaveLeads(eLeadCalls).intValue() < 1){
+                        message= sTransNox+" not saved to local";
+                        return false;
+                    }
                     message= sTransNox+" has been saved to local";
                 }else {
-                    poDaoLeads.UpdateLeads(eLeadCalls);
+                    if (poDaoLeads.UpdateLeads(eLeadCalls) < 1){
+                        message= sTransNox+" not updated to local";
+                        return false;
+                    }
                     message= sTransNox+" has been updated to local";
                 }
 
                 //CALL METHOD TO IMPORT CLIENT, INQUIRiES, MOBILE INFO BASED ON RETURNED LEADS
-                /*if (ImportClients(sClientId) == false){
+                if (ImportClients(sClientId) == false){
+                    return false;
+                }
+                if (ImportCLientMobile(sClientId, sMobile) == false){
                     return false;
                 }
                 if (ImportMCInquiries(sTransNox, sLeadSrc) == false){
                     return false;
                 }
-                if (ImportCLientMobile(sClientId, sMobile) == false){
-                    return false;
-                }*/
             }
             return true;
         } catch (Exception e) {
@@ -164,10 +167,11 @@ public class GTeleApp {
 
             //initialize entity column values
             EClient2Call eClient2Call = new EClient2Call();
-            eClient2Call.setsClientNM(loClient.getString("sClientNM"));
-            eClient2Call.setsClientNM(loClient.getString("xAddressx"));
-            eClient2Call.setsClientNM(loClient.getString("sPhoneNox"));
-            eClient2Call.setsClientNM(loClient.getString("sMobileNox"));
+            eClient2Call.setsClientID(loClient.get("sClientID").toString());
+            eClient2Call.setsClientNM(loClient.get("sCompnyNm").toString());
+            eClient2Call.setxAddressx(loClient.get("xAddressx").toString());
+            eClient2Call.setsMobileNox(loClient.get("sMobileNo").toString());
+            eClient2Call.setsPhoneNox(loClient.get("sPhoneNox").toString());
 
             //get exisitng record on local database, if 0 then insert else update
             if (poDaoClient.GetClient2Call(sClientID) == null){
@@ -265,23 +269,23 @@ public class GTeleApp {
 
             EClientMobile eClientMobile = new EClientMobile();
 
-            eClientMobile.setsClientID(loInq.getString("sClientID"));
-            eClientMobile.setnEntryNox(loInq.getInt("nEntryNox"));
-            eClientMobile.setsMobileNo(loInq.getString("sMobileNo"));
-            eClientMobile.setnPriority(loInq.getInt("nPriority"));
-            eClientMobile.setcIncdMktg(loInq.getString("cIncdMktg"));
-            eClientMobile.setnUnreachx(loInq.getInt("nUnreachx"));
-            eClientMobile.setdLastVeri(loInq.getString("dLastVeri"));
-            eClientMobile.setdInactive(loInq.getString("dInactive"));
-            eClientMobile.setnNoRetryx(loInq.getInt("nNoRetryx"));
-            eClientMobile.setcInvalidx(loInq.getString("cInvalidx"));
-            eClientMobile.setsIdleTime(loInq.getString("sIdleTime"));
-            eClientMobile.setcConfirmd(loInq.getString("cConfirmd"));
-            eClientMobile.setdConfirmd(loInq.getString("dConfirmd"));
-            eClientMobile.setcSubscr(loInq.getString("cSubscr"));
-            eClientMobile.setdHoldMktg(loInq.getString("dHoldMktg"));
-            eClientMobile.setdLastCall(loInq.getString("dLastCall"));
-            eClientMobile.setcRecdStat(loInq.getString("cRecdStat"));
+            eClientMobile.setsClientID(loInq.get("sClientID").toString());
+            eClientMobile.setnEntryNox(Integer.valueOf(loInq.get("nEntryNox").toString()));
+            eClientMobile.setsMobileNo(loInq.get("sMobileNo").toString());
+            eClientMobile.setnPriority(Integer.valueOf(loInq.get("nPriority").toString()));
+            eClientMobile.setcIncdMktg(loInq.get("cIncdMktg").toString());
+            eClientMobile.setnUnreachx(Integer.valueOf(loInq.get("nUnreachx").toString()));
+            eClientMobile.setdLastVeri(loInq.get("dLastVeri").toString());
+            eClientMobile.setdInactive(loInq.get("dInactive").toString());
+            eClientMobile.setnNoRetryx(Integer.valueOf(loInq.get("nNoRetryx").toString()));
+            eClientMobile.setcInvalidx(loInq.get("cInvalidx").toString());
+            eClientMobile.setsIdleTime(loInq.get("sIdleTime").toString());
+            eClientMobile.setcConfirmd(loInq.get("cConfirmd").toString());
+            eClientMobile.setdConfirmd(loInq.get("dConfirmd").toString());
+            eClientMobile.setcSubscr(loInq.get("cSubscrbr").toString());
+            eClientMobile.setdHoldMktg(loInq.get("dHoldMktg").toString());
+            eClientMobile.setdLastCall(loInq.get("dLastCall").toString());
+            eClientMobile.setcRecdStat(loInq.get("cRecdStat").toString());
 
             if (poDaoClientMobile.GetClientMobile(sClientID, sMobileNo) == null){
                 poDaoClientMobile.SaveClientMobile(eClientMobile);
@@ -342,17 +346,23 @@ public class GTeleApp {
             return false;
         }
     }
+    /*THESE METHOD UPLOADS ALL CALL TRANSACTIONS AND STATUS AT ONCE*/
     public JSONObject SendCallStatus(String sCallStat, String sReferNox, String cSubscr, String sApprvCd, String sUserID,
                         String sClientID, String sMobileNo){
         try {
             //CREATE PARAMS USING JSON OBJECT
             JSONObject jsonParam = new JSONObject();
 
+            //PARAM FOR CALL_OUTGOING UPDATE
             jsonParam.put("sCallStat", loConstants.GetRemarks(sCallStat));
             jsonParam.put("sReferNox", sReferNox);
+
+            //PARAM FOR HOTLINE OUTGOING INSERT
             jsonParam.put("cSubscr", cSubscr);
             jsonParam.put("sApprvCd", sApprvCd);
             jsonParam.put("sUserID", sUserID);
+
+            //PARAM FOR CLIENT MOBILE UPDATE
             jsonParam.put("sClientID", sClientID);
             jsonParam.put("sMobileNo", sMobileNo);
 
@@ -374,7 +384,8 @@ public class GTeleApp {
                 return null;
             }
 
-            return loResponse;
+            JSONObject loTransData = loResponse.getJSONObject("transactdata");
+            return loTransData;
         }catch (Exception e){
             message = e.getMessage();
             return null;

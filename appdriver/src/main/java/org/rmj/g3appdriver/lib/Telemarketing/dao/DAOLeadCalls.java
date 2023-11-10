@@ -45,9 +45,9 @@ public interface DAOLeadCalls {
     @Query("UPDATE Lead_Calls SET cTLMStatx= :cTLMStatx WHERE sTransNox= :sTransNoxx")
     void UpdateLeadCall(String sTransNoxx, String cTLMStatx);
     @Insert
-    void SaveLeads(ELeadCalls eLeadCalls);
+    Long SaveLeads(ELeadCalls eLeadCalls);
     @Update
-    void UpdateLeads(ELeadCalls eLeadCalls);
+    int UpdateLeads(ELeadCalls eLeadCalls);
 
     class LeadInformation{
         public String sReferNox;

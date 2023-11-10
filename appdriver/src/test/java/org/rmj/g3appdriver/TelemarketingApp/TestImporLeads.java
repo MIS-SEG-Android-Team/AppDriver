@@ -1,55 +1,86 @@
 package org.rmj.g3appdriver.TelemarketingApp;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
-import android.app.Application;
-
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.utils.SQLUtil;
-import org.rmj.g3appdriver.utils.SecUtil;
-
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+@RunWith(JUnit4.class)
 public class TestImporLeads {
-    private static final String TAG = TestImporLeads.class.getSimpleName();
-    private Boolean isSuccess;
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testImportLeads() throws Exception{
-        String sURL = "http://192.168.10.68:8080/telemarketing_app/GetLeads.php";
+    private Map<String, String> headers;
+    @Before
+    public void SetUp(){
+        /*NOTE: RUN THIS ON 192.168.10.224 (TEST DATABASE) TO INITIALIZE HEADERS PROPERLY
+        * RUN: SELECT * FROM xxxSysUserLog WHERE  sUserIDxx = 'GAP0190004' AND sLogNoxxx = "GAP023110901" AND sProdctID = "gRider";
+        * REQUIRED: Change 'dLogInxxx' column date to current date.*/
+
         Calendar calendar = Calendar.getInstance();
         //Create the header section needed by the API
-        Map<String, String> headers =
-                new HashMap<String, String>();
+        headers = new HashMap<String, String>();
         headers.put("Accept", "application/json");
         headers.put("Content-Type", "application/json");
         headers.put("g-api-id", "gRider");
         headers.put("g-api-client", "GGC_BM001");
-        headers.put("g-api-log", "GAP023113874");
-        headers.put("g-api-imei", "MIS_SEG23");
+        headers.put("g-api-log", "GAP023110901");
+        headers.put("g-api-imei", "GMC_SEG09");
         headers.put("g-api-key", SQLUtil.dateFormat(calendar.getTime(), "yyyyMMddHHmmss"));
         headers.put("g-api-hash", org.apache.commons.codec.digest.DigestUtils.md5Hex((String)headers.get("g-api-imei") + (String)headers.get("g-api-key")));
-        headers.put("g-api-user", "GAP021002961");
-        headers.put("g-api-mobile", "09171870011");
-        headers.put("g-api-token", "ezEUjzzaR52VXJ7vwj01Bo:APA91bFFXB6ntjWlYDIlzlkG5qGwH2r0bLvfVwD7u0AlCKD64uw845-bVZ8yXMijxe0FUbNwYXgWX82VQxetxBNEHTpQp-H4V48hMZZbgmBCO7jylEG0RwkP8KldpVkJJu1FwLg4Yi5I");
+        headers.put("g-api-user", "GAP0190004");
+        headers.put("g-api-mobile", "09260375777");
+        headers.put("g-api-token", "12312312");
+
+    }
+    @Test
+    public void TestImportLeads() throws Exception{
+        String sURL = "http://192.168.10.68:8080/telemarketing_app/GetLeads.php";
 
         //Create the parameters needed by the API
         JSONObject param = new JSONObject();
         param.put("sAgentIDx", "M001160024");
         param.put("cSubscrbr", "(cSubscrbr IN ('0', '1'))");
 
-        String response = WebClient.sendRequest(sURL, param.toJSONString(), (HashMap<String, String>) headers);
+        String response = WebClient.sendRequest(sURL, param.toString(), (HashMap<String, String>) headers);
         if(response == null){
             System.out.println("HTTP Error detected: " + System.getProperty("store.error.info"));
         }
 
-        isSuccess = true;
-        System.out.println(response);
-        assertTrue(isSuccess);
+        JSONObject jsonResponse = new JSONObject(response);
+        JSONArray jsonArray = jsonResponse.getJSONArray("leadsload");
+        assertNotNull(jsonArray);
+
+        for (int i = 0; i < jsonArray.length(); i++){
+            JSONObject loResult = jsonArray.getJSONObject(i).getJSONObject("leads");
+            assertNotNull(loResult);
+
+            System.out.println(loResult.get("sTransNox"));
+            System.out.println(loResult.get("sAgentIDx"));
+            System.out.println(loResult.get("dTransact"));
+            System.out.println(loResult.get("sClientID"));
+            System.out.println(loResult.get("sMobileNo"));
+            System.out.println(loResult.get("sRemarksx"));
+            System.out.println(loResult.get("sReferNox"));
+            System.out.println(loResult.get("sSourceCD"));
+            System.out.println(loResult.get("sApprovCd"));
+            System.out.println(loResult.get("cTranStat"));
+            System.out.println(loResult.get("dCallStrt"));
+            System.out.println(loResult.get("dCallEndx"));
+            System.out.println(loResult.get("nNoRetryx"));
+            System.out.println(loResult.get("cSubscrbr"));
+            System.out.println(loResult.get("cCallStat"));
+            System.out.println(loResult.get("cTLMStatx"));
+            System.out.println(loResult.get("cSMSStatx"));
+            System.out.println(loResult.get("nSMSSentx"));
+            System.out.println(loResult.get("sModified"));
+            System.out.println(loResult.get("dModified"));
+        }
     }
 }
