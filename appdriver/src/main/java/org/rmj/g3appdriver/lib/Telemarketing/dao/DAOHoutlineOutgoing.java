@@ -17,7 +17,7 @@ public interface DAOHoutlineOutgoing {
     @Query("SELECT * FROM Hotline_Outgoing WHERE sTransNox= :sTransNox")
     LiveData<List<EHotline_Outgoing>> GetLiveHotlineOutgoing(String sTransNox);
     @Insert
-    void SaveHotlineOutgoing(EHotline_Outgoing eHotlineOutgoing);
+    Long SaveHotlineOutgoing(EHotline_Outgoing eHotlineOutgoing);
     @Update
-    void UpdateHotlineOutgoing(EHotline_Outgoing eHotlineOutgoing);
+    int UpdateHotlineOutgoing(EHotline_Outgoing eHotlineOutgoing);
 }

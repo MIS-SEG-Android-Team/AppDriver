@@ -16,9 +16,9 @@ public interface DAOMCInquiry {
     @Query("SELECT * FROM MC_Inquiry WHERE sTransNox= :sTransNox")
     EMCInquiry GetMCInquiry(String sTransNox);
     @Query("UPDATE MC_Inquiry SET dFollowUp= :dFollowUp WHERE sTransNox= :sTransNox")
-    void UpdateFollowUp(String dFollowUp, String sTransNox);
+    int UpdateFollowUp(String dFollowUp, String sTransNox);
     @Insert
-    void SaveMCInq(EMCInquiry emcInquiry);
+    Long SaveMCInq(EMCInquiry emcInquiry);
     @Update
-    void UpdateMCInq(EMCInquiry emcInquiry);
+    int UpdateMCInq(EMCInquiry emcInquiry);
 }

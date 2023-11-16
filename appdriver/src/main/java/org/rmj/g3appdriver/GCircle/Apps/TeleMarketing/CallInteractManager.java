@@ -94,7 +94,7 @@ public class CallInteractManager {
         try {
             //validate first if transaction no is applied
             if (sTransNox == null){
-                message = "No applied transaction no";
+                message = "No applied transaction number";
                 return false;
             }
 
@@ -106,40 +106,59 @@ public class CallInteractManager {
                 message = poTeleApp.getMessage();
                 return false;
             }
-            String dTransact = jsonResponse.get("dTransact").toString();
+
+            JSONObject loTransParams = jsonResponse.getJSONObject("transparams");
+            String dTransact = loTransParams.get("dTransact").toString();
 
             //'POSSIBLE SALES' AND 'NOT NOW' STATUS, INSERT TO HOTLINE_OUTGOING
             if (sCallStat == "POSSIBLE SALES" || sCallStat == "NOT NOW"){
-                poTeleApp.InsertHotlineOutgoing(jsonResponse.get("sTransNox").toString(),
-                        dTransact,
-                        "TLM",
-                        jsonResponse.get("sMobileNo").toString(),
-                        jsonResponse.get("sMessagex").toString(),
-                        jsonResponse.get("cSubscr").toString(),
-                        jsonResponse.get("dDueDate").toString(),
-                        jsonResponse.get("cSendStat").toString(),
-                        Integer.valueOf(jsonResponse.get("nNoRetryx").toString()),
-                        jsonResponse.get("sUDHeader").toString(),
-                        jsonResponse.get("sReferNox").toString(),
-                        jsonResponse.get("sSourceCd").toString(),
-                        jsonResponse.get("cTranStat").toString(),
-                        Integer.valueOf(jsonResponse.get("nPriority").toString()),
-                        jsonResponse.get("sUserID").toString());
+                String sHOutgoingNox = loTransParams.get("sTransNox").toString();
+
+                if (sHOutgoingNox != null || sHOutgoingNox.isEmpty()){
+                    poTeleApp.InsertHotlineOutgoing(sHOutgoingNox,
+                            dTransact,
+                            loTransParams.get("sDivision").toString(),
+                            sMobileNo,
+                            loTransParams.get("sMessagex").toString(),
+                            cSubscr,
+                            loTransParams.get("dDueDate").toString(),
+                            loTransParams.get("cSendStat").toString(),
+                            Integer.valueOf(loTransParams.get("nNoRetryx").toString()),
+                            loTransParams.get("sUDHeader").toString(),
+                            sTransNox,
+                            loTransParams.get("sSourceCd").toString(),
+                            loTransParams.get("cTranStat").toString(),
+                            Integer.valueOf(loTransParams.get("nPriority").toString()),
+                            sUserIDx);
+
+                    message = poTeleApp.getMessage();
+                }else {
+                    message = "No generated transaction no for Hotline_Outgoing";
+                    return false;
+                }
             }
 
             //UPDATE NUNREACHX, IF STATUS 'CANNOT BE REACHED', ELSE 0
+            int nUnreachx = 0;
             if (sCallStat == "CANNOT BE REACHED"){
-                poTeleApp.UpdateCMobile(sClientID, sMobileNo, dTransact, 1);
+                nUnreachx = 1;
                 message= poTeleApp.getMessage() + " Status: Unreachable";
-            }else {
-                poTeleApp.UpdateCMobile(sClientID, sMobileNo, dTransact, 0);
-                message= poTeleApp.getMessage();
             }
-            //UPDATE LEAD'S CTLMSTATX TO SELECTED STATUS
-            poTeleApp.UpdateLeadCallStat(sTransNox, sCallStat);
+            //UPDATE CLIENT MOBILE, IMPORT DATA AS NEW ROW IF NOT FOUND ON LOCAL
+            if (poTeleApp.UpdateCMobile(sClientID, sMobileNo, dTransact, nUnreachx) == false){
+                message = poTeleApp.getMessage();
+                return false;
+            }
 
+            //UPDATE LEAD'S CTLMSTATX TO SELECTED STATUS
+            if (poTeleApp.UpdateLeadCallStat(sTransNox, sCallStat) == false){
+                message = poTeleApp.getMessage();
+                return false;
+            }
+
+            message = "Call transaction has been saved";
             return true;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             message = e.getMessage();
             return false;
         }

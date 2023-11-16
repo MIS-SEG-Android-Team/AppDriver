@@ -48,6 +48,10 @@ public class GTeleApp {
     public String getMessage(){
         return message;
     }
+    public ELeadCalls GetLeadTrans(String sTransNox){
+        ELeadCalls eLeadCalls = poDaoLeads.GetLeadTrans(sTransNox);
+        return eLeadCalls;
+    }
     public boolean ImportLeads(String sUserID, String simSubscr){
         try {
             //CREATE PARAMS USING JSON OBJECT
@@ -112,29 +116,20 @@ public class GTeleApp {
                 //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
                 if (poDaoLeads.GetLeadTrans(sTransNox) == null){
                     if (poDaoLeads.SaveLeads(eLeadCalls).intValue() < 1){
-                        message= sTransNox+" not saved to local";
-                        return false;
+                        message= sTransNox+" transaction number failed to save on local";
                     }
-                    message= sTransNox+" has been saved to local";
                 }else {
                     if (poDaoLeads.UpdateLeads(eLeadCalls) < 1){
-                        message= sTransNox+" not updated to local";
-                        return false;
+                        message= sTransNox+" transaction number failed to updated on local";
                     }
-                    message= sTransNox+" has been updated to local";
                 }
 
-                //CALL METHOD TO IMPORT CLIENT, INQUIRiES, MOBILE INFO BASED ON RETURNED LEADS
-                if (ImportClients(sClientId) == false){
-                    return false;
-                }
-                if (ImportCLientMobile(sClientId, sMobile) == false){
-                    return false;
-                }
-                if (ImportMCInquiries(sTransNox, sLeadSrc) == false){
-                    return false;
-                }
+                ImportClients(sClientId); //import client info
+                ImportCLientMobile(sClientId, sMobile); //import client mobile
+                ImportMCInquiries(sTransNox, sLeadSrc); //import inquiries
             }
+
+            message= "Lead Calls imported successfully to device";
             return true;
         } catch (Exception e) {
             message= e.getMessage();
@@ -175,10 +170,18 @@ public class GTeleApp {
 
             //get exisitng record on local database, if 0 then insert else update
             if (poDaoClient.GetClient2Call(sClientID) == null){
-                poDaoClient.SaveClients(eClient2Call);
+                if (poDaoClient.SaveClients(eClient2Call).intValue() < 1){
+                    message= sClientID+" client id failed to save on local";
+                    return false;
+                }
             }else {
-                poDaoClient.UpdateClients(eClient2Call);
+                if (poDaoClient.UpdateClients(eClient2Call) < 1){
+                    message= sClientID+" client id failed to update on local";
+                    return false;
+                }
             }
+
+            message = "Client Info imported successfully to device";
             return true;
         } catch (Exception e) {
             message = e.getMessage();
@@ -228,10 +231,18 @@ public class GTeleApp {
             emcInquiry.setsTableNM(loInq.getString("sTableNM"));
 
             if (poDaoMcInq.GetMCInquiry(sTransNox) == null){
-                poDaoMcInq.SaveMCInq(emcInquiry);
+                if (poDaoMcInq.SaveMCInq(emcInquiry).intValue() < 1){
+                    message = sTransNox + " transaction no failed to save on local";
+                    return false;
+                }
             }else {
-                poDaoMcInq.UpdateMCInq(emcInquiry);
+                if (poDaoMcInq.UpdateMCInq(emcInquiry) < 1){
+                    message = sTransNox + " transaction no failed to update on local";
+                    return false;
+                }
             }
+
+            message = "MC Inquiries imported successfully to device";
             return true;
         } catch (Exception e) {
             message = e.getMessage();
@@ -288,19 +299,23 @@ public class GTeleApp {
             eClientMobile.setcRecdStat(loInq.get("cRecdStat").toString());
 
             if (poDaoClientMobile.GetClientMobile(sClientID, sMobileNo) == null){
-                poDaoClientMobile.SaveClientMobile(eClientMobile);
+                if (poDaoClientMobile.SaveClientMobile(eClientMobile) < 1){
+                    message = sClientID + " client id failed to save on local";
+                    return false;
+                }
             }else {
-                poDaoClientMobile.UpdateClientMobile(eClientMobile);
+                if (poDaoClientMobile.UpdateClientMobile(eClientMobile) < 1){
+                    message = sClientID + " client id failed to update on local";
+                    return false;
+                }
             }
+
+            message = "Client mobile imported successfully to device";
             return true;
         } catch (Exception e) {
             message= e.getMessage();
             return false;
         }
-    }
-    public ELeadCalls GetLeadTrans(String sTransNox){
-        ELeadCalls eLeadCalls = poDaoLeads.GetLeadTrans(sTransNox);
-        return eLeadCalls;
     }
     public boolean UploadSchedule(String sTransNox, String sLeadsrc, String dFollowUp, String cTranstat,
                                   String sRemarks, String sUserIDx){
@@ -327,19 +342,17 @@ public class GTeleApp {
 
             JSONObject loResponse = new JSONObject(lsResponse);
             String lsResult = loResponse.getString("result");
+
+            //store result to message variable
             if (lsResult.equalsIgnoreCase("error")) {
                 JSONObject loError = loResponse.getJSONObject("error");
-                message = getErrorMessage(loError);;
+                message = getErrorMessage(loError);
                 return false;
             }
 
-            if (loResponse.getString("sTransNox") == null){
-                message = "No transaction no returned from server";
-                return false;
+            if (poDaoMcInq.UpdateFollowUp(dFollowUp, sTransNox) < 1){
+                message = sTransNox + " transaction no schedule failed to update on local";
             }
-
-            poDaoMcInq.UpdateFollowUp(dFollowUp, loResponse.getString("sTransNox"));
-            message = "Schedule has been updated!";
             return true;
         }catch (Exception e){
             message = e.getMessage();
@@ -348,21 +361,27 @@ public class GTeleApp {
     }
     /*THESE METHOD UPLOADS ALL CALL TRANSACTIONS AND STATUS AT ONCE*/
     public JSONObject SendCallStatus(String sCallStat, String sReferNox, String cSubscr, String sApprvCd, String sUserID,
-                        String sClientID, String sMobileNo){
+                                        String sClientID, String sMobileNo){
         try {
             //CREATE PARAMS USING JSON OBJECT
             JSONObject jsonParam = new JSONObject();
 
-            //PARAM FOR CALL_OUTGOING UPDATE
+            //PARAM FOR CALL_OUTGOING UPDATE COLUMN: cTLMStatx
             jsonParam.put("sCallStat", loConstants.GetRemarks(sCallStat));
             jsonParam.put("sReferNox", sReferNox);
 
-            //PARAM FOR HOTLINE OUTGOING INSERT
+            //PARAM FOR HOTLINE OUTGOING INSERT TABLE
             jsonParam.put("cSubscr", cSubscr);
             jsonParam.put("sApprvCd", sApprvCd);
+            jsonParam.put("sDivision", "TLM"); //temporary, which primary user for this app is telemarketing
+            jsonParam.put("cSendStat", "0"); //temporary, which may change on future adjustment
+            jsonParam.put("nNoRetryx", 0); //temporary, which may change on future adjustment
+            jsonParam.put("sUDHeader", ""); //temporary, which may change on future adjustment
+            jsonParam.put("cTranStat", "0"); //temporary, which may change on future adjustment
+            jsonParam.put("nPriority", "1"); //temporary, which may change on future adjustment
             jsonParam.put("sUserID", sUserID);
 
-            //PARAM FOR CLIENT MOBILE UPDATE
+            //PARAM FOR CLIENT MOBILE UPDATE COLUMNS: nUnreachx, dLastCall
             jsonParam.put("sClientID", sClientID);
             jsonParam.put("sMobileNo", sMobileNo);
 
@@ -384,14 +403,13 @@ public class GTeleApp {
                 return null;
             }
 
-            JSONObject loTransData = loResponse.getJSONObject("transactdata");
-            return loTransData;
+            return loResponse.getJSONObject("transactdata");
         }catch (Exception e){
             message = e.getMessage();
             return null;
         }
     }
-    public void InsertHotlineOutgoing(String sTransNox, String dTransact,String sDivision, String sMobileNo,
+    public Boolean InsertHotlineOutgoing(String sTransNox, String dTransact,String sDivision, String sMobileNo,
                                       String sMessagex, String cSubscr, String dDueDate, String cSendStat,
                                       int nNoRetryx, String sUDHeader, String sReferNox, String sSourceCd,
                                       String cTranStat, int nPriority, String sUserID){
@@ -416,20 +434,37 @@ public class GTeleApp {
 
         //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
         if (poDaoHOutgoing.GetHotlineOutgoing(sTransNox) == null){
-            poDaoHOutgoing.SaveHotlineOutgoing(eHotlineOutgoing);
-            message= sTransNox+" has been saved to local";
+            if (poDaoHOutgoing.SaveHotlineOutgoing(eHotlineOutgoing) < 1){
+                message= sTransNox+" transaction no failed to save on local";
+                return false;
+            }
         }else {
-            poDaoHOutgoing.UpdateHotlineOutgoing(eHotlineOutgoing);
-            message= sTransNox+" has been updated to local";
+            if (poDaoHOutgoing.UpdateHotlineOutgoing(eHotlineOutgoing) < 1){
+                message= sTransNox+" transaction no failed to update on local";
+                return false;
+            }
         }
 
+        message = "Hotline Outgoing transaction no " + sTransNox + " has been saved to local";
+        return true;
     }
-    public void UpdateCMobile(String sClientID, String sMobileNo, String dTransact, int nUnreachx){
-        poDaoClientMobile.UpdateCallTrans(sClientID, sMobileNo, dTransact, nUnreachx);
-        message= sClientID+" has been updated to local.";
+    public Boolean UpdateCMobile(String sClientID, String sMobileNo, String dTransact, int nUnreachx){
+
+        if (poDaoClientMobile.UpdateCallTrans(sClientID, sMobileNo, dTransact, nUnreachx) < 1){
+            message= sClientID+" Client ID failed to update on local";
+            return false;
+        }
+
+        message = sClientID+" Client ID has been update on local";
+        return true;
     }
-    public void UpdateLeadCallStat(String sTransNox, String sCallStat){
-        poDaoLeads.UpdateLeadCall(sTransNox, loConstants.GetRemarks(sCallStat));
-        message= sTransNox+" has been updated to local.";
+    public Boolean UpdateLeadCallStat(String sTransNox, String sCallStat){
+        if (poDaoLeads.UpdateLeadCall(sTransNox, loConstants.GetRemarks(sCallStat)) < 1){
+            message= sTransNox+" transaction no failed to update on local";
+            return false;
+        }
+
+        message= sTransNox+" transaction no has been updated to local.";
+        return true;
     }
 }

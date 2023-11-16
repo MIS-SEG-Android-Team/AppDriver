@@ -43,7 +43,7 @@ public interface DAOLeadCalls {
             "ORDER BY lead.dTransact DESC, lead.sMobileNo ASC, ccl.sClientNM ASC")
     LiveData<List<LeadHistory>> GetLeadHistory();
     @Query("UPDATE Lead_Calls SET cTLMStatx= :cTLMStatx WHERE sTransNox= :sTransNoxx")
-    void UpdateLeadCall(String sTransNoxx, String cTLMStatx);
+    int UpdateLeadCall(String sTransNoxx, String cTLMStatx);
     @Insert
     Long SaveLeads(ELeadCalls eLeadCalls);
     @Update
