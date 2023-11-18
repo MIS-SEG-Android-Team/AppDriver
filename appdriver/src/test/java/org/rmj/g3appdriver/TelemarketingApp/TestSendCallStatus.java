@@ -45,7 +45,7 @@ public class TestSendCallStatus {
         //PS & NN, Hotline_Outgoing. (INSERT AS NEW ROW)
         //UR, Client_Mobile. (UPDATE nUnreachx, dLastCall)
         //ALL STATUS, Call_Outgoin. (UPDATE cTLMStatx)
-        String sCallStat = "UR";
+        String sCallStat = "NN";
 
         String sURL = "http://192.168.10.68:8080/telemarketing_app/SaveCallStat.php";
 

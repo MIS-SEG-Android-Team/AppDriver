@@ -9,13 +9,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.utils.SQLUtil;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(JUnit4.class)
-public class TestImportClientMobile {
+public class TestImportMCInquiries {
     private Map<String, String> headers;
     @Before
     public void SetUp(){
@@ -40,41 +39,39 @@ public class TestImportClientMobile {
 
     }
     @Test
-    public void TestImportClientMobile() throws Exception{
-        String sURL = "http://192.168.10.68:8080/telemarketing_app/GetClientMobile.php";
+    public void TestImportInquiries() throws Exception {
+        String sURL = "http://192.168.10.68:8080/telemarketing_app/GetMCInquiry.php";
 
         //Create the parameters needed by the API
         JSONObject param = new JSONObject();
-        param.put("sClientID", "M01520000603");
-        param.put("sMobileNo", "09481552529");
+        param.put("sTransNox", "M0T123000816");
+        param.put("sLeadSrc", "INQR");
 
         String response = WebClient.sendRequest(sURL, param.toString(), (HashMap<String, String>) headers);
         if(response == null){
             System.out.println("HTTP Error detected: " + System.getProperty("store.error.info"));
         }
 
+        System.out.println(response);
+
         JSONObject loJson = new JSONObject(response);
         assertNotNull(loJson);
 
-        JSONObject loCMob = loJson.getJSONObject("client_mobile");
-        assertNotNull(loCMob);
+        JSONObject loInq = loJson.getJSONObject("mcinq");
+        assertNotNull(loInq);
 
-        System.out.println(loCMob.get("sClientID"));
-        System.out.println(loCMob.get("nEntryNox"));
-        System.out.println(loCMob.get("sMobileNo"));
-        System.out.println(loCMob.get("nPriority"));
-        System.out.println(loCMob.get("cIncdMktg"));
-        System.out.println(loCMob.get("nUnreachx"));
-        System.out.println(loCMob.get("dLastVeri"));
-        System.out.println(loCMob.get("dInactive"));
-        System.out.println(loCMob.get("nNoRetryx"));
-        System.out.println(loCMob.get("cInvalidx"));
-        System.out.println(loCMob.get("sIdleTime"));
-        System.out.println(loCMob.get("cConfirmd"));
-        System.out.println(loCMob.get("dConfirmd"));
-        System.out.println(loCMob.get("cSubscrbr"));
-        System.out.println(loCMob.get("dHoldMktg"));
-        System.out.println(loCMob.get("dLastCall"));
-        System.out.println(loCMob.get("cRecdStat"));
+        System.out.println(loInq.get("sTransnox"));
+        System.out.println(loInq.get("dFollowUp"));
+        System.out.println(loInq.get("sClientID"));
+        System.out.println(loInq.get("sBrandIDx"));
+        System.out.println(loInq.get("sModelIDx"));
+        System.out.println(loInq.get("sColorIDx"));
+        System.out.println(loInq.get("nTerms"));
+        System.out.println(loInq.get("dTargetxx"));
+        System.out.println(loInq.get("nDownPaym"));
+        System.out.println(loInq.get("nMonAmort"));
+        System.out.println(loInq.get("nCashPrc"));
+        System.out.println(loInq.get("sRelatnID"));
+        System.out.println(loInq.get("sTableNM"));
     }
 }

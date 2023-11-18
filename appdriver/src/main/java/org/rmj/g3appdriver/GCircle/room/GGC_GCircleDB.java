@@ -227,7 +227,7 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
         EClient2Call.class,
         EMCInquiry.class,
         EClientMobile.class,
-        EHotline_Outgoing.class}, version = 41, exportSchema = false)
+        EHotline_Outgoing.class}, version = 42, exportSchema = true)
 public abstract class GGC_GCircleDB extends RoomDatabase {
     private static final String TAG = "GhostRider_DB_Manager";
     private static GGC_GCircleDB instance;
@@ -309,7 +309,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
                      GGC_GCircleDB.class, "GGC_ISysDBF.db")
                     .allowMainThreadQueries()
                     .addCallback(roomCallBack)
-                    .addMigrations(MIGRATION_V40,MIGRATION_V41)
+                    .addMigrations(MIGRATION_V40,MIGRATION_V42)
                     .build();
         }
         return instance;
@@ -337,22 +337,9 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
             database.execSQL("ALTER TABLE Ganado_Online ADD COLUMN dPricexxx TEXT");
         }
     };
-    public static final Migration MIGRATION_V41 = new Migration(40, 41) {
+    public static final Migration MIGRATION_V42 = new Migration(41, 42) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            //1. DROP all renamed old tables
-            database.execSQL("DROP TABLE IF EXISTS `Lead_Calls_Old`");
-            database.execSQL("DROP TABLE IF EXISTS `MC_Inquiry_Old`");
-            database.execSQL("DROP TABLE IF EXISTS `Client_Mobile_Old`");
-            database.execSQL("DROP TABLE IF EXISTS `Hotline_Outgoing_Old`");
-            database.execSQL("DROP TABLE IF EXISTS `Call_Client_Old`");
-            //2. RENAME current tables as old tables (as copy of old datas)
-            database.execSQL("ALTER TABLE `Lead_Calls` RENAME TO `Lead_Calls_Old`");
-            database.execSQL("ALTER TABLE `MC_Inquiry` RENAME TO `MC_Inquiry_Old`");
-            database.execSQL("ALTER TABLE `Client_Mobile` RENAME TO `Client_Mobile_Old`");
-            database.execSQL("ALTER TABLE `Hotline_Outgoing` RENAME TO `Hotline_Outgoing_Old`");
-            database.execSQL("ALTER TABLE `Call_Client` RENAME TO `Call_Client_Old`");
-            //3. CREATE TABLES
             database.execSQL("CREATE TABLE IF NOT EXISTS `Lead_Calls` " +
                     "(`sTransNox` TEXT NOT NULL, `sAgentIDx` TEXT, `dTransact` TEXT, " +
                     "`sClientID` TEXT, `sMobileNo` TEXT, `sRemarksx` TEXT, `sReferNox` TEXT, " +
@@ -377,19 +364,6 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
 
             database.execSQL("CREATE TABLE IF NOT EXISTS `Call_Client` (`sClientID` TEXT NOT NULL, `sClientNM` TEXT, " +
                     "`xAddressx` TEXT, `sPhoneNox` TEXT, `sMobileNox` TEXT, PRIMARY KEY(`sClientID`))");
-
-            //4. COPY old data to created new tables
-            database.execSQL("INSERT INTO `Lead_Calls` SELECT * FROM `Lead_Calls_Old`");
-            database.execSQL("INSERT INTO `MC_Inquiry` SELECT * FROM `MC_Inquiry_Old`");
-            database.execSQL("INSERT INTO `Client_Mobile` SELECT * FROM `Client_Mobile_Old`");
-            database.execSQL("INSERT INTO `Hotline_Outgoing` SELECT * FROM `Hotline_Outgoing_Old`");
-            database.execSQL("INSERT INTO `Call_Client` SELECT * FROM `Call_Client_Old`");
-            //5. DROP renamed old tables
-            database.execSQL("DROP TABLE IF EXISTS `Lead_Calls_Old`");
-            database.execSQL("DROP TABLE IF EXISTS `MC_Inquiry_Old`");
-            database.execSQL("DROP TABLE IF EXISTS `Client_Mobile_Old`");
-            database.execSQL("DROP TABLE IF EXISTS `Hotline_Outgoing_Old`");
-            database.execSQL("DROP TABLE IF EXISTS `Call_Client_Old`");
         }
     };
 }

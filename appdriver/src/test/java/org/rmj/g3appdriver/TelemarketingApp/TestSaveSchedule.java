@@ -50,12 +50,14 @@ public class TestSaveSchedule {
 
         JSONObject jsonParam = new JSONObject();
 
-        jsonParam.put("sTransNox", "M0T123072843");
+        jsonParam.put("sTransNox", "M0T123000816");
         jsonParam.put("sLeadSrc", loConstants.GetLeadConstant("MC INQUIRY"));
         jsonParam.put("dFollowUp", "2023-11-21");
         jsonParam.put("cTransStat", "0");
         jsonParam.put("sRemarks", "Reschedule mo boy testing");
         jsonParam.put("sUserID", "M001160024");
+
+
 
         String lsResponse = WebClient.sendRequest( sURL, jsonParam.toString(), (HashMap<String, String>) headers);
         if(lsResponse == null){
@@ -67,10 +69,11 @@ public class TestSaveSchedule {
         JSONObject loResponse = new JSONObject(lsResponse);
         assertNotNull(loResponse);
 
-        JSONObject loTransData = loResponse.getJSONObject("transparams");
-        assertNotNull(loTransData);
+        JSONObject loSchedule = loResponse.getJSONObject("schedule");
+        assertNotNull(loSchedule);
 
-        System.out.println(loTransData.get("sTransNox"));
-        System.out.println(loTransData.get("sLeadsrc"));
+        System.out.println(loSchedule.get("sTransNox"));
+        System.out.println(loSchedule.get("dFollowUp"));
+        System.out.println(loSchedule.get("tablenm"));
     }
 }

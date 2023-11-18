@@ -4,14 +4,12 @@ plugins {
 
 android {
     namespace 'org.rmj.guanzongroup.appdriver'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "org.rmj.guanzongroup.appdriver"
-        minSdk 24
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        minSdk 21
+        targetSdk 34
 
         // used by Room, to test migrations
         javaCompileOptions {
@@ -39,6 +37,10 @@ android {
         androidTest.assets.srcDirs +=
                 files("$projectDir/schemas".toString())
     }
+    //fix build gradle error '2 files path found in 'core.properties''
+    packagingOptions {
+        resources.merges.add("core.properties")
+    }
 }
 
 dependencies {
@@ -49,4 +51,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    implementation project(path: ':appdriver')
 }

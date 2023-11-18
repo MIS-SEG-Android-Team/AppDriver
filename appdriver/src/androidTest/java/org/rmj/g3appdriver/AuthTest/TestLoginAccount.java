@@ -14,6 +14,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.rmj.g3appdriver.Config.AppConfig;
 import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 
@@ -21,17 +22,19 @@ import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 @RunWith(AndroidJUnit4.class)
 public class TestLoginAccount {
     private static final String TAG = TestLoginAccount.class.getSimpleName();
-
     private Application instance;
-
+    private AppConfig loConfig;
     private EmployeeMaster poUser;
-
     private boolean isSuccess = false;
     private String message;
 
     @Before
     public void setup() throws Exception{
         instance = ApplicationProvider.getApplicationContext();
+
+        loConfig = AppConfig.getInstance(instance);
+        loConfig.setProductID("gRider");
+
         poUser = new EmployeeMaster(instance);
         AppStatusConfig.getInstance(instance).setTestStatus(true);
     }
