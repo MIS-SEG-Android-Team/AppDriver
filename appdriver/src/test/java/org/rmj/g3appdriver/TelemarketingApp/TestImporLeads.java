@@ -1,6 +1,7 @@
 package org.rmj.g3appdriver.TelemarketingApp;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,34 +54,37 @@ public class TestImporLeads {
             System.out.println("HTTP Error detected: " + System.getProperty("store.error.info"));
         }
 
+        System.out.println(response);
+
         JSONObject jsonResponse = new JSONObject(response);
-        JSONArray jsonArray = jsonResponse.getJSONArray("leadsload");
-        assertNotNull(jsonArray);
+        assertNotNull(jsonResponse);
 
-        for (int i = 0; i < jsonArray.length(); i++){
-            JSONObject loResult = jsonArray.getJSONObject(i).getJSONObject("leads");
-            assertNotNull(loResult);
+        JSONArray loArray = jsonResponse.getJSONArray("initleads");
+        assertTrue(loArray.length() > 0);
 
-            System.out.println(loResult.get("sTransNox"));
-            System.out.println(loResult.get("sAgentIDx"));
-            System.out.println(loResult.get("dTransact"));
-            System.out.println(loResult.get("sClientID"));
-            System.out.println(loResult.get("sMobileNo"));
-            System.out.println(loResult.get("sRemarksx"));
-            System.out.println(loResult.get("sReferNox"));
-            System.out.println(loResult.get("sSourceCD"));
-            System.out.println(loResult.get("sApprovCd"));
-            System.out.println(loResult.get("cTranStat"));
-            System.out.println(loResult.get("dCallStrt"));
-            System.out.println(loResult.get("dCallEndx"));
-            System.out.println(loResult.get("nNoRetryx"));
-            System.out.println(loResult.get("cSubscrbr"));
-            System.out.println(loResult.get("cCallStat"));
-            System.out.println(loResult.get("cTLMStatx"));
-            System.out.println(loResult.get("cSMSStatx"));
-            System.out.println(loResult.get("nSMSSentx"));
-            System.out.println(loResult.get("sModified"));
-            System.out.println(loResult.get("dModified"));
+        for (int i = 0; i < loArray.length(); i++){
+            JSONObject loLeads = loArray.getJSONObject(i).getJSONObject("leads");
+
+            System.out.println(loLeads.get("sTransNox"));
+            System.out.println(loLeads.get("sAgentIDx"));
+            System.out.println(loLeads.get("dTransact"));
+            System.out.println(loLeads.get("sClientID"));
+            System.out.println(loLeads.get("sMobileNo"));
+            System.out.println(loLeads.get("sRemarksx"));
+            System.out.println(loLeads.get("sReferNox"));
+            System.out.println(loLeads.get("sSourceCD"));
+            System.out.println(loLeads.get("sApprovCd"));
+            System.out.println(loLeads.get("cTranStat"));
+            System.out.println(loLeads.get("dCallStrt"));
+            System.out.println(loLeads.get("dCallEndx"));
+            System.out.println(loLeads.get("nNoRetryx"));
+            System.out.println(loLeads.get("cSubscrbr"));
+            System.out.println(loLeads.get("cCallStat"));
+            System.out.println(loLeads.get("cTLMStatx"));
+            System.out.println(loLeads.get("cSMSStatx"));
+            System.out.println(loLeads.get("nSMSSentx"));
+            System.out.println(loLeads.get("sModified"));
+            System.out.println(loLeads.get("dModified"));
         }
     }
 }

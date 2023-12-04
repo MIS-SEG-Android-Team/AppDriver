@@ -1,7 +1,9 @@
 package org.rmj.g3appdriver.TelemarketingApp;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +12,10 @@ import org.junit.runners.JUnit4;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.utils.SQLUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(JUnit4.class)
@@ -43,11 +47,10 @@ public class TestImporClient2Call {
     public void TestImportClient2Call() throws Exception{
         String sURL = "http://192.168.10.68:8080/telemarketing_app/GetCallClients.php";
 
-        //Create the parameters needed by the API
-        JSONObject param = new JSONObject();
-        param.put("sClientID", "M01520000603");
+        JSONObject loParams = new JSONObject();
+        loParams.put("sClientID","M01520000603");
 
-        String response = WebClient.sendRequest(sURL, param.toString(), (HashMap<String, String>) headers);
+        String response = WebClient.sendRequest(sURL, loParams.toString(), (HashMap<String, String>) headers);
         if(response == null){
             System.out.println("HTTP Error detected: " + System.getProperty("store.error.info"));
         }

@@ -1,5 +1,7 @@
 package org.rmj.g3appdriver.GCircle.Apps.TeleMarketing;
 
+import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
+
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
@@ -53,6 +55,7 @@ public class CallInteractManager {
     private String sClientID;
     private String sMobileNo;
     private String cSubscr;
+    private String dToday;
     private String message;
     public CallInteractManager(Application instance) {
         this.context = instance.getApplicationContext();
@@ -72,7 +75,7 @@ public class CallInteractManager {
     public String getMessage(){
         return message;
     }
-    private String CreateSubscrCondition(){ //INITIALIZE SIM CARD NAMES
+    public String CreateSubscrCondition(){ //INITIALIZE SIM CARD NAMES
         if (loSubscriber.InitSim() == false){
             message = loSubscriber.getMessage();
             return null;
@@ -97,53 +100,44 @@ public class CallInteractManager {
     }
     public Boolean ImportCalls(){ //IMPORT LEADS WITH CLIENT INFO, PRODUCT INQUIRY
         try {
-            JSONArray loArray = poTeleApp.GetLeads(poSession.getUserID(), CreateSubscrCondition());
-            if (loArray == null){
+            JSONArray loLeads = poTeleApp.GetLeads(poSession.getUserID(), CreateSubscrCondition());
+            if (loLeads == null){
                 message = poTeleApp.getMessage();
                 return false;
             }
 
-            List<String> ListClientInfos = new ArrayList<>(); //list of params for client info
-            HashMap<String, String> HashClientMobile = new HashMap<>(); //list of params for client mobile
-            HashMap<String, String> HashMCInq = new HashMap<>(); //list of params for inquiries
+            for (int i = 0; i < loLeads.length(); i++){
+                JSONObject loLeadInfo = loLeads.getJSONObject(i).getJSONObject("leads");
 
-            //ITERATE ROWS FROM JSON ARRAY
-            for (int i = 0; i < loArray.length(); i++){
-
-                JSONObject jsonLeads = loArray.getJSONObject(i).getJSONObject("leads");//convert each array to json object
-                String sTransNox = jsonLeads.get("sTransNox").toString();
+                String sTransNox = loLeadInfo.get("sTransNox").toString();
 
                 //INITIALIZE ENTITY COLUMNS
                 ELeadCalls eLeadCalls = new ELeadCalls();
                 eLeadCalls.setsTransNox(sTransNox);
-                eLeadCalls.setsAgentIDx(jsonLeads.get("sAgentIDx").toString());
-                eLeadCalls.setdTransact(jsonLeads.get("dTransact").toString());
-                eLeadCalls.setsClientID(jsonLeads.get("sClientID").toString());
-                eLeadCalls.setsMobileNo(jsonLeads.get("sMobileNo").toString());
-                eLeadCalls.setsRemarksx(jsonLeads.get("sRemarksx").toString());
-                eLeadCalls.setsReferNox(jsonLeads.get("sReferNox").toString());
-                eLeadCalls.setsSourceCD(jsonLeads.get("sSourceCD").toString());
-                eLeadCalls.setsApprovCd(jsonLeads.get("sApprovCd").toString());
-                eLeadCalls.setcTranStat(jsonLeads.get("cTranStat").toString());
-                eLeadCalls.setdCallStrt(jsonLeads.get("dCallStrt").toString());
-                eLeadCalls.setdCallEndx(jsonLeads.get("dCallEndx").toString());
-                eLeadCalls.setnNoRetryx(Integer.valueOf(jsonLeads.get("nNoRetryx").toString()));
-                eLeadCalls.setcSubscrbr(jsonLeads.get("cSubscrbr").toString());
-                eLeadCalls.setcCallStat(jsonLeads.get("cCallStat").toString());
-                eLeadCalls.setcTLMStatx(jsonLeads.get("cTLMStatx").toString());
-                eLeadCalls.setcSMSStatx(jsonLeads.get("cSMSStatx").toString());
-                eLeadCalls.setnSMSSentx(Integer.valueOf(jsonLeads.get("nSMSSentx").toString()));
-                eLeadCalls.setsModified(jsonLeads.get("sModified").toString());
-                eLeadCalls.setdModified(jsonLeads.get("dModified").toString());
-
-                String sClientId = jsonLeads.get("sClientID").toString();
-                String sMobile = jsonLeads.get("sMobileNo").toString();
-                String sLeadSrc = jsonLeads.get("sSourceCD").toString();
+                eLeadCalls.setsAgentIDx(loLeadInfo.get("sAgentIDx").toString());
+                eLeadCalls.setdTransact(loLeadInfo.get("dTransact").toString());
+                eLeadCalls.setsClientID(loLeadInfo.get("sClientID").toString());
+                eLeadCalls.setsMobileNo(loLeadInfo.get("sMobileNo").toString());
+                eLeadCalls.setsRemarksx(loLeadInfo.get("sRemarksx").toString());
+                eLeadCalls.setsReferNox(loLeadInfo.get("sReferNox").toString());
+                eLeadCalls.setsSourceCD(loLeadInfo.get("sSourceCD").toString());
+                eLeadCalls.setsApprovCd(loLeadInfo.get("sApprovCd").toString());
+                eLeadCalls.setcTranStat(loLeadInfo.get("cTranStat").toString());
+                eLeadCalls.setdCallStrt(loLeadInfo.get("dCallStrt").toString());
+                eLeadCalls.setdCallEndx(loLeadInfo.get("dCallEndx").toString());
+                eLeadCalls.setnNoRetryx(Integer.valueOf(loLeadInfo.get("nNoRetryx").toString()));
+                eLeadCalls.setcSubscrbr(loLeadInfo.get("cSubscrbr").toString());
+                eLeadCalls.setcCallStat(loLeadInfo.get("cCallStat").toString());
+                eLeadCalls.setcTLMStatx(loLeadInfo.get("cTLMStatx").toString());
+                eLeadCalls.setcSMSStatx(loLeadInfo.get("cSMSStatx").toString());
+                eLeadCalls.setnSMSSentx(Integer.valueOf(loLeadInfo.get("nSMSSentx").toString()));
+                eLeadCalls.setsModified(loLeadInfo.get("sModified").toString());
+                eLeadCalls.setdModified(loLeadInfo.get("dModified").toString());
 
                 //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
                 if (poDaoLeadCalls.GetLeadTrans(sTransNox) == null){
                     if (poDaoLeadCalls.SaveLeads(eLeadCalls).intValue() < 1){
-                        message= "Failed to import leads on device";
+                        message= "Failed to save leads on device";
                         Log.d(TAG, "Table: Call_Outgoing Transaction No: "+ sTransNox);
                         return false;
                     }
@@ -154,212 +148,194 @@ public class CallInteractManager {
                         return false;
                     }
                 }
-
-                //Collect all datas related to leads
-                if (!sClientId.isEmpty()){ //client id not empty
-                    ListClientInfos.add(sClientId);
-
-                    if (!sMobile.isEmpty()){ //mobile no not empty
-                        HashClientMobile.put(sMobile, sClientId);
-                    }
-                }
-
-                if (!sTransNox.isEmpty() && !sLeadSrc.isEmpty()){
-                    HashMCInq.put(sTransNox, sLeadSrc);
-                }
             }
-            if (ImportClient2Call(ListClientInfos) == false){
-                message = getMessage();
-                return false;
-            }
-            if (ImportClientMobile(HashClientMobile) == false){
-                message = getMessage();
-                return false;
-            }
-            if (ImportInquiries(HashMCInq) == false){
-                message = getMessage();
-                return false;
-            }
-
             message= "Lead Calls imported successfully to device";
-
             return true;
-        }catch (JSONException e){
+        }catch(Exception e){
             message= e.getMessage();
             return false;
         }
     }
-    public Boolean ImportClient2Call(List<String> ClientIDParams){
+    /* REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO, BEFORE SAVING/UPDATING TRANSACTIONS*/
+    public void InitTransaction(LeadsInformation loLeads){
+        Date dcurrDt = Calendar.getInstance().getTime();
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.getDefault());
+        String frmDt = sdFormat.format(dcurrDt);
+
+        this.sTransNox = loLeads.getsTransNox();
+        this.sLeadSrc = loLeads.getsSourceCD();
+        this.sClientID = loLeads.getsClientID();
+        this.sMobileNo = loLeads.getsMobileNo();
+        this.cSubscr = loLeads.getsSubscr();
+        this.sUserIDx = poSession.getUserID();
+        this.dToday = frmDt;
+    }
+    public Boolean SaveClient2Call(){
         try {
-            if (ClientIDParams.size() < 1){
+            JSONObject loParam = new JSONObject();
+            loParam.put("sClientID", sClientID); //"M01520000603" - for testing params
+
+            if (loParam == null){
                 message = "No client informations to import";
                 return false;
             }
 
-            for (int i = 0; i < ClientIDParams.size(); i++){
-                JSONObject loClient = poTeleApp.GetClients(ClientIDParams.get(i));
-
-                if (loClient == null){
-                    message = poTeleApp.getMessage();
-                    return false;
-                }
-
-                String sClientid = loClient.get("sClientID").toString();
-
-                //initialize entity column values
-                EClient2Call eClient2Call = new EClient2Call();
-                eClient2Call.setsClientID(sClientid);
-                eClient2Call.setsClientNM(loClient.get("sCompnyNm").toString());
-                eClient2Call.setxAddressx(loClient.get("xAddressx").toString());
-                eClient2Call.setsMobileNox(loClient.get("sMobileNo").toString());
-                eClient2Call.setsPhoneNox(loClient.get("sPhoneNox").toString());
-
-                //get exisitng record on local database, if 0 then insert else update
-                if (poDaoClient.GetClient2Call(sClientid) == null){
-                    if (poDaoClient.SaveClients(eClient2Call).intValue() < 1){
-                        message= "Failed to import client's information";
-                        Log.d(TAG, "Table: Client_Master Client ID: "+ sClientid);
-                        return false;
-                    }
-                }else {
-                    if (poDaoClient.UpdateClients(eClient2Call) < 1){
-                        message= "Failed to import client's information";
-                        Log.d(TAG, "Table: Client_Master Client ID: "+ sClientid);
-                        return false;
-                    }
-                }
-            }
-            message = "Client's Info imported successfully to device";
-            return true;
-        }catch (Exception e){
-            message = e.getMessage();
-            return false;
-        }
-    }
-    public Boolean ImportClientMobile(HashMap<String, String> ClientMobParams){
-        try {
-            if (ClientMobParams.size() < 1){
-                message = "No client's mobile information to import";
+            //GET RESULTS FROM SERVER
+            JSONObject loClients = poTeleApp.GetClients(loParam);
+            if (loClients == null){
+                message = poTeleApp.getMessage();
                 return false;
             }
 
-            for (Map.Entry<String, String> params: ClientMobParams.entrySet()){
-                String sMobile = params.getKey();
-                String sClientId = params.getValue();
+            String sClientid = loClients.get("sClientID").toString();
 
-                JSONObject loMobile = poTeleApp.GetCLientMobile(sClientId,sMobile);
-                if (loMobile == null){
-                    message = poTeleApp.getMessage();
+            //initialize entity column values
+            EClient2Call eClient2Call = new EClient2Call();
+            eClient2Call.setsClientID(sClientid);
+            eClient2Call.setsClientNM(loClients.get("sCompnyNm").toString());
+            eClient2Call.setxAddressx(loClients.get("xAddressx").toString());
+            eClient2Call.setsMobileNox(loClients.get("sMobileNo").toString());
+            eClient2Call.setsPhoneNox(loClients.get("sPhoneNox").toString());
+
+            //get exisitng record on local database, if 0 then insert else update
+            if (poDaoClient.GetClient2Call(sClientid) == null){
+                if (poDaoClient.SaveClients(eClient2Call).intValue() < 1){
+                    message= "Failed to save client's information";
+                    Log.d(TAG, "Table: Client_Master Client ID: "+ sClientid);
+                    return false;
                 }
-
-                EClientMobile eClientMobile = new EClientMobile();
-
-                eClientMobile.setsClientID(loMobile.get("sClientID").toString());
-                eClientMobile.setnEntryNox(Integer.valueOf(loMobile.get("nEntryNox").toString()));
-                eClientMobile.setsMobileNo(loMobile.get("sMobileNo").toString());
-                eClientMobile.setnPriority(Integer.valueOf(loMobile.get("nPriority").toString()));
-                eClientMobile.setcIncdMktg(loMobile.get("cIncdMktg").toString());
-                eClientMobile.setnUnreachx(Integer.valueOf(loMobile.get("nUnreachx").toString()));
-                eClientMobile.setdLastVeri(loMobile.get("dLastVeri").toString());
-                eClientMobile.setdInactive(loMobile.get("dInactive").toString());
-                eClientMobile.setnNoRetryx(Integer.valueOf(loMobile.get("nNoRetryx").toString()));
-                eClientMobile.setcInvalidx(loMobile.get("cInvalidx").toString());
-                eClientMobile.setsIdleTime(loMobile.get("sIdleTime").toString());
-                eClientMobile.setcConfirmd(loMobile.get("cConfirmd").toString());
-                eClientMobile.setdConfirmd(loMobile.get("dConfirmd").toString());
-                eClientMobile.setcSubscr(loMobile.get("cSubscrbr").toString());
-                eClientMobile.setdHoldMktg(loMobile.get("dHoldMktg").toString());
-                eClientMobile.setdLastCall(loMobile.get("dLastCall").toString());
-                eClientMobile.setcRecdStat(loMobile.get("cRecdStat").toString());
-
-                if (poDaoClientMobile.GetClientMobile(sClientId, sMobile) == null){
-                    if (poDaoClientMobile.SaveClientMobile(eClientMobile) < 1){
-                        message = "Failed to import client's mobile information";
-                        Log.d(TAG, "Table: Client_Mobile Mobile No: " + sMobile);
-                        return false;
-                    }
-                }else {
-                    if (poDaoClientMobile.UpdateClientMobile(eClientMobile) < 1){
-                        message = sClientID + " client id failed to update on local";
-                        Log.d(TAG, "Table: Client_Mobile Mobile No: " + sMobile);
-                        return false;
-                    }
+            }else {
+                if (poDaoClient.UpdateClients(eClient2Call) < 1){
+                    message= "Failed to update client's information";
+                    Log.d(TAG, "Table: Client_Master Client ID: "+ sClientid);
+                    return false;
                 }
             }
 
-            message = "Client's Mobile imported successfully to device";
+            message = "Client's Info saved to device";
             return true;
         }catch (Exception e){
             message = e.getMessage();
             return false;
         }
     }
-    public Boolean ImportInquiries(HashMap<String, String> InqParams){
+    public Boolean SaveClientMobile(){
         try {
-            if (InqParams.size() < 1){
+            JSONObject loParams = new JSONObject();
+            loParams.put("sClientID",sClientID); //"M01520000603"
+            loParams.put("sMobileNo",sMobileNo); //"09481552529"
+
+            if (loParams == null){
+                message = "No client's mobile info to import";
+                return false;
+            }
+
+            JSONObject loMobiles = poTeleApp.GetCLientMobile(loParams);
+            if (loMobiles == null){
+                message = poTeleApp.getMessage();
+                return false;
+            }
+
+            String sClientId = loMobiles.get("sClientID").toString();
+            String sMobile = loMobiles.get("sMobileNo").toString();
+
+            EClientMobile eClientMobile = new EClientMobile();
+
+            eClientMobile.setsClientID(sClientId);
+            eClientMobile.setnEntryNox(Integer.valueOf(loMobiles.get("nEntryNox").toString()));
+            eClientMobile.setsMobileNo(sMobile);
+            eClientMobile.setnPriority(Integer.valueOf(loMobiles.get("nPriority").toString()));
+            eClientMobile.setcIncdMktg(loMobiles.get("cIncdMktg").toString());
+            eClientMobile.setnUnreachx(Integer.valueOf(loMobiles.get("nUnreachx").toString()));
+            eClientMobile.setdLastVeri(loMobiles.get("dLastVeri").toString());
+            eClientMobile.setdInactive(loMobiles.get("dInactive").toString());
+            eClientMobile.setnNoRetryx(Integer.valueOf(loMobiles.get("nNoRetryx").toString()));
+            eClientMobile.setcInvalidx(loMobiles.get("cInvalidx").toString());
+            eClientMobile.setsIdleTime(loMobiles.get("sIdleTime").toString());
+            eClientMobile.setcConfirmd(loMobiles.get("cConfirmd").toString());
+            eClientMobile.setdConfirmd(loMobiles.get("dConfirmd").toString());
+            eClientMobile.setcSubscr(loMobiles.get("cSubscrbr").toString());
+            eClientMobile.setdHoldMktg(loMobiles.get("dHoldMktg").toString());
+            eClientMobile.setdLastCall(loMobiles.get("dLastCall").toString());
+            eClientMobile.setcRecdStat(loMobiles.get("cRecdStat").toString());
+
+            if (poDaoClientMobile.GetClientMobile(sClientId, sMobile) == null){
+                if (poDaoClientMobile.SaveClientMobile(eClientMobile) < 1){
+                    message = "Failed to import client's mobile information";
+                    Log.d(TAG, "Table: Client_Mobile Mobile No: " + sMobile);
+                    return false;
+                }
+            }else {
+                if (poDaoClientMobile.UpdateClientMobile(eClientMobile) < 1){
+                    message = sClientID + " client id failed to update on local";
+                    Log.d(TAG, "Table: Client_Mobile Mobile No: " + sMobile);
+                    return false;
+                }
+            }
+
+            message = "Client's Mobile saved to device";
+            return true;
+        }catch (Exception e){
+            message = e.getMessage();
+            return false;
+        }
+    }
+    public Boolean SaveInquiries(){
+        try {
+            JSONObject loParams = new JSONObject();
+            loParams.put("sReferNox",sTransNox); //"M02020000196"
+            loParams.put("sSourceCd",sLeadSrc); //"MCSO"
+
+            if (loParams == null){
                 message = "No inquiries to import";
                 return false;
             }
 
-            for (Map.Entry<String, String> params: InqParams.entrySet()){
-                String sTransNox = params.getKey();
-                String sLeadsrc = params.getValue();
+            JSONObject loInq = poTeleApp.GetMCInquiries(loParams);
+            if (loInq == null){
+                message = poTeleApp.getMessage();
+                return false;
+            }
 
-                JSONObject loInq = poTeleApp.GetMCInquiries(sTransNox,sLeadsrc);
-                if (loInq == null){
-                    message = poTeleApp.getMessage();
+            String sTransNox = loInq.get("sTransnox").toString();
+
+            //initialize entity column values
+            EMCInquiry emcInquiry = new EMCInquiry();
+
+            emcInquiry.setsTransNox(sTransNox);
+            emcInquiry.setdFollowUp(loInq.get("dFollowUp").toString());
+            emcInquiry.setsClientID(loInq.get("sClientID").toString());
+            emcInquiry.setsBrandIDx(loInq.get("sBrandIDx").toString());
+            emcInquiry.setsModelIDx(loInq.get("sModelIDx").toString());
+            emcInquiry.setsColorIDx(loInq.get("sColorIDx").toString());
+            emcInquiry.setnTerms(Integer.valueOf(loInq.get("nTerms").toString()));
+            emcInquiry.setdTargetxx(loInq.get("dTargetxx").toString());
+            emcInquiry.setnDownPaym(Double.valueOf(loInq.get("nDownPaym").toString()));
+            emcInquiry.setnMonAmort(Double.valueOf(loInq.get("nMonAmort").toString()));
+            emcInquiry.setnCashPrc(Double.valueOf(loInq.get("nCashPrc").toString()));
+            emcInquiry.setsRelatnID(loInq.get("sRelatnID").toString());
+            emcInquiry.setsTableNM(loInq.get("sTableNM").toString());
+
+            if (poDaoMcInq.GetMCInquiry(sTransNox) == null){
+                if (poDaoMcInq.SaveMCInq(emcInquiry).intValue() < 1){
+                    message = "Failed to import inquiry on device";
+                    Log.d(TAG, "Table: "+ loInq.get("sTableNM") + "Transaction No: " + sTransNox);
+                    return false;
                 }
-
-                //initialize entity column values
-                EMCInquiry emcInquiry = new EMCInquiry();
-
-                emcInquiry.setsTransNox(loInq.get("sTransNox").toString());
-                emcInquiry.setdFollowUp(loInq.get("dFollowUp").toString());
-                emcInquiry.setsClientID(loInq.get("sClientID").toString());
-                emcInquiry.setsBrandIDx(loInq.get("sBrandIDx").toString());
-                emcInquiry.setsModelIDx(loInq.get("sModelIDx").toString());
-                emcInquiry.setsColorIDx(loInq.get("sColorIDx").toString());
-                emcInquiry.setnTerms(Integer.valueOf(loInq.get("nTerms").toString()));
-                emcInquiry.setdTargetxx(loInq.get("dTargetxx").toString());
-                emcInquiry.setnDownPaym(Double.valueOf(loInq.get("nDownPaym").toString()));
-                emcInquiry.setnMonAmort(Double.valueOf(loInq.get("nMonAmort").toString()));
-                emcInquiry.setnCashPrc(Double.valueOf(loInq.get("nCashPrc").toString()));
-                emcInquiry.setsRelatnID(loInq.get("sRelatnID").toString());
-                emcInquiry.setsTableNM(loInq.get("sTableNM").toString());
-
-                if (poDaoMcInq.GetMCInquiry(sTransNox) == null){
-                    if (poDaoMcInq.SaveMCInq(emcInquiry).intValue() < 1){
-                        message = "Failed to import inquiry on device";
-                        Log.d(TAG, "Table: "+ loInq.get("sTableNM").toString() + "Transaction No: " + sTransNox);
-                        return false;
-                    }
-                }else {
-                    if (poDaoMcInq.UpdateMCInq(emcInquiry) < 1){
-                        message = "Failed to update inquiry on device";
-                        Log.d(TAG, "Table: "+ loInq.get("sTableNM").toString() + "Transaction No: " + sTransNox);
-                        return false;
-                    }
+            }else {
+                if (poDaoMcInq.UpdateMCInq(emcInquiry) < 1){
+                    message = "Failed to update inquiry on device";
+                    Log.d(TAG, "Table: "+ loInq.get("sTableNM") + "Transaction No: " + sTransNox);
+                    return false;
                 }
             }
 
-            message = "Inquiries imported successfully to device";
+            message = "Inquiries saved to device";
             return true;
         }catch (Exception e){
             message = e.getMessage();
             return false;
         }
-    }
-
-    /* REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO, BEFORE SAVING/UPDATING TRANSACTIONS*/
-    public void InitTransaction(String sTransNox){
-        ELeadCalls leadCalls = poDaoLeadCalls.GetLeadTrans(sTransNox);
-
-        this.sTransNox = sTransNox;
-        this.sLeadSrc = leadCalls.getsSourceCD();
-        this.sClientID = leadCalls.getsClientID();
-        this.sMobileNo = leadCalls.getsMobileNo();
-        this.cSubscr = leadCalls.getcSubscrbr();
-        this.sUserIDx = poSession.getUserID();
     }
     public Boolean SaveCallStatus(String sCallStat, String sApprvCD){
         try {
@@ -370,6 +346,7 @@ public class CallInteractManager {
             }
 
             //send json params for web request and get response
+            //TEST PARAMS- sTransNox: M02020000196, cSubscr: 0
             JSONObject jsonResponse = poTeleApp.SendCallStatus(sCallStat, sTransNox, cSubscr,
                     sApprvCD, sUserIDx, sClientID, sMobileNo);
 
@@ -439,6 +416,41 @@ public class CallInteractManager {
             return false;
         }
     }
+    public Boolean SaveSchedule(String dFollowUp, String cTranstat, String sRemarks){
+        try {
+            if (sTransNox == null){
+                message = "No applied transaction no";
+                return false;
+            }
+
+            if (dFollowUp == null){
+                message = "No schedule date applied";
+                return false;
+            }
+
+            JSONObject loSchedule =  poTeleApp.UploadSchedule(sTransNox, sLeadSrc, dFollowUp, cTranstat, sRemarks, sUserIDx);
+            if (loSchedule == null){
+                message = poTeleApp.getMessage();
+                return false;
+            }
+
+            String loTransNox = loSchedule.get("sTransNox").toString();
+            String loFollowUp = loSchedule.get("dFollowUp").toString();
+            String loTableNm = loSchedule.get("tablenm").toString();
+
+            if (poDaoMcInq.UpdateFollowUp(loFollowUp, loTransNox) < 1){
+                message = "Failed to save schedule on device";
+                Log.d(TAG, "Table: " + loTableNm + " Transaction No: " + loTransNox);
+                return false;
+            }
+
+            message = "Schedule has been saved on device";
+            return true;
+        }catch (Exception e){
+            message = e.getMessage();
+            return false;
+        }
+    }
     public Boolean InsertHotlineOutgoing(String sCallstat, String sTransNox, String dTransact,String sDivision, String sMobileNo,
                                          String sMessagex, String cSubscr, String dDueDate, String cSendStat,
                                          int nNoRetryx, String sUDHeader, String sReferNox, String sSourceCd,
@@ -504,50 +516,17 @@ public class CallInteractManager {
         Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
         return true;
     }
-    public Boolean SaveSchedule(String dFollowUp, String cTranstat, String sRemarks){
-        try {
-            if (sTransNox == null){
-                message = "No applied transaction no";
-                return false;
-            }
-
-            if (dFollowUp == null){
-                message = "No schedule date applied";
-                return false;
-            }
-
-            JSONObject loSchedule =  poTeleApp.UploadSchedule(sTransNox, sLeadSrc, dFollowUp, cTranstat, sRemarks, sUserIDx);
-            if (loSchedule == null){
-                message = poTeleApp.getMessage();
-                return false;
-            }
-
-            String loTransNox = loSchedule.get("sTransNox").toString();
-            String loFollowUp = loSchedule.get("dFollowUp").toString();
-            String loTableNm = loSchedule.get("tablenm").toString();
-
-            if (poDaoMcInq.UpdateFollowUp(loFollowUp, loTransNox) < 1){
-                message = "Failed to save schedule on device";
-                Log.d(TAG, "Table: " + loTableNm + " Transaction No: " + loTransNox);
-                return false;
-            }
-
-            message = "Schedule has been saved on device";
-            return true;
-        }catch (Exception e){
-            message = e.getMessage();
-            return false;
-        }
+    public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueues(String sSourceCd){
+        return poDaoLeadCalls.GetInitLead(poSession.getUserID(), CreateSubscrCondition(), loConstants.GetLeadConstant(sSourceCd));
     }
-    public LiveData<DAOLeadCalls.LeadInformation> GetLeads(String sLeadSrc){ //ON QUEUES, PRIORITY CALLS
-        return poDaoLeadCalls.GetLiveLeadCall(poSession.getUserID(), CreateSubscrCondition(), loConstants.GetLeadConstant(sLeadSrc));
+    public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueuesonSched(String sSourceCd){
+        return poDaoLeadCalls.GetInitLeadsonSched(poSession.getUserID(), CreateSubscrCondition(),
+                loConstants.GetLeadConstant(sSourceCd), dToday);
     }
-    public LiveData<DAOLeadCalls.LeadInformation> GetLeadsOnSched() { //ON SCHED, LEAST PRIORITY AFTER QUEUES
-        String dTransact = new
-                SimpleDateFormat("yyyy:MM:dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
-        return poDaoLeadCalls.GetLiveSchedCall(poSession.getUserID(), CreateSubscrCondition(), dTransact);
+    public LiveData<DAOLeadCalls.LeadDetails> GetLeadDetails(){ //ON QUEUES, PRIORITY CALLS
+        return poDaoLeadCalls.GetLeadDetails(sTransNox);
     }
     public LiveData<List<DAOLeadCalls.LeadHistory>> GetHistory(){
-        return poDaoLeadCalls.GetLeadHistory();
+        return poDaoLeadCalls.GetCallHistory();
     }
 }

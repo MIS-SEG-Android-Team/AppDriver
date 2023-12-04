@@ -24,8 +24,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
-import static org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB.MIGRATION_V40;
-import static org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB.MIGRATION_V42;
+import static org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB.MIGRATION_V44;
 
 import java.io.IOException;
 
@@ -37,8 +36,9 @@ import java.io.IOException;
 @RunWith(AndroidJUnit4.class)
 public class MigrationDBTesting {
     private static final Migration[] ALL_MIGRATIONS = new Migration[]{
-            MIGRATION_V40, MIGRATION_V42};
+            MIGRATION_V44};
     @Rule
+
     public MigrationTestHelper helper;
     @Before
     public void setUp(){
@@ -50,7 +50,7 @@ public class MigrationDBTesting {
     @Test
     public void MigrateDB() throws IOException {
         // Create earliest version of the database.
-        SupportSQLiteDatabase db = helper.createDatabase("TEST_DB", 42);
+        SupportSQLiteDatabase db = helper.createDatabase("TEST_DB", 43);
         db.close();
 
         // Open latest version of the database. Room validates the schema

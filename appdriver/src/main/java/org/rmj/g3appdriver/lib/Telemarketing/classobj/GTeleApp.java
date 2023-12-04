@@ -4,6 +4,7 @@ import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 
 import android.app.Application;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
@@ -11,6 +12,9 @@ import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Telemarketing.constants.GTeleConstants;
+
+import java.util.List;
+
 public class GTeleApp {
     private String TAG = getClass().getSimpleName();
     private String message;
@@ -44,7 +48,6 @@ public class GTeleApp {
 
             //GET ERROR RETURNED FROM SERVER
             String lsResult = loJson.getString("result");
-
             if(lsResult.equalsIgnoreCase("error")){
                 JSONObject loError = loJson.getJSONObject("error");
                 message = getErrorMessage(loError);
@@ -52,22 +55,23 @@ public class GTeleApp {
             }
 
             //CONVERT JSON RESPONSE TO JSON ARRAY
-            JSONArray loArray = loJson.getJSONArray("leadsload");
-            return loArray;
+            JSONArray loLeads = loJson.getJSONArray("initleads");
+            return loLeads;
         } catch (Exception e) {
             message= e.getMessage();
             return null;
         }
     }
-    public JSONObject GetClients(String sClientID){
+    public JSONObject GetClients(JSONObject loParams){
         try {
-            //create params on http using json object
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("sClientID", sClientID);
-
             //send params and get result
             String loResponse = WebClient.sendRequest(loApi.getURLClientCalls(),
-                    jsonParam.toString(), poHeader.getHeaders());
+                    loParams.toString(), poHeader.getHeaders());
+
+            if(loResponse == null){
+                message = SERVER_NO_RESPONSE;
+                return null;
+            }
 
             //convert web server response to json object
             JSONObject loJson = new JSONObject(loResponse);
@@ -81,27 +85,24 @@ public class GTeleApp {
             }
 
             //convert json object response to json array for multiple results
-            JSONObject loClient = loJson.getJSONObject("clientinfo");
-            return loClient;
+            JSONObject loClientS = loJson.getJSONObject("clientinfo");
+            return loClientS;
         } catch (Exception e) {
             message = e.getMessage();
             return null;
         }
     }
-    public JSONObject GetCLientMobile(String sClientID, String sMobileNo){
+    public JSONObject GetCLientMobile(JSONObject loParams){
         try {
-            //CREATE PARAMS USING JSON OBJECT
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("sClientID", sClientID);
-            jsonParam.put("sMobileNo", sMobileNo);
-
             //SEND PARAMS AND GET RESULT
-            String loResponse = WebClient.sendRequest(loApi.getURLLeadCalls(),
-                    jsonParam.toString(), poHeader.getHeaders());
+            String loResponse = WebClient.sendRequest(loApi.getURLClientMobile(),
+                    loParams.toString(), poHeader.getHeaders());
+
             if(loResponse == null){
                 message = SERVER_NO_RESPONSE;
                 return null;
             }
+
             //CONVERT WEB SERVER RESPONSE TO JSON
             JSONObject loJson = new JSONObject(loResponse);
 
@@ -115,23 +116,23 @@ public class GTeleApp {
 
             //CONVERT JSON RESPONSE TO JSON ARRAY
             //convert json object response to json array for multiple results
-            JSONObject loMobile = loJson.getJSONObject("client_mobile");
-            return loMobile;
+            JSONObject loMobileS = loJson.getJSONObject("clientmobile");
+            return loMobileS;
         } catch (Exception e) {
             message= e.getMessage();
             return null;
         }
     }
-    public JSONObject GetMCInquiries(String sTransNox, String sLeadSrc){
+    public JSONObject GetMCInquiries(JSONObject loParams){
         try {
-            //create params on http using json object
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("sTransNox", sTransNox);
-            jsonParam.put("sLeadSrc", sLeadSrc);
-
             //send params and get result
             String loResponse = WebClient.sendRequest(loApi.getURLMCInq(),
-                    jsonParam.toString(), poHeader.getHeaders());
+                    loParams.toString(), poHeader.getHeaders());
+
+            if(loResponse == null){
+                message = SERVER_NO_RESPONSE;
+                return null;
+            }
 
             //convert web server response to json object
             JSONObject loJson = new JSONObject(loResponse);
@@ -145,8 +146,8 @@ public class GTeleApp {
             }
 
             //convert json object response to json array for multiple results
-            JSONObject loInq = loJson.getJSONObject("mcinq");
-            return loInq;
+            JSONObject loInquiries = loJson.getJSONObject("inquiries");
+            return loInquiries;
         } catch (Exception e) {
             message = e.getMessage();
             return null;

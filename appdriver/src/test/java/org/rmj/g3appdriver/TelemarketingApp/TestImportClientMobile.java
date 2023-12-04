@@ -1,7 +1,9 @@
 package org.rmj.g3appdriver.TelemarketingApp;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +12,10 @@ import org.junit.runners.JUnit4;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.utils.SQLUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(JUnit4.class)
@@ -45,8 +49,8 @@ public class TestImportClientMobile {
 
         //Create the parameters needed by the API
         JSONObject param = new JSONObject();
-        param.put("sClientID", "M01520000603");
-        param.put("sMobileNo", "09481552529");
+        param.put("sClientID","M02020000513");
+        param.put("sMobileNo","09304422091");
 
         String response = WebClient.sendRequest(sURL, param.toString(), (HashMap<String, String>) headers);
         if(response == null){
@@ -56,7 +60,7 @@ public class TestImportClientMobile {
         JSONObject loJson = new JSONObject(response);
         assertNotNull(loJson);
 
-        JSONObject loCMob = loJson.getJSONObject("client_mobile");
+        JSONObject loCMob = loJson.getJSONObject("clientmobile");
         assertNotNull(loCMob);
 
         System.out.println(loCMob.get("sClientID"));

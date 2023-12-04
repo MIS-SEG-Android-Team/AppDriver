@@ -1,5 +1,5 @@
 package org.rmj.g3appdriver.Telemarketing;
-
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import android.app.Application;
@@ -10,6 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClient2Call;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClientMobile;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOMCInquiry;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EClient2Call;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EClientMobile;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.ELeadCalls;
@@ -20,15 +24,22 @@ public class TestRoomImports {
     private Application instance;
     private String TAG = getClass().getSimpleName();
     private GGC_GCircleDB TestDB;
+    private DAOLeadCalls daoLeadCalls;
+    private DAOClient2Call daoClient2Call;
+    private DAOClientMobile daoClientMobile;
+    private DAOMCInquiry daomcInquiry;
 
     @Before
     public void setUp() throws Exception{
         instance= ApplicationProvider.getApplicationContext();
         TestDB = Room.inMemoryDatabaseBuilder(instance, GGC_GCircleDB.class).build();
-    }
 
-    @Test
-    public void ImportLeads(){
+        daoLeadCalls = TestDB.teleLeadsDao();
+        daoClient2Call = TestDB.teleCallClientsDao();
+        daoClientMobile = TestDB.teleClientMobDao();
+        daomcInquiry = TestDB.teleMCInquiryDao();
+    }
+    public ELeadCalls GetLeadCalls(){
         ELeadCalls leadCalls = new ELeadCalls();
         leadCalls.setsTransNox("M0T123026687");
         leadCalls.setdTransact("2023-03-23 14:20:47");
@@ -51,12 +62,9 @@ public class TestRoomImports {
         leadCalls.setsModified("M001111122");
         leadCalls.setdModified("2023-03-23 14:20:47");
 
-        assertSame(1, TestDB.teleLeadsDao().SaveLeads(leadCalls).intValue());
-        assertSame(1, TestDB.teleLeadsDao().UpdateLeads(leadCalls));
+        return leadCalls;
     }
-
-    @Test
-    public void ImportClients(){
+    public EClient2Call GetClient2Call(){
         EClient2Call eClient2Call = new EClient2Call();
         eClient2Call.setsClientID("M01520000603");
         eClient2Call.setsClientNM("Enaje, Michael Acosta");
@@ -64,11 +72,9 @@ public class TestRoomImports {
         eClient2Call.setsMobileNox("09481552529");
         eClient2Call.setsPhoneNox("");
 
-        assertSame(1, TestDB.teleCallClientsDao().SaveClients(eClient2Call).intValue());
-        assertSame(1, TestDB.teleCallClientsDao().UpdateClients(eClient2Call));
+        return eClient2Call;
     }
-    @Test
-    public void ImportClientsMobile(){
+    public EClientMobile GetClientMobile(){
         EClientMobile eClientMobile = new EClientMobile();
 
         eClientMobile.setsClientID("M01520000603");
@@ -89,13 +95,9 @@ public class TestRoomImports {
         eClientMobile.setdLastCall(null);
         eClientMobile.setcRecdStat("1");
 
-        assertSame(1, TestDB.teleClientMobDao().SaveClientMobile(eClientMobile).intValue());
-        assertSame(1, TestDB.teleClientMobDao().UpdateClientMobile(eClientMobile));
-        assertSame(1, TestDB.teleClientMobDao().UpdateCallTrans("M01520000603", "09481552529",
-                "2023-11-09", 0));
+        return eClientMobile;
     }
-    @Test
-    public void ImportMCInquiries(){
+    public EMCInquiry GetMCInquiry(){
         EMCInquiry emcInquiry = new EMCInquiry();
 
         emcInquiry.setsTransNox("M0T123000816");
@@ -112,7 +114,57 @@ public class TestRoomImports {
         emcInquiry.setsRelatnID(null);
         emcInquiry.setsTableNM("MC_Product_Inquiry");
 
-        assertSame(1, TestDB.teleMCInquiryDao().SaveMCInq(emcInquiry).intValue());
-        assertSame(1, TestDB.teleMCInquiryDao().UpdateMCInq(emcInquiry));
+        return emcInquiry;
+    }
+
+    @Test
+    public void RoomHasDao(){
+        assertNotNull(GetLeadCalls());
+        assertNotNull(GetClient2Call());
+        assertNotNull(GetClientMobile());
+        assertNotNull(GetMCInquiry());
+    }
+
+    @Test
+    public void SaveLeads(){
+        assertSame(1, daoLeadCalls.SaveLeads(GetLeadCalls()).intValue());
+    }
+   @Test
+    public void UpdateLeads(){
+        SaveLeads(); //import data first to update existing data
+        assertSame(1, daoLeadCalls.UpdateLeads(GetLeadCalls()));
+    }
+    @Test
+    public void SaveClient2Call(){
+        assertSame(1, daoClient2Call.SaveClients(GetClient2Call()).intValue());
+    }
+    @Test
+    public void UpdateClient2Call(){
+        SaveClient2Call(); //import data first to update existing data
+        assertSame(1, daoClient2Call.UpdateClients(GetClient2Call()));
+    }
+    @Test
+    public void SaveClientMobile(){
+        assertSame(1, daoClientMobile.SaveClientMobile(GetClientMobile()).intValue());
+    }
+    @Test
+    public void UpdateClientMobile(){
+        SaveClientMobile(); //import data first to update existing data
+        assertSame(1, daoClientMobile.UpdateClientMobile(GetClientMobile()));
+    }
+    @Test
+    public void UpdateCallTrans(){
+        SaveClientMobile(); //import data first to update existing data
+        assertSame(1, daoClientMobile.UpdateCallTrans("M01520000603", "09481552529",
+                "2023-11-09", 0));
+    }
+    @Test
+    public void SaveMCInquiry(){
+        assertSame(1, daomcInquiry.SaveMCInq(GetMCInquiry()).intValue());
+    }
+    @Test
+    public void UpdateMCInquiry(){
+        SaveMCInquiry(); //import data first to update existing data
+        assertSame(1, daomcInquiry.UpdateMCInq(GetMCInquiry()));
     }
 }

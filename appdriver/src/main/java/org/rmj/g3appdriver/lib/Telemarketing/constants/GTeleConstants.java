@@ -41,6 +41,8 @@ public class GTeleConstants {
                 return 1;
             case "SUN":
                 return 2;
+            case "T-Mobile": //for testing on emulator, default simcard
+                return 0;
             default:
                 return 3; //no return value
         }

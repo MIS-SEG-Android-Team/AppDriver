@@ -14,34 +14,37 @@ import java.util.List;
 public interface DAOLeadCalls {
     @Query("SELECT * FROM Lead_Calls WHERE sTransNox = :sTransNoxx")
     ELeadCalls GetLeadTrans(String sTransNoxx);
+    @Query("SELECT sReferNox, sSourceCD, sClientID, sMobileNo, cSubscrbr " +
+            "FROM Lead_Calls " +
+            "WHERE (cTranStat = '0' " +
+            "OR (cTranStat = '1' " +
+            "AND sAgentIDx = :sAgentID)) " +
+            "AND :sSimClause AND sSourceCd = :sLeadsrc " +
+            "ORDER BY dTransact DESC, cSubscrbr DESC, cTranStat DESC LIMIT 1")
+    LiveData<LeadInformation> GetInitLead(String sAgentID, String sSimClause, String sLeadsrc);
+    @Query("SELECT lead.sReferNox, lead.sSourceCD, lead.sClientID, lead.sMobileNo, lead.cSubscrbr " +
+            "FROM Lead_Calls lead " +
+            "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
+            "WHERE (cTranStat = '0' " +
+            "OR (cTranStat = '1' " +
+            "AND sAgentIDx = :sAgentID)) " +
+            "AND (mci.dFollowUp= :dFollowUp) " +
+            "AND :sSimClause AND sSourceCd = :sLeadsrc " +
+            "ORDER BY mci.dFollowUp DESC, cSubscrbr DESC, cTranStat DESC LIMIT 1")
+    LiveData<LeadInformation> GetInitLeadsonSched(String sAgentID, String sSimClause, String sLeadsrc, String dFollowUp);
     @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, ccl.xAddressx sAddressx, lead.sMobileNo sMobileNo, " +
             "lead.sReferNox sReferNox, mci.sModelIDx sModelIDx, lead.dTransact dTransact " +
             "FROM Lead_Calls lead " +
             "LEFT JOIN  Call_Client ccl ON (lead.sClientID = ccl.sClientID) " +
             "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
-            "WHERE (lead.cTranStat = '0' " +
-            "OR (lead.cTranStat = '1' " +
-            "AND lead.sAgentIDx = :sAgentID)) " +
-            "AND :sSimClause AND lead.sSourceCd = :sLeadsrc " +
-            "ORDER BY dTransact DESC, lead.cSubscrbr DESC, lead.cTranStat DESC LIMIT 1")
-    LiveData<LeadInformation> GetLiveLeadCall(String sAgentID, String sSimClause, String sLeadsrc);
-    @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, ccl.xAddressx sAddressx, lead.sMobileNo sMobileNo, " +
-            "lead.sReferNox sReferNox, mci.sModelIDx sModelIDx, mci.dFollowUp dFollowUp " +
-            "FROM Lead_Calls lead " +
-            "LEFT JOIN  Call_Client ccl ON (lead.sClientID = ccl.sClientID) " +
-            "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
-            "WHERE (lead.cTranStat = '1' " +
-            "AND lead.sAgentIDx = :sAgentID " +
-            "AND mci.dFollowUp= :dFollowUp) " +
-            "AND :sSimClause " +
-            "ORDER BY dFollowUp DESC, lead.cSubscrbr DESC, lead.cTranStat DESC LIMIT 1")
-    LiveData<LeadInformation> GetLiveSchedCall(String sAgentID, String sSimClause, String dFollowUp);
+            "WHERE lead.sReferNox = :sTransNox")
+    LiveData<LeadDetails> GetLeadDetails(String sTransNox);
     @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, lead.sMobileNo sMobileNo, lead.dTransact dTransact, " +
             "lead.cTLMStatx cTLMStatx, lead.sRemarksx sRemarksx " +
             "FROM Lead_Calls lead " +
             "LEFT JOIN  Call_Client ccl ON (lead.sClientID = ccl.sClientID) " +
             "ORDER BY lead.dTransact DESC, lead.sMobileNo ASC, ccl.sClientNM ASC")
-    LiveData<List<LeadHistory>> GetLeadHistory();
+    LiveData<List<LeadHistory>> GetCallHistory();
     @Query("UPDATE Lead_Calls SET cTLMStatx= :cTLMStatx WHERE sTransNox= :sTransNoxx")
     int UpdateLeadCall(String sTransNoxx, String cTLMStatx);
     @Insert
@@ -50,6 +53,13 @@ public interface DAOLeadCalls {
     int UpdateLeads(ELeadCalls eLeadCalls);
 
     class LeadInformation{
+        public String sTransNox;
+        public String sSourceCD;
+        public String sClientID;
+        public String sMobileNo;
+        public String cSubscrbr;
+    }
+    class LeadDetails{
         public String sReferNox;
         public String sClientNm;
         public String sAddressx;

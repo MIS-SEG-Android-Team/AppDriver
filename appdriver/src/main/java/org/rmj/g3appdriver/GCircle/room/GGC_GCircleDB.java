@@ -227,7 +227,7 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
         EClient2Call.class,
         EMCInquiry.class,
         EClientMobile.class,
-        EHotline_Outgoing.class}, version = 42, exportSchema = true)
+        EHotline_Outgoing.class}, version = 44, exportSchema = false)
 public abstract class GGC_GCircleDB extends RoomDatabase {
     private static final String TAG = "GhostRider_DB_Manager";
     private static GGC_GCircleDB instance;
@@ -309,7 +309,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
                      GGC_GCircleDB.class, "GGC_ISysDBF.db")
                     .allowMainThreadQueries()
                     .addCallback(roomCallBack)
-                    .addMigrations(MIGRATION_V40,MIGRATION_V42)
+                    .addMigrations(MIGRATION_V44)
                     .build();
         }
         return instance;
@@ -323,7 +323,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
         }
     };
 
-    public static final Migration MIGRATION_V40 = new Migration(39, 40) {
+    public static final Migration MIGRATION_V44 = new Migration(43, 44) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS `MC_Cash_Price` " +
@@ -335,11 +335,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
 
             database.execSQL("ALTER TABLE  Ganado_Online ADD COLUMN nCashPrce REAL");
             database.execSQL("ALTER TABLE Ganado_Online ADD COLUMN dPricexxx TEXT");
-        }
-    };
-    public static final Migration MIGRATION_V42 = new Migration(41, 42) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
             database.execSQL("CREATE TABLE IF NOT EXISTS `Lead_Calls` " +
                     "(`sTransNox` TEXT NOT NULL, `sAgentIDx` TEXT, `dTransact` TEXT, " +
                     "`sClientID` TEXT, `sMobileNo` TEXT, `sRemarksx` TEXT, `sReferNox` TEXT, " +

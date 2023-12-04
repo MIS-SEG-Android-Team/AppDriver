@@ -1,7 +1,9 @@
 package org.rmj.g3appdriver.TelemarketingApp;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,20 +46,18 @@ public class TestImportMCInquiries {
 
         //Create the parameters needed by the API
         JSONObject param = new JSONObject();
-        param.put("sTransNox", "M0T123000816");
-        param.put("sLeadSrc", "INQR");
+        param.put("sReferNox", "M02020000196");
+        param.put("sSourceCd", "MCSO");
 
         String response = WebClient.sendRequest(sURL, param.toString(), (HashMap<String, String>) headers);
         if(response == null){
             System.out.println("HTTP Error detected: " + System.getProperty("store.error.info"));
         }
 
-        System.out.println(response);
-
         JSONObject loJson = new JSONObject(response);
         assertNotNull(loJson);
 
-        JSONObject loInq = loJson.getJSONObject("mcinq");
+        JSONObject loInq = loJson.getJSONObject("inquiries");
         assertNotNull(loInq);
 
         System.out.println(loInq.get("sTransnox"));

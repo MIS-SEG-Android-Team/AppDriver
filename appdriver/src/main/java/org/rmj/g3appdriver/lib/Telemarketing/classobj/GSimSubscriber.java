@@ -5,6 +5,7 @@ import static android.content.Context.TELEPHONY_SERVICE;
 import android.content.Context;
 import android.os.Build;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 public class GSimSubscriber {
     private Context context;
@@ -22,8 +23,8 @@ public class GSimSubscriber {
     public boolean InitSim(){
         //check device version for dual sim os supported
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int slot1State = telephonyManager.getSimState(1);
-            int slot2State = telephonyManager.getSimState(2);
+            int slot1State = telephonyManager.getSimState(0);
+            int slot2State = telephonyManager.getSimState(1);
 
             switch (slot1State){
                 case TelephonyManager.SIM_STATE_UNKNOWN:
