@@ -20,7 +20,19 @@ android {
         minSdk 21
         targetSdk 34
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // add the schema location to the source sets
+    // used by Room, to test migrations
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
     buildTypes {
@@ -64,6 +76,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
     implementation 'com.google.firebase:firebase-crashlytics:18.3.7'
     implementation 'com.google.firebase:firebase-storage:20.2.0'
+    implementation 'androidx.room:room-testing:2.6.1'
+    testImplementation 'org.json:json:20140107'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
