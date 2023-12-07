@@ -24,11 +24,13 @@ import org.rmj.g3appdriver.lib.Telemarketing.entities.EHotline_Outgoing;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.ELeadCalls;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class CallInteractManager {
     private static final String TAG = "CallInteractManager";
@@ -51,6 +53,11 @@ public class CallInteractManager {
     private String cSubscr;
     private String dToday;
     private String message;
+    private String sCallStrt;
+    private String sCallEnd;
+    private long lHourDuration;
+    private long lMinDuration;
+    private long lSecDuration;
     public CallInteractManager(Application instance) {
         this.context = instance.getApplicationContext();
 
@@ -164,6 +171,21 @@ public class CallInteractManager {
         this.cSubscr = loLeads.getsSubscr();
         this.sUserIDx = poSession.getUserID();
         this.dToday = frmDt;
+    }
+    public void InitCallTime(String sCallStrt, String sCallEnd) throws ParseException {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        Date dCallStrt = timeFormat.parse(sCallStrt);
+        Date dCallEnd = timeFormat.parse(sCallEnd);
+
+        long lDuration = dCallEnd.getTime() - dCallStrt.getTime();
+
+        this.sCallStrt = sCallStrt;
+        this.sCallEnd = sCallEnd;
+
+        this.lHourDuration = TimeUnit.HOURS.convert(lDuration, TimeUnit.MILLISECONDS);
+        this.lMinDuration = TimeUnit.MINUTES.convert(lDuration, TimeUnit.MILLISECONDS);
+        this.lSecDuration = TimeUnit.SECONDS.convert(lDuration, TimeUnit.MILLISECONDS);
     }
     public Boolean SaveClient2Call(){
         try {
@@ -342,7 +364,7 @@ public class CallInteractManager {
 
             //send json params for web request and get response
             JSONObject loTransParams = poTeleApp.SendCallStatus(sCallStat, sTransNox, cSubscr,
-                    sApprvCD, sUserIDx, sClientID, sMobileNo);
+                    sApprvCD, sUserIDx, sClientID, sMobileNo, sCallStrt, sCallEnd);
 
             if (loTransParams == null){
                 message = poTeleApp.getMessage();
