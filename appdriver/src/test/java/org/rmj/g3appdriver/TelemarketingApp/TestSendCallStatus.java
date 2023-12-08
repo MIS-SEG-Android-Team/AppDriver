@@ -45,7 +45,7 @@ public class TestSendCallStatus {
         //PS & NN, Hotline_Outgoing. (INSERT AS NEW ROW)
         //UR, Client_Mobile. (UPDATE nUnreachx, dLastCall)
         //ALL STATUS, Call_Outgoin. (UPDATE cTLMStatx)
-        String sCallStat = "NN";
+        String sCallStat = "PS";
 
         String sURL = "http://192.168.10.68:8080/telemarketing_app/SaveCallStat.php";
 
@@ -57,9 +57,11 @@ public class TestSendCallStatus {
         jsonParam.put("cSendStat", "0");
         jsonParam.put("nNoRetryx", 0);
         jsonParam.put("sUDHeader", "");
-        jsonParam.put("cTranStat", "0");
+        jsonParam.put("cTranStat", "2");
         jsonParam.put("nPriority", "1");
         jsonParam.put("sReferNox", "M0T123072843");
+        jsonParam.put("dCallStrt", "2023-12-08 11:40:33");
+        jsonParam.put("dCallEndx", "2023-12-08 11:50:33");
 
         //PARAM FOR HOTLINE OUTGOING INSERT
         jsonParam.put("cSubscr", "1");

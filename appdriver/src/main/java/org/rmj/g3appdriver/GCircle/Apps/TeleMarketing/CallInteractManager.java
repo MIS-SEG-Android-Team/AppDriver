@@ -354,7 +354,7 @@ public class CallInteractManager {
             return false;
         }
     }
-    public Boolean SaveCallStatus(String sCallStat, String sApprvCD){
+    public Boolean SaveCallStatus(String sCallStat, String callAction, String sApprvCD){
         try {
             //validate first if transaction no is applied
             if (sTransNox == null){
@@ -363,7 +363,7 @@ public class CallInteractManager {
             }
 
             //send json params for web request and get response
-            JSONObject loTransParams = poTeleApp.SendCallStatus(sCallStat, sTransNox, cSubscr,
+            JSONObject loTransParams = poTeleApp.SendCallStatus(sCallStat, callAction, sTransNox, cSubscr,
                     sApprvCD, sUserIDx, sClientID, sMobileNo, sCallStrt, sCallEnd);
 
             if (loTransParams == null){
@@ -372,6 +372,9 @@ public class CallInteractManager {
             }
 
             String dTransact = loTransParams.get("dTransact").toString();
+            if (sCallStat == "POSSIBLE SALES"){
+
+            }
 
             //'POSSIBLE SALES' AND 'NOT NOW' STATUS, INSERT TO HOTLINE_OUTGOING
             if (sCallStat == "POSSIBLE SALES" || sCallStat == "NOT NOW"){
@@ -414,7 +417,7 @@ public class CallInteractManager {
             }
 
             //UPDATE LEAD'S CTLMSTATX TO SELECTED STATUS
-            if (UpdateLeadCallStat(sTransNox, sCallStat) == false){
+            if (UpdateLeadCallStat(sTransNox, sCallStat, sApprvCD, callAction) == false){
                 message = getMessage();
                 return false;
             }
@@ -515,8 +518,9 @@ public class CallInteractManager {
         Log.d(TAG, "Table: Client Mobile Mobile No: " + sMobileNo);
         return true;
     }
-    public Boolean UpdateLeadCallStat(String sTransNox, String sCallStat){
-        if (poDaoLeadCalls.UpdateLeadCall(sTransNox, loConstants.GetRemarks(sCallStat)) < 1){
+    public Boolean UpdateLeadCallStat(String sTransNox, String sCallStat, String sApprvCd, String cTransTat){
+        if (poDaoLeadCalls.UpdateLeadCall(sTransNox, loConstants.GetRemarks(sCallStat), cTransTat, sApprvCd, sCallStrt,
+                sCallEnd, sUserIDx, dToday) < 1){
             message= "Lead transaction failed to update on device";
             Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
             return false;

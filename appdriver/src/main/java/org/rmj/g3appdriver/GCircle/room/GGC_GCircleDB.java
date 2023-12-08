@@ -227,7 +227,7 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
         EClient2Call.class,
         EMCInquiry.class,
         EClientMobile.class,
-        EHotline_Outgoing.class}, version = 45, exportSchema = false)
+        EHotline_Outgoing.class}, version = 46, exportSchema = false)
 public abstract class GGC_GCircleDB extends RoomDatabase {
     private static final String TAG = "GhostRider_DB_Manager";
     private static GGC_GCircleDB instance;
@@ -309,7 +309,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
                             GGC_GCircleDB.class, "GGC_ISysDBF.db")
                     .allowMainThreadQueries()
                     .addCallback(roomCallBack)
-                    .addMigrations(MIGRATION_V45)
+                    .addMigrations(MIGRATION_V46)
                     .build();
         }
         return instance;
@@ -323,7 +323,7 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
         }
     };
 
-    public static final Migration MIGRATION_V45 = new Migration(44, 45) {
+    public static final Migration MIGRATION_V46 = new Migration(45, 46) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS `MC_Cash_Price` " +

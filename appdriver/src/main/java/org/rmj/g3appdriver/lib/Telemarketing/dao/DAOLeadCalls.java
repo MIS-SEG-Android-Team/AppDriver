@@ -46,8 +46,12 @@ public interface DAOLeadCalls {
             "LEFT JOIN  Call_Client ccl ON (lead.sClientID = ccl.sClientID) " +
             "ORDER BY lead.dTransact DESC, lead.sMobileNo ASC, ccl.sClientNM ASC")
     LiveData<List<LeadHistory>> GetCallHistory();
-    @Query("UPDATE Lead_Calls SET cTLMStatx= :cTLMStatx WHERE sTransNox= :sTransNoxx")
-    int UpdateLeadCall(String sTransNoxx, String cTLMStatx);
+    @Query("UPDATE Lead_Calls SET cTLMStatx= :cTLMStatx, cTranStat = :cTranStat, " +
+            "sApprovCd = :sApprovCd , dCallStrt = :sCallStrt, " +
+            "dCallEndx = :sCallEnd, sModified = :sModified, dModified = :dModified " +
+            "WHERE sTransNox= :sTransNoxx")
+    int UpdateLeadCall(String sTransNoxx, String cTLMStatx, String cTranStat, String sApprovCd,
+                       String sCallStrt, String sCallEnd, String sModified, String dModified);
     @Insert
     Long SaveLeads(ELeadCalls eLeadCalls);
     @Update

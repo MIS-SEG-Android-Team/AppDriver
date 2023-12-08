@@ -32,8 +32,8 @@ public class TestAppImports {
 
     public LeadsInformation GetQueues(){
         LeadsInformation loLeads = new LeadsInformation();
-        loLeads.setsClientID("M01520000603");
-        loLeads.setsMobileNo("09481552529");
+        loLeads.setsClientID("M16323000812");
+        loLeads.setsMobileNo("09188118093");
         loLeads.setsTransNox("M0T123072843");
         loLeads.setsReferNox("M0T123000816");
 
@@ -56,6 +56,7 @@ public class TestAppImports {
 
         poCallManager = new CallInteractManager(instance);
         poCallManager.InitTransaction(GetQueues());
+        poCallManager.InitCallTime("2023-12-08 11:40:33", "2023-12-08 11:50:33");
 
         //WIPE DATA AND RUN TestLoginAccount BEFORE RUNNING THIS TEST, FOR VALID LOGIN AND SUCCESS
         //"INVALID LOG / INVALID AUTH DETECTED" - WIPE EMULATOR DATA
@@ -96,7 +97,7 @@ public class TestAppImports {
     }
     @Test
     public void SaveCallStatus(){
-        Boolean isSaved = poCallManager.SaveCallStatus("CANNOT BE REACHED", "C001120623021");
+        Boolean isSaved = poCallManager.SaveCallStatus("POSSIBLE SALES", "2", "C00112062302");
         System.out.println(poCallManager.getMessage());
         assertTrue(isSaved);
     }

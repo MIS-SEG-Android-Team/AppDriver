@@ -155,7 +155,7 @@ public class GTeleApp {
         }
     }
     /*THESE METHOD UPLOADS ALL CALL TRANSACTIONS AND STATUS AT ONCE*/
-    public JSONObject SendCallStatus(String sCallStat, String sReferNox, String cSubscr, String sApprvCd, String sUserID,
+    public JSONObject SendCallStatus(String sCallStat, String callAction, String sReferNox, String cSubscr, String sApprvCd, String sUserID,
                                         String sClientID, String sMobileNo, String sCallStrt, String sCallEnd){
         try {
             //CREATE PARAMS USING JSON OBJECT
@@ -174,7 +174,7 @@ public class GTeleApp {
             jsonParam.put("cSendStat", "0"); //temporary, which may change on future adjustment
             jsonParam.put("nNoRetryx", 0); //temporary, which may change on future adjustment
             jsonParam.put("sUDHeader", ""); //temporary, which may change on future adjustment
-            jsonParam.put("cTranStat", "0"); //temporary, which may change on future adjustment
+            jsonParam.put("cTranStat", callAction);
             jsonParam.put("nPriority", "1"); //temporary, which may change on future adjustment
             jsonParam.put("sUserID", sUserID);
 
