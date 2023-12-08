@@ -15,12 +15,23 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClient2Call;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClientMobile;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOHoutlineOutgoing;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOMCInquiry;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EClient2Call;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EClientMobile;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EHotline_Outgoing;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.ELeadCalls;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
 import org.rmj.g3appdriver.lib.addressbook.data.dao.DAddressRequest;
 import org.rmj.g3appdriver.lib.addressbook.data.dao.DAddressUpdate;
 import org.rmj.g3appdriver.GCircle.room.DataAccessObject.DAppConfig;
@@ -211,7 +222,12 @@ import org.rmj.g3appdriver.GCircle.room.Entities.ETownInfo;
         EGanadoOnline.class,
         EMCModelCashPrice.class,
         EPanaloReward.class,
-        EGuanzonPanalo.class}, version = 40, exportSchema = false)
+        EGuanzonPanalo.class,
+        ELeadCalls.class,
+        EClient2Call.class,
+        EMCInquiry.class,
+        EClientMobile.class,
+        EHotline_Outgoing.class}, version = 46, exportSchema = false)
 public abstract class GGC_GCircleDB extends RoomDatabase {
     private static final String TAG = "GhostRider_DB_Manager";
     private static GGC_GCircleDB instance;
@@ -281,14 +297,19 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
     public abstract DNotification notificationDao();
     public abstract DPacita pacitaDao();
     public abstract DGanadoOnline ganadoDao();
+    public abstract DAOLeadCalls teleLeadsDao();
+    public abstract DAOClient2Call teleCallClientsDao();
+    public abstract DAOMCInquiry teleMCInquiryDao();
+    public abstract DAOClientMobile teleClientMobDao();
+    public abstract DAOHoutlineOutgoing teleHOutgoingDao();
 
     public static synchronized GGC_GCircleDB getInstance(Context context){
         if(instance == null){
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                     GGC_GCircleDB.class, "GGC_ISysDBF.db")
+                            GGC_GCircleDB.class, "GGC_ISysDBF.db")
                     .allowMainThreadQueries()
                     .addCallback(roomCallBack)
-                    .addMigrations(MIGRATION_V40)
+                    .addMigrations(MIGRATION_V46)
                     .build();
         }
         return instance;
@@ -302,10 +323,9 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
         }
     };
 
-    static final Migration MIGRATION_V40 = new Migration(39, 40) {
+    public static final Migration MIGRATION_V46 = new Migration(45, 46) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            // Add the new column
             database.execSQL("CREATE TABLE IF NOT EXISTS `MC_Cash_Price` " +
                     "(`sModelIDx` TEXT NOT NULL, `sMCCatNme` TEXT NOT NULL, " +
                     "`sModelNme` TEXT NOT NULL, `sBrandNme` TEXT, `nSelPrice` REAL, " +
@@ -313,8 +333,33 @@ public abstract class GGC_GCircleDB extends RoomDatabase {
                     "`sBrandIDx` TEXT, `sMCCatIDx` TEXT, " +
                     "PRIMARY KEY(`sModelIDx`, `sMCCatNme`, `sModelNme`))");
 
-            database.execSQL("ALTER TABLE Ganado_Online ADD COLUMN nCashPrce REAL");
+            database.execSQL("ALTER TABLE  Ganado_Online ADD COLUMN nCashPrce REAL");
             database.execSQL("ALTER TABLE Ganado_Online ADD COLUMN dPricexxx TEXT");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Lead_Calls` " +
+                    "(`sTransNox` TEXT NOT NULL, `sAgentIDx` TEXT, `dTransact` TEXT, " +
+                    "`sClientID` TEXT, `sMobileNo` TEXT, `sRemarksx` TEXT, `sReferNox` TEXT, " +
+                    "`sSourceCD` TEXT, `sApprovCd` TEXT, `cTranStat` TEXT, `dCallStrt` TEXT, `dCallEndx` TEXT, " +
+                    "`nNoRetryx` INTEGER, `cSubscrbr` INTEGER, `cCallStat` TEXT, `cTLMStatx` TEXT, `cSMSStatx` INTEGER, " +
+                    "`nSMSSentx` INTEGER, `sModified` TEXT, `dModified` TEXT, PRIMARY KEY(`sTransNox`))");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `MC_Inquiry` (`sTransNox` TEXT NOT NULL, `dFollowUp` TEXT, " +
+                    "`sClientID` TEXT, `sBrandIDx` TEXT, `sModelIDx` TEXT, `sColorIDx` TEXT, `nTerms` INTEGER, `dTargetxx` TEXT, " +
+                    "`nDownPaym` REAL, `nMonAmort` REAL, `nCashPrc` REAL, `sRelatnID` TEXT, `sTableNM` TEXT, PRIMARY KEY(`sTransNox`))");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Client_Mobile` " +
+                    "(`sClientID` TEXT NOT NULL, `sMobileNo` TEXT NOT NULL, `nEntryNox` INTEGER, " +
+                    "`nPriority` INTEGER, `cIncdMktg` TEXT, `nUnreachx` INTEGER, `dLastVeri` TEXT, `dInactive` TEXT, " +
+                    "`nNoRetryx` INTEGER, `cInvalidx` TEXT, `sIdleTime` TEXT, `cConfirmd` TEXT, `dConfirmd` TEXT, `cSubscr` TEXT, " +
+                    "`dHoldMktg` TEXT, `dLastCall` TEXT, `cRecdStat` TEXT, PRIMARY KEY(`sClientID`, `sMobileNo`))");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Hotline_Outgoing` (`sTransNox` TEXT NOT NULL, `dTransact` TEXT, " +
+                    "`sDivision` TEXT, `sMobileNo` TEXT, `sMessagex` TEXT, `cSubscrbr` TEXT, `dDueUntil` TEXT, `cSendStat` TEXT, " +
+                    "`nNoRetryx` INTEGER, `sUDHeader` TEXT, `sReferNox` TEXT, `sSourceCd` TEXT, `cTranStat` TEXT, `nPriority` INTEGER, " +
+                    "`sModified` TEXT, `dModified` TEXT, PRIMARY KEY(`sTransNox`))");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Call_Client` (`sClientID` TEXT NOT NULL, `sClientNM` TEXT, " +
+                    "`xAddressx` TEXT, `sPhoneNox` TEXT, `sMobileNox` TEXT, PRIMARY KEY(`sClientID`))");
         }
     };
 }
