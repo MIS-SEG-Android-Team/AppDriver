@@ -18,12 +18,8 @@ import org.rmj.g3appdriver.Config.AppStatusConfig;
 
 public abstract class WebApi {
     private static final String TAG = WebApi.class.getSimpleName();
-
     private final AppStatusConfig poConfig;
-
-    //protected static final String LOCAL = "http://192.168.36.12/";
-    protected static final String LOCAL = "http://192.168.10.68:8080/";
-
+    protected static final String LOCAL = "http://192.168.10.64:80/";
     private static final String PRIMARY_LIVE = "https://restgk.guanzongroup.com.ph/";
     private static final String SECONDARY_LIVE = "https://restgk1.guanzongroup.com.ph/";
 
@@ -38,14 +34,9 @@ public abstract class WebApi {
         this.poConfig = AppStatusConfig.getInstance(instance);
         this.isUnitTest = poConfig.isTestMode();
 
-
-        /*
-        Temporarily set as default to ensure the app will Run...
-         */
         LIVE = PRIMARY_LIVE;
 
         /*
-
         THIS area of the code has been disabled and later on be remove or revise...
 
         boolean isLiveData = poConfig.isBackUpServer();
@@ -58,22 +49,17 @@ public abstract class WebApi {
         }
          */
     }
-
     protected boolean isUnitTest(){
         return isUnitTest;
     }
-
     private static final String URL_DOWNLOAD_UPDATE = "https://restgk.guanzongroup.com.ph/apk/gCircle.apk";
     private static final String URL_DOWNLOAD_TEST_UPDATE = "https://restgk.guanzongroup.com.ph/apk/test/gRider.apk";
-
     public String getUrlDownloadUpdate() {
         return URL_DOWNLOAD_UPDATE;
     }
-
     public String getUrlDownloadTestUpdate() {
         return URL_DOWNLOAD_TEST_UPDATE;
     }
-
     public String getAPI(String fsVal){
         return "";
     }

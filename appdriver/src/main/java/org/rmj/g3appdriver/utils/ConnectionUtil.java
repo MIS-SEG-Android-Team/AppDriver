@@ -40,19 +40,16 @@ public class ConnectionUtil {
 
     private final Context context;
     private String message;
-
-    private static final String LOCAL = "http://192.168.36.12";
+    private static String LOCAL = "http://192.168.10.64:80/";
     private static final String PRIMARY_LIVE = "https://restgk.guanzongroup.com.ph";
 //    private static final String SECONDARY_LIVE = "restgk1.guanzongroup.com.ph";
 
     public ConnectionUtil(Context context){
         this.context = context;
     }
-
     public String getMessage() {
         return message;
     }
-
     public boolean isDeviceConnected(){
         try {
             if (!deviceConnected()) {

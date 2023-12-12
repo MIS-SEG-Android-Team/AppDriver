@@ -47,7 +47,7 @@ public class TestLoginAccount {
 
     @Test
     public void
-    test02LoginAccount() throws Exception{
+    test02oginAccount() throws Exception{
         EmployeeMaster.UserAuthInfo loAuth = new EmployeeMaster.UserAuthInfo("mikegarcia8748@gmail.com", "123456", "09171870011");
         assertTrue(poUser.AuthenticateUser(loAuth));
     }
@@ -69,8 +69,6 @@ public class TestLoginAccount {
                 return;
             }
         }
-
-
         Log.d(TAG, message);
         assertTrue(isSuccess);
     }
