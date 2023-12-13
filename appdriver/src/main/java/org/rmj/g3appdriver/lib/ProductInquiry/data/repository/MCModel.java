@@ -200,7 +200,7 @@ public class MCModel {
                     loModel.setColorNme(loJson.getString("sColorNme"));
                     loModel.setTimeStmp(loJson.getString("dTimeStmp"));
                     poDao.insert(loModel);
-                    Log.d(TAG, "Mc model info has been saved.");
+                    Log.d(TAG, "Mc model color has been saved.");
                 } else {
                     Date ldDate1 = SQLUtil.toDate(loDetail.getTimeStmp(), SQLUtil.FORMAT_TIMESTAMP);
                     Date ldDate2 = SQLUtil.toDate((String) loJson.get("dTimeStmp"), SQLUtil.FORMAT_TIMESTAMP);
@@ -210,7 +210,7 @@ public class MCModel {
                         loDetail.setColorNme(loJson.getString("sColorNme"));
                         loDetail.setTimeStmp(loJson.getString("dTimeStmp"));
                         poDao.update(loDetail);
-                        Log.d(TAG, "Mc model info has been updated.");
+                        Log.d(TAG, "Mc model color has been updated.");
                     }
                 }
             }
