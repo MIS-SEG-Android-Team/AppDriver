@@ -39,7 +39,7 @@ public class DeviceConfig {
     }
 
     public void setMobileNO(String fsMobileNo){
-        poEdit.putString(DEVICE_ID, fsMobileNo);
+        poEdit.putString(MOBILE_NO, fsMobileNo); //bug fixed wrong key "DEVICE_ID" instead of "MOBILE_NO"
         poEdit.commit();
     }
 
