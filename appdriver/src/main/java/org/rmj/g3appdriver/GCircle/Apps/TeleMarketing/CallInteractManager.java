@@ -588,7 +588,7 @@ public class CallInteractManager {
         Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
         return true;
     }
-    public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueues(String sSourceCd){
+    public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueues(){
         return poDaoLeadCalls.GetInitLead(poSession.getUserID(), sim1, sim2);
     }
     public LiveData<DAOLeadCalls.LeadDetails> GetLeadDetails(){ //ON QUEUES, PRIORITY CALLS
