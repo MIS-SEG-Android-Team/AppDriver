@@ -63,6 +63,34 @@ public class GTeleApp {
             return null;
         }
     }
+    public JSONArray GetPriorities(){
+        try {
+            //SEND PARAMS AND GET RESULT
+            String loResponse = WebClient.sendRequest(loApi.getUrlPriorities(),
+                    new JSONObject().toString(), poHeader.getHeaders());
+            if(loResponse == null){
+                message = SERVER_NO_RESPONSE;
+                return null;
+            }
+            //CONVERT WEB SERVER RESPONSE TO JSON
+            JSONObject loJson = new JSONObject(loResponse);
+
+            //GET ERROR RETURNED FROM SERVER
+            String lsResult = loJson.getString("result");
+            if(lsResult.equalsIgnoreCase("error")){
+                JSONObject loError = loJson.getJSONObject("error");
+                message = getErrorMessage(loError);
+                return null;
+            }
+
+            //CONVERT JSON RESPONSE TO JSON ARRAY
+            JSONArray loPriorities = loJson.getJSONArray("initpriorities");
+            return loPriorities;
+        } catch (Exception e) {
+            message= e.getMessage();
+            return null;
+        }
+    }
     public JSONObject GetClients(JSONObject loParams){
         try {
             //send params and get result

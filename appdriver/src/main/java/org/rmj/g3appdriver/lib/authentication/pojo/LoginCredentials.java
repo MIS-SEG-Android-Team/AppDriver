@@ -3,12 +3,10 @@ package org.rmj.g3appdriver.lib.authentication.pojo;
 public class LoginCredentials {
     private final String Email;
     private final String Password;
-    private final String MobileNo;
 
-    public LoginCredentials(String email, String password, String mobileNo) {
+    public LoginCredentials(String email, String password) {
         Email = email;
         Password = password;
-        MobileNo = mobileNo;
     }
 
     public String getEmail() {
@@ -17,10 +15,6 @@ public class LoginCredentials {
 
     public String getPassword() {
         return Password;
-    }
-
-    public String getMobileNo() {
-        return MobileNo;
     }
 
     public static class EntryValidator{
@@ -56,28 +50,6 @@ public class LoginCredentials {
                 message = "Please enter password";
                 return false;
             }
-
-            if(foCredentials.getMobileNo() == null){
-                message = "Please enter mobile no.";
-                return false;
-            }
-
-            if(foCredentials.getMobileNo().isEmpty()){
-                message = "Please enter mobile no.";
-                return false;
-            }
-
-            if(foCredentials.getMobileNo().length()!=11){
-                message = "Mobile number must be 11 characters";
-                return false;
-            }
-
-            if(!foCredentials.getMobileNo().substring(0, 2)
-                    .equalsIgnoreCase("09")){
-                message = "Mobile number must start with '09'";
-                return false;
-            }
-
             return true;
         }
     }

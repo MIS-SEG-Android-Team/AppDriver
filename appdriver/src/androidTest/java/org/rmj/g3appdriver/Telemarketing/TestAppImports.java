@@ -4,8 +4,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Application;
+import android.database.DatabaseUtils;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.Observer;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -20,6 +22,11 @@ import org.rmj.g3appdriver.Config.AppStatusConfig;
 import org.rmj.g3appdriver.GCircle.Account.EmployeeMaster;
 import org.rmj.g3appdriver.GCircle.Apps.TeleMarketing.CallInteractManager;
 import org.rmj.g3appdriver.GCircle.Apps.TeleMarketing.LeadsInformation;
+import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOPriorities;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EPriorities;
 
 @RunWith(AndroidJUnit4.class)
 public class TestAppImports {
@@ -29,6 +36,8 @@ public class TestAppImports {
     private EmployeeMaster poUser;
     private CallInteractManager poCallManager;
     private AppConfig loConfig;
+    public DAOLeadCalls poDao;
+    public DAOPriorities poDaoPriorities;
 
     public LeadsInformation GetQueues(){
         LeadsInformation loLeads = new LeadsInformation();
@@ -58,22 +67,43 @@ public class TestAppImports {
         poCallManager.InitTransaction(GetQueues());
         poCallManager.InitCallTime("2023-12-08 11:40:33", "2023-12-08 11:50:33");
 
-        //WIPE DATA AND RUN TestLoginAccount BEFORE RUNNING THIS TEST, FOR VALID LOGIN AND SUCCESS
-        //"INVALID LOG / INVALID AUTH DETECTED" - WIPE EMULATOR DATA
-        //"INVALID MOBILE NUMBER DETECTED" - CHANGE lsMobileN VALUE TO SPECIFIC NUMBER
-        loAuth = new EmployeeMaster.UserAuthInfo("mikegarcia8748@gmail.com", "123456", "09171870011");
-    }
-    //SEE GTeleConstants TO ADD SIM CARD IF READING SIM CARD FAILED
-    @Test
-    public void GetSubscrClause(){
-        String SQLCondition = poCallManager.CreateSubscrCondition();
-        assertNotNull(SQLCondition);
-        System.out.println(SQLCondition);
+        poDao = GGC_GCircleDB.getInstance(ApplicationProvider.getApplicationContext()).teleLeadsDao();
+        poDaoPriorities = GGC_GCircleDB.getInstance(ApplicationProvider.getApplicationContext()).telePriorities();
     }
     /*IF ERROR OCCURS, TRY TO RUN ONLY TEST YOU NEED AND COMMENT OTHER TESTS.*/
     @Test
     public void ImportCalls(){
+        EPriorities ePriorities = new EPriorities();
+        ePriorities.setIndex(2);
+        ePriorities.setsSourceCD("GNDO");
+
+        ePriorities.setIndex(1);
+        ePriorities.setsSourceCD("MCCA");
+
+        ePriorities.setIndex(3);
+        ePriorities.setsSourceCD("INQR");
+
+        poDaoPriorities.UpdatePriorities(ePriorities);
+
         Boolean isImported = poCallManager.ImportCalls();
+        System.out.println(poCallManager.getMessage());
+        assertTrue(isImported);
+
+        poDao.GetInitLead("GAP023000374", "0", "0").observeForever(new Observer<DAOLeadCalls.LeadInformation>() {
+            @Override
+            public void onChanged(DAOLeadCalls.LeadInformation leadInformation) {
+                assertNotNull(leadInformation);
+                System.out.println(leadInformation.sTransNox);
+                System.out.println(leadInformation.sReferNox);
+                System.out.println(leadInformation.sSourceCD);
+                System.out.println(leadInformation.sClientID);
+                System.out.println(leadInformation.sMobileNo);
+            }
+        });
+    }
+    @Test
+    public void ImportPriorities(){
+        Boolean isImported = poCallManager.ImportPriorities();
         System.out.println(poCallManager.getMessage());
         assertTrue(isImported);
     }

@@ -14,25 +14,16 @@ import java.util.List;
 public interface DAOLeadCalls {
     @Query("SELECT * FROM Lead_Calls WHERE sTransNox = :sTransNoxx")
     ELeadCalls GetLeadTrans(String sTransNoxx);
-    @Query("SELECT sTransNox, sReferNox, sSourceCD, sClientID, sMobileNo, cSubscrbr " +
-            "FROM Lead_Calls " +
-            "WHERE (cTranStat = '0' " +
-            "OR (cTranStat = '1' " +
-            "AND sAgentIDx = :sAgentID)) " +
-            "AND :sSimClause AND sSourceCd = :sLeadsrc " +
-            "ORDER BY dTransact DESC, cSubscrbr DESC, cTranStat DESC LIMIT 1")
-    LiveData<LeadInformation> GetInitLead(String sAgentID, String sSimClause, String sLeadsrc);
-    @Query("SELECT lead.sTransNox sTransNox, lead.sReferNox sReferNox, lead.sSourceCD sSourceCD, " +
-            "lead.sClientID sClientID, lead.sMobileNo sMobileNo, lead.cSubscrbr cSubscrbr " +
-            "FROM Lead_Calls lead " +
-            "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
-            "WHERE (cTranStat = '0' " +
-            "OR (cTranStat = '1' " +
-            "AND sAgentIDx = :sAgentID)) " +
-            "AND (mci.dFollowUp= :dFollowUp) " +
-            "AND :sSimClause AND sSourceCd = :sLeadsrc " +
-            "ORDER BY mci.dFollowUp DESC, cSubscrbr DESC, cTranStat DESC LIMIT 1")
-    LiveData<LeadInformation> GetInitLeadsonSched(String sAgentID, String sSimClause, String sLeadsrc, String dFollowUp);
+    @Query("SELECT a.sTransNox sTransNox, a.sReferNox sReferNox, a.sSourceCD sSourceCD, a.sClientID sClientID, " +
+            "a.sMobileNo sMobileNo, a.cSubscrbr cSubscrbr " +
+            "FROM Lead_Calls a, Call_Priorities b " +
+            "WHERE a.sSourceCD = b.sSourceCD " +
+            "AND (a.cTranStat = '0' " +
+            "OR (a.cTranStat = '1' " +
+            "AND a.sAgentIDx = :sAgentID)) " +
+            "AND a.cSubscrbr IN (:sSim1, :sSim2) " +
+            "ORDER BY a.dTransact DESC, a.cSubscrbr DESC, a.cTranStat DESC, b.srcIndex ASC LIMIT 1")
+    LiveData<LeadInformation> GetInitLead(String sAgentID, String sSim1, String sSim2);
     @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, ccl.xAddressx sAddressx, lead.sMobileNo sMobileNo, " +
             "lead.sReferNox sReferNox, mci.sModelIDx sModelIDx, lead.dTransact dTransact " +
             "FROM Lead_Calls lead " +

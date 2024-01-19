@@ -16,6 +16,7 @@ import android.content.Context;
 import android.provider.Settings;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,17 +35,15 @@ public class Telephony {
                 mContext.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
     }
-
-
     @SuppressLint("MissingPermission")
     public String getMobilNumbers() {
         try {
             List<SubscriptionInfo> subInfoList;
             ArrayList<String> Numbers = new ArrayList<>();
-            SubscriptionManager mSubscriptionManager = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
-                mSubscriptionManager = SubscriptionManager.from(mContext);
+                SubscriptionManager mSubscriptionManager = SubscriptionManager.from(mContext);
                 subInfoList = mSubscriptionManager.getActiveSubscriptionInfoList();
+
                 if (subInfoList.size() > 0) {
                     for (SubscriptionInfo subscriptionInfo : subInfoList) {
                         Numbers.add(subscriptionInfo.getNumber());

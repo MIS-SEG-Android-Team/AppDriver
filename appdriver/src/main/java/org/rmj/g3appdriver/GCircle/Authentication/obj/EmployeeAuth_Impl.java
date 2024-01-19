@@ -60,8 +60,9 @@ public class EmployeeAuth_Impl implements iAuthenticate {
                 return 0;
             }
 
+            //GET DEVICE MOBILE NO FROM SIMCARD SUBSCRIPTION
             if(poConfig.getMobileNO().isEmpty()){
-                poConfig.setMobileNO(loInfo.getMobileNo());
+                poConfig.setMobileNO(poDevID.getMobilNumbers());
                 Log.d(TAG, "Mobile number has been initialized.");
             }
 

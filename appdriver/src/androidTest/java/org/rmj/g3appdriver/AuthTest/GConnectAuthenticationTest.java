@@ -51,7 +51,7 @@ public class GConnectAuthenticationTest {
 
     @Test
     public void test01LoginAccount() {
-        LoginCredentials loInfo = new LoginCredentials("mikegarcia8748@gmail.com", "123456", "09171870011");
+        LoginCredentials loInfo = new LoginCredentials("mikegarcia8748@gmail.com", "123456");
         int lnResult = poSys.DoAction(loInfo);
         if(lnResult == 1){
             isSuccess = true;

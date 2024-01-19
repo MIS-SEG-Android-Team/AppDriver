@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 @RunWith(JUnit4.class)
 public class TestTimeDuration {
-    private String sCallStrt = "2023-12-07 8:30:30";
-    private String sCallEnd = "2023-12-07 9:30:01";
+    private String sCallStrt = "2023-12-07 8:30:59";
+    private String sCallEnd = "2023-12-07 9:42:01";
     private Date dCallStrt;
     private Date dCallEnd;
 
@@ -33,7 +33,7 @@ public class TestTimeDuration {
         long lSecDuration = TimeUnit.SECONDS.convert(lTimeValue, TimeUnit.MILLISECONDS);
 
         System.out.println(lHourDuration);
-        System.out.println(lMinDuration);
-        System.out.println((lSecDuration / 1000) % 60);
+        System.out.println(lMinDuration % 60);
+        System.out.println((lSecDuration) % 60);
     }
 }

@@ -110,6 +110,7 @@ public class GCircleApi extends WebApi {
     private static final String URL_GET_CLIENTS = "telemarketing_app/GetCallClients.php";
     private static final String URL_GET_MCINQ = "telemarketing_app/GetMCInquiry.php";
     private static final String URL_GET_CLIENT_MOBILE = "telemarketing_app/GetClientMobile.php";
+    private static final String URL_GET_PRIORITIES = "telemarketing_app/GetPrioritySrc.php";
     private static final String URL_SEND_SCHEDULE = "telemarketing_app/SaveSchedule.php";
     private static final String URL_SEND_CALL_STATUS = "telemarketing_app/SaveCallStat.php";
 
@@ -928,6 +929,14 @@ public class GCircleApi extends WebApi {
         }
         Log.d(TAG, "Initialize api:" + LIVE + URL_SEND_CALL_STATUS);
         return LIVE + URL_SEND_CALL_STATUS;
+    }
+    public String getUrlPriorities(){
+        if (isUnitTest()){
+            Log.d(TAG, "Initialize api:" + LOCAL + URL_GET_PRIORITIES);
+            return LOCAL + URL_GET_PRIORITIES;
+        }
+        Log.d(TAG, "Initialize api:" + LIVE + URL_GET_PRIORITIES);
+        return LIVE + URL_GET_PRIORITIES;
     }
 
 }
