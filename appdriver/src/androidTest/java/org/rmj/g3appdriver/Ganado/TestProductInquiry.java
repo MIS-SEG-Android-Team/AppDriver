@@ -46,7 +46,7 @@ public class TestProductInquiry {
         AppConfig.getInstance(instance).setProductID("gRider");
         this.poSys = new ProductInquiry(instance);
         poAuth = new GAuthentication(instance).initAppAuthentication().getInstance(Auth.AUTHENTICATE);
-        poAuth.DoAction(new LoginCredentials("mikegarcia8748@gmail.com", "123456", "09171870011"));
+        poAuth.DoAction(new LoginCredentials("mikegarcia8748@gmail.com", "123456"));
     }
 
     @Test

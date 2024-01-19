@@ -43,11 +43,6 @@ public class SignIn implements iAuthenticate {
                 return 0;
             }
 
-            if(poConfig.getMobileNO().isEmpty()){
-                poConfig.setMobileNO(loInfo.getMobileNo());
-                Log.d(TAG, "Mobile number has been initialized.");
-            }
-
             JSONObject params = new JSONObject();
             params.put("user", loInfo.getEmail());
             params.put("pswd", loInfo.getPassword());
@@ -77,8 +72,7 @@ public class SignIn implements iAuthenticate {
             ClientSession loAccount = ClientSession.getInstance(instance);
             loAccount.setUserID(loResponse.getString("sUserIDxx"));
             loAccount.setFullName(loResponse.getString("sUserName"));
-//                    loInfo.setEmailAdd(loResponse.getString("sEmailAdd"));
-            loAccount.setMobileNo(loInfo.getMobileNo());
+            //loAccount.setMobileNo(loInfo.getMobileNo());
             loAccount.setLoginStatus(true);
 
             EClientInfo loClient = new EClientInfo();

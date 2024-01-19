@@ -57,8 +57,6 @@ public class TestSaveSchedule {
         jsonParam.put("sRemarks", "Reschedule mo boy testing");
         jsonParam.put("sUserID", "M001160024");
 
-
-
         String lsResponse = WebClient.sendRequest( sURL, jsonParam.toString(), (HashMap<String, String>) headers);
         if(lsResponse == null){
             System.out.println("HTTP Error detected: " + System.getProperty("store.error.info"));

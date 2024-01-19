@@ -18,11 +18,13 @@ import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOClientMobile;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOHoutlineOutgoing;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOMCInquiry;
+import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOPriorities;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EClient2Call;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EClientMobile;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EHotline_Outgoing;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.ELeadCalls;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
+import org.rmj.g3appdriver.lib.Telemarketing.entities.EPriorities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,6 +44,7 @@ public class CallInteractManager {
     private DAOClientMobile poDaoClientMobile;
     private DAOMCInquiry poDaoMcInq;
     private DAOHoutlineOutgoing poDaoHOutgoing;
+    private DAOPriorities poDaoPriorities;
     private GTeleConstants loConstants;
     private GSimSubscriber loSubscriber;
     private String sTransNox;
@@ -50,7 +53,10 @@ public class CallInteractManager {
     private String sUserIDx;
     private String sClientID;
     private String sMobileNo;
+    private String sim1;
+    private String sim2;
     private String cSubscr;
+    private String simCondition;
     private String dToday;
     private String message;
     private String sCallStrt;
@@ -69,6 +75,7 @@ public class CallInteractManager {
         this.poDaoClientMobile = GGC_GCircleDB.getInstance(instance).teleClientMobDao();
         this.poDaoMcInq = GGC_GCircleDB.getInstance(instance).teleMCInquiryDao();
         this.poDaoHOutgoing = GGC_GCircleDB.getInstance(instance).teleHOutgoingDao();
+        this.poDaoPriorities = GGC_GCircleDB.getInstance(instance).telePriorities();
 
         this.loSubscriber = new GSimSubscriber(instance.getApplicationContext());
         this.loConstants = new GTeleConstants();
@@ -76,18 +83,22 @@ public class CallInteractManager {
     public String getMessage(){
         return message;
     }
-    public String CreateSubscrCondition(){ //INITIALIZE SIM CARD NAMES
+    public Boolean GetSimCards(){ //INITIALIZE SIM CARD NAMES
         if (loSubscriber.InitSim() == false){
             message = loSubscriber.getMessage();
-            return null;
+            return false;
         }
 
         //GET SIM CARD NAMES EACH SLOT
-        String sim1 = loSubscriber.getSimSlot1();
-        String sim2 = loSubscriber.getSimSlot2();
+        sim1 = loSubscriber.getSimSlot1();
+        sim2 = loSubscriber.getSimSlot2();
+
+        if (sim1.isEmpty() && sim2.isEmpty()){
+            message = "No simcards detected by the app";
+            return false;
+        }
 
         //CREATE SQL CONDITION OF 'cSubscrbr' COLUMN FOR FILTERING OF CLIENTS TO BE IMPORTED
-        String simCondition = null;
         if(sim1 != null && sim2 != null){
             simCondition= "(cSubscrbr IN ("+loConstants.GetSimSubscriber(sim1)+","+loConstants.GetSimSubscriber(sim2)+"))";
         }else {
@@ -97,11 +108,16 @@ public class CallInteractManager {
                 simCondition=  "(cSubscrbr = '"+loConstants.GetSimSubscriber(sim2)+"')";
             }
         }
-        return simCondition;
+        return true;
     }
     public Boolean ImportCalls(){ //IMPORT LEADS WITH CLIENT INFO, PRODUCT INQUIRY
         try {
-            JSONArray loLeads = poTeleApp.GetLeads(poSession.getUserID(), CreateSubscrCondition());
+            if (simCondition.isEmpty()){
+                message = "Failed to import contacts. Please check your simcards";
+                return false;
+            }
+
+            JSONArray loLeads = poTeleApp.GetLeads(poSession.getUserID(), simCondition);
             if (loLeads == null){
                 message = poTeleApp.getMessage();
                 return false;
@@ -157,7 +173,49 @@ public class CallInteractManager {
             return false;
         }
     }
-    /* REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO, BEFORE SAVING/UPDATING TRANSACTIONS*/
+    public Boolean ImportPriorities(){
+        try {
+            JSONArray loPriorities = poTeleApp.GetPriorities();
+            if (loPriorities == null){
+                message = poTeleApp.getMessage();
+                return false;
+            }
+
+            for (int i = 0; i < loPriorities.length(); i++){
+                JSONObject loInfo = loPriorities.getJSONObject(i).getJSONObject("priorities");
+
+                int index = (int) loInfo.get("index");
+                String sSourceCD = loInfo.get("sSourceCD").toString();
+
+                //INITIALIZE ENTITY COLUMNS
+                EPriorities ePriorities = new EPriorities();
+                ePriorities.setIndex(index);
+                ePriorities.setsSourceCD(sSourceCD);
+
+                //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
+                if (poDaoPriorities.GetByIndex(index) == null){
+                    if (poDaoPriorities.SavePriorities(ePriorities).intValue() < 1){
+                        message= "Failed to save priorities on device";
+                        Log.d(TAG, "Table: Call_Priorities Index No: "+ String.valueOf(index));
+                        return false;
+                    }
+                }else {
+                    if (poDaoPriorities.UpdatePriorities(ePriorities) < 1){
+                        message= "Failed to update leads on device";
+                        Log.d(TAG, "Table: Call_Priorities Index No: "+ String.valueOf(index));
+                        return false;
+                    }
+                }
+            }
+            message= "Priorities imported successfully to device";
+            return true;
+        }catch(Exception e){
+            message= e.getMessage();
+            return false;
+        }
+    }
+
+    /** REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO, BEFORE SAVING/UPDATING TRANSACTIONS*/
     public void InitTransaction(LeadsInformation loLeads){
         Date dcurrDt = Calendar.getInstance().getTime();
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -531,11 +589,7 @@ public class CallInteractManager {
         return true;
     }
     public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueues(String sSourceCd){
-        return poDaoLeadCalls.GetInitLead(poSession.getUserID(), CreateSubscrCondition(), loConstants.GetLeadConstant(sSourceCd));
-    }
-    public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueuesonSched(String sSourceCd){
-        return poDaoLeadCalls.GetInitLeadsonSched(poSession.getUserID(), CreateSubscrCondition(),
-                loConstants.GetLeadConstant(sSourceCd), dToday);
+        return poDaoLeadCalls.GetInitLead(poSession.getUserID(), sim1, sim2);
     }
     public LiveData<DAOLeadCalls.LeadDetails> GetLeadDetails(){ //ON QUEUES, PRIORITY CALLS
         return poDaoLeadCalls.GetLeadDetails(sReferNox);

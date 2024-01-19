@@ -1,6 +1,9 @@
 package org.rmj.g3appdriver.TelemarketingApp;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,12 +11,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.utils.SQLUtil;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(JUnit4.class)
-public class TestImporClient2Call {
+public class TestImportPriorities {
     private Map<String, String> headers;
     @Before
     public void SetUp(){
@@ -35,30 +39,29 @@ public class TestImporClient2Call {
         headers.put("g-api-user", "GAP0190004");
         headers.put("g-api-mobile", "09260375777");
         headers.put("g-api-token", "12312312");
-
     }
     @Test
-    public void TestImportClient2Call() throws Exception{
-        String sURL = "http://192.168.10.68:8080/telemarketing_app/GetCallClients.php";
+    public void TestImportLeads() throws Exception{
+        String sURL = "http://192.168.10.68:8080/telemarketing_app/GetPrioritySrc.php";
 
-        JSONObject loParams = new JSONObject();
-        loParams.put("sClientID","M01520000603");
-
-        String response = WebClient.sendRequest(sURL, loParams.toString(), (HashMap<String, String>) headers);
+        String response = WebClient.sendRequest(sURL, new JSONObject().toString(), (HashMap<String, String>) headers);
         if(response == null){
             System.out.println("HTTP Error detected: " + System.getProperty("store.error.info"));
         }
 
-        JSONObject loJson = new JSONObject(response);
-        assertNotNull(loJson);
+        System.out.println(response);
 
-        JSONObject loClient = loJson.getJSONObject("clientinfo");
-        assertNotNull(loClient);
+        JSONObject jsonResponse = new JSONObject(response);
+        assertNotNull(jsonResponse);
 
-        System.out.println(loClient.get("sClientID"));
-        System.out.println(loClient.get("sCompnyNm"));
-        System.out.println(loClient.get("xAddressx"));
-        System.out.println(loClient.get("sMobileNo"));
-        System.out.println(loClient.get("sPhoneNox"));
+        JSONArray loArray = jsonResponse.getJSONArray("initpriorities");
+        assertTrue(loArray.length() > 0);
+
+        for (int i = 0; i < loArray.length(); i++){
+            JSONObject loLeads = loArray.getJSONObject(i).getJSONObject("priorities");
+
+            System.out.println(loLeads.get("index"));
+            System.out.println(loLeads.get("sSourceCD"));
+        }
     }
 }
