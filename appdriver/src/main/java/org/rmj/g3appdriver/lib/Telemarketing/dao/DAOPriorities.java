@@ -17,4 +17,6 @@ public interface DAOPriorities {
     Long SavePriorities(EPriorities ePriorities);
     @Update
     int UpdatePriorities(EPriorities ePriorities);
+    @Query("DELETE FROM Call_Priorities")
+    int RemovePriorities();
 }

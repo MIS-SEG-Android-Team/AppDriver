@@ -20,4 +20,6 @@ public interface DAOHoutlineOutgoing {
     Long SaveHotlineOutgoing(EHotline_Outgoing eHotlineOutgoing);
     @Update
     int UpdateHotlineOutgoing(EHotline_Outgoing eHotlineOutgoing);
+    @Query("DELETE FROM Hotline_Outgoing")
+    int RemoveHOutgoing();
 }

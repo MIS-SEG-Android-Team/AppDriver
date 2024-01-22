@@ -18,4 +18,6 @@ public interface DAOClientMobile {
     Long SaveClientMobile(EClientMobile eClientMobile);
     @Update
     int UpdateClientMobile(EClientMobile eClientMobile);
+    @Query("DELETE FROM Client_Mobile")
+    int RemoveClientMobile();
 }

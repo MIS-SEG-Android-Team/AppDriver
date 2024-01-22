@@ -47,6 +47,8 @@ public interface DAOLeadCalls {
     Long SaveLeads(ELeadCalls eLeadCalls);
     @Update
     int UpdateLeads(ELeadCalls eLeadCalls);
+    @Query("DELETE FROM Lead_Calls")
+    int RemoveLeads();
 
     class LeadInformation{
         public String sTransNox;
