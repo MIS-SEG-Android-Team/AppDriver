@@ -18,4 +18,6 @@ public interface DAOClient2Call {
     Long SaveClients(EClient2Call eClient2Call);
     @Update
     int UpdateClients(EClient2Call eClient2Call);
+    @Query("DELETE FROM Call_Client")
+    int RemoveClient2Call();
 }

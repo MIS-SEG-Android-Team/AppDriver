@@ -21,4 +21,6 @@ public interface DAOMCInquiry {
     Long SaveMCInq(EMCInquiry emcInquiry);
     @Update
     int UpdateMCInq(EMCInquiry emcInquiry);
+    @Query("DELETE FROM MC_Inquiry")
+    int RemoveInquiries();
 }

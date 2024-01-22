@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.json.JSONException;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -85,11 +86,20 @@ public class TestAppImports {
 
         poDaoPriorities.UpdatePriorities(ePriorities);
 
+        Boolean hasSim = poCallManager.GetSimCards();
+
+        System.out.println(poCallManager.sim1);
+        System.out.println(poCallManager.sim2);
+        System.out.println(poCallManager.simCondition);
+        System.out.println(poCallManager.getMessage());
+        assertTrue(hasSim);
+
         Boolean isImported = poCallManager.ImportCalls();
+
         System.out.println(poCallManager.getMessage());
         assertTrue(isImported);
 
-        poDao.GetInitLead("GAP023000374", "0", "0").observeForever(new Observer<DAOLeadCalls.LeadInformation>() {
+        poDao.GetInitLead("GAP023000374", poCallManager.sim1, poCallManager.sim2).observeForever(new Observer<DAOLeadCalls.LeadInformation>() {
             @Override
             public void onChanged(DAOLeadCalls.LeadInformation leadInformation) {
                 assertNotNull(leadInformation);
@@ -136,5 +146,9 @@ public class TestAppImports {
         Boolean isSaved = poCallManager.SaveSchedule("2023-12-06", "0", "RESCHEDULE CLIENT IS BUSY AGAIN");
         System.out.println(poCallManager.getMessage());
         assertTrue(isSaved);
+    }
+    @Test
+    public void RemoveSession(){
+        poCallManager.RemoveCallSession();
     }
 }

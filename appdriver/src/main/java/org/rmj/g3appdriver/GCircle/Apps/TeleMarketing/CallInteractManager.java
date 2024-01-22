@@ -53,10 +53,10 @@ public class CallInteractManager {
     private String sUserIDx;
     private String sClientID;
     private String sMobileNo;
-    private String sim1;
-    private String sim2;
+    public String sim1;
+    public String sim2;
     private String cSubscr;
-    private String simCondition;
+    public String simCondition;
     private String dToday;
     private String message;
     private String sCallStrt;
@@ -98,15 +98,17 @@ public class CallInteractManager {
             return false;
         }
 
-        //CREATE SQL CONDITION OF 'cSubscrbr' COLUMN FOR FILTERING OF CLIENTS TO BE IMPORTED
+        //INITIALIZE FINAL VALUE FOR VARIABLES
+        if (!sim1.isEmpty()){
+            sim1 = String.valueOf(loConstants.GetSimSubscriber(sim1));
+            simCondition=  "(cSubscrbr = '"+sim1+"')";
+        } else if (sim2.isEmpty()) {
+            sim2 = String.valueOf(loConstants.GetSimSubscriber(sim2));
+            simCondition=  "(cSubscrbr = '"+sim2+"')";
+        }
+
         if(sim1 != null && sim2 != null){
-            simCondition= "(cSubscrbr IN ("+loConstants.GetSimSubscriber(sim1)+","+loConstants.GetSimSubscriber(sim2)+"))";
-        }else {
-            if (sim1 != null){
-                simCondition=  "(cSubscrbr = '"+loConstants.GetSimSubscriber(sim1)+"')";
-            } else if (sim2 != null) {
-                simCondition=  "(cSubscrbr = '"+loConstants.GetSimSubscriber(sim2)+"')";
-            }
+            simCondition= "(cSubscrbr IN ("+sim1+","+sim2+"))";
         }
         return true;
     }
@@ -499,7 +501,7 @@ public class CallInteractManager {
                 return false;
             }
 
-            JSONObject loSchedule =  poTeleApp.UploadSchedule(sReferNox, sLeadSrc, dFollowUp, cTranstat, sRemarks, sUserIDx);
+            JSONObject loSchedule =  poTeleApp.UploadSchedule(sReferNox, sLeadSrc, dFollowUp, cTranstat, loConstants.GetRemarks(sRemarks), sUserIDx);
             if (loSchedule == null){
                 message = poTeleApp.getMessage();
                 return false;
@@ -577,7 +579,7 @@ public class CallInteractManager {
         return true;
     }
     public Boolean UpdateLeadCallStat(String sTransNox, String sCallStat, String sApprvCd, String cTransTat){
-        if (poDaoLeadCalls.UpdateLeadCall(sTransNox, loConstants.GetRemarks(sCallStat), cTransTat, sApprvCd, sCallStrt,
+        if (poDaoLeadCalls.UpdateLeadCall(sTransNox, sCallStat, cTransTat, sApprvCd, sCallStrt,
                 sCallEnd, sUserIDx, dToday) < 1){
             message= "Lead transaction failed to update on device";
             Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
@@ -587,6 +589,14 @@ public class CallInteractManager {
         message= "Lead transaction has been updated to device";
         Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
         return true;
+    }
+    public void RemoveCallSession(){
+        poDaoLeadCalls.RemoveLeads();
+        poDaoClient.RemoveClient2Call();
+        poDaoClientMobile.RemoveClientMobile();
+        poDaoMcInq.RemoveInquiries();
+        poDaoPriorities.RemovePriorities();
+        poDaoHOutgoing.RemoveHOutgoing();
     }
     public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueues(){
         return poDaoLeadCalls.GetInitLead(poSession.getUserID(), sim1, sim2);
