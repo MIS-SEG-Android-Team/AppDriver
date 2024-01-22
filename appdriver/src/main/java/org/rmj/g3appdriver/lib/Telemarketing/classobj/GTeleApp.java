@@ -190,7 +190,7 @@ public class GTeleApp {
             JSONObject jsonParam = new JSONObject();
 
             //PARAM FOR CALL_OUTGOING UPDATE COLUMN: cTLMStatx
-            jsonParam.put("sCallStat", loConstants.GetRemarks(sCallStat));
+            jsonParam.put("sCallStat", sCallStat);
             jsonParam.put("sReferNox", sReferNox);
             jsonParam.put("dCallStrt", sCallStrt);
             jsonParam.put("dCallEndx", sCallEnd);

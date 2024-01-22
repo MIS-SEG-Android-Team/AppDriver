@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.json.JSONException;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -86,6 +87,7 @@ public class TestAppImports {
         poDaoPriorities.UpdatePriorities(ePriorities);
 
         Boolean hasSim = poCallManager.GetSimCards();
+
         System.out.println(poCallManager.sim1);
         System.out.println(poCallManager.sim2);
         System.out.println(poCallManager.simCondition);
@@ -93,6 +95,7 @@ public class TestAppImports {
         assertTrue(hasSim);
 
         Boolean isImported = poCallManager.ImportCalls();
+
         System.out.println(poCallManager.getMessage());
         assertTrue(isImported);
 

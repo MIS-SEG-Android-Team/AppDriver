@@ -501,7 +501,7 @@ public class CallInteractManager {
                 return false;
             }
 
-            JSONObject loSchedule =  poTeleApp.UploadSchedule(sReferNox, sLeadSrc, dFollowUp, cTranstat, sRemarks, sUserIDx);
+            JSONObject loSchedule =  poTeleApp.UploadSchedule(sReferNox, sLeadSrc, dFollowUp, cTranstat, loConstants.GetRemarks(sRemarks), sUserIDx);
             if (loSchedule == null){
                 message = poTeleApp.getMessage();
                 return false;
@@ -579,7 +579,7 @@ public class CallInteractManager {
         return true;
     }
     public Boolean UpdateLeadCallStat(String sTransNox, String sCallStat, String sApprvCd, String cTransTat){
-        if (poDaoLeadCalls.UpdateLeadCall(sTransNox, loConstants.GetRemarks(sCallStat), cTransTat, sApprvCd, sCallStrt,
+        if (poDaoLeadCalls.UpdateLeadCall(sTransNox, sCallStat, cTransTat, sApprvCd, sCallStrt,
                 sCallEnd, sUserIDx, dToday) < 1){
             message= "Lead transaction failed to update on device";
             Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);

@@ -51,7 +51,7 @@ public class TestSaveSchedule {
         JSONObject jsonParam = new JSONObject();
 
         jsonParam.put("sTransNox", "M0T123000816");
-        jsonParam.put("sLeadSrc", loConstants.GetLeadConstant("MC INQUIRY"));
+        jsonParam.put("sLeadSrc", "INQR");
         jsonParam.put("dFollowUp", "2023-11-21");
         jsonParam.put("cTransStat", "0");
         jsonParam.put("sRemarks", "Reschedule mo boy testing");
