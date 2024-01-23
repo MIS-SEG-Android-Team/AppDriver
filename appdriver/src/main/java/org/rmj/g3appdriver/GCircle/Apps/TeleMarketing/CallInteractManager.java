@@ -605,6 +605,6 @@ public class CallInteractManager {
         return poDaoLeadCalls.GetLeadDetails(sReferNox);
     }
     public LiveData<List<DAOLeadCalls.LeadHistory>> GetHistory(){
-        return poDaoLeadCalls.GetCallHistory();
+        return poDaoLeadCalls.GetCallHistory(poSession.getUserID());
     }
 }

@@ -31,12 +31,28 @@ public interface DAOLeadCalls {
             "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
             "WHERE lead.sReferNox = :sTransNox")
     LiveData<LeadDetails> GetLeadDetails(String sTransNox);
-    @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, lead.sMobileNo sMobileNo, lead.dTransact dTransact, " +
-            "lead.cTLMStatx cTLMStatx, lead.sRemarksx sRemarksx " +
+    @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, lead.sMobileNo sMobileNo, lead.dModified dTransact, " +
+            "lead.cTLMStatx cTLMStatx, lead.sRemarksx sRemarksx, lead.dCallStrt dCallStrt, lead.dCallEndx dCallEndx, " +
+            "mci.dFollowUp dFollowUp " +
             "FROM Lead_Calls lead " +
             "LEFT JOIN  Call_Client ccl ON (lead.sClientID = ccl.sClientID) " +
+            "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
+            "WHERE sAgentIDx= :sUserIdxx AND cTranStat = '1' " +
             "ORDER BY lead.dTransact DESC, lead.sMobileNo ASC, ccl.sClientNM ASC")
-    LiveData<List<LeadHistory>> GetCallHistory();
+    LiveData<List<LeadHistory>> GetCallHistory(String sUserIdxx);
+    @Query("SELECT " +
+            "COUNT(CASE WHEN cTLMStatx = 'NI' THEN sTransNox END) AS nNI, " +
+            "COUNT(CASE WHEN cTLMStatx = 'NN' THEN sTransNox END) AS nNN, " +
+            "COUNT(CASE WHEN cTLMStatx = 'WN' THEN sTransNox END) AS nWN, " +
+            "COUNT(CASE WHEN cTLMStatx = 'UR' THEN sTransNox END) AS nUR, " +
+            "COUNT(CASE WHEN cTLMStatx = 'NA' THEN sTransNox END) AS nNA, " +
+            "COUNT(CASE WHEN cTLMStatx = 'CB' THEN sTransNox END) AS nCB, " +
+            "COUNT(CASE WHEN cTLMStatx = 'AM' THEN sTransNox END) AS nAM, " +
+            "COUNT(CASE WHEN cTLMStatx = 'PS' THEN sTransNox END) AS nPS, " +
+            "COUNT(CASE WHEN cTLMStatx = 'NC' THEN sTransNox END) AS nNC " +
+            "FROM Lead_Calls " +
+            "WHERE sAgentIDx= :sUserIdxx")
+    LiveData<CountLeads> GetLeadCounts(String sUserIdxx);
     @Query("UPDATE Lead_Calls SET cTLMStatx= :cTLMStatx, cTranStat = :cTranStat, " +
             "sApprovCd = :sApprovCd , dCallStrt = :sCallStrt, " +
             "dCallEndx = :sCallEnd, sModified = :sModified, dModified = :dModified " +
@@ -72,5 +88,19 @@ public interface DAOLeadCalls {
         public String dTransact;
         public String cTLMStatx;
         public String sRemarksx;
+        public String dCallStrt;
+        public String dCallEndx;
+        public String dFollowUp;
+    }
+    class CountLeads{
+        public int nNI;
+        public int nNN;
+        public int nWN;
+        public int nUR;
+        public int nNA;
+        public int nCB;
+        public int nAM;
+        public int nPS;
+        public int nNC;
     }
 }

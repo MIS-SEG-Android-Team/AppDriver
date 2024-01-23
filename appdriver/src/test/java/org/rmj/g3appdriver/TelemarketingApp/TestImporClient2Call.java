@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(JUnit4.class)
-public class TestImporClient2Call {
+public class
+TestImporClient2Call {
     private Map<String, String> headers;
     @Before
     public void SetUp(){
