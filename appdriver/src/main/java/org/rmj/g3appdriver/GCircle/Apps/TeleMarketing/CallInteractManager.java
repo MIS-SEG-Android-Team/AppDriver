@@ -232,21 +232,6 @@ public class CallInteractManager {
         this.sUserIDx = poSession.getUserID();
         this.dToday = frmDt;
     }
-    public void InitCallTime(String sCallStrt, String sCallEnd) throws ParseException {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
-        Date dCallStrt = timeFormat.parse(sCallStrt);
-        Date dCallEnd = timeFormat.parse(sCallEnd);
-
-        long lDuration = dCallEnd.getTime() - dCallStrt.getTime();
-
-        this.sCallStrt = sCallStrt;
-        this.sCallEnd = sCallEnd;
-
-        this.lHourDuration = TimeUnit.HOURS.convert(lDuration, TimeUnit.MILLISECONDS);
-        this.lMinDuration = TimeUnit.MINUTES.convert(lDuration, TimeUnit.MILLISECONDS);
-        this.lSecDuration = TimeUnit.SECONDS.convert(lDuration, TimeUnit.MILLISECONDS);
-    }
     public Boolean SaveClient2Call(){
         try {
             JSONObject loParam = new JSONObject();
@@ -413,6 +398,21 @@ public class CallInteractManager {
             message = e.getMessage();
             return false;
         }
+    }
+    public void InitCallTime(String sCallStrt, String sCallEnd) throws ParseException {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        Date dCallStrt = timeFormat.parse(sCallStrt);
+        Date dCallEnd = timeFormat.parse(sCallEnd);
+
+        long lDuration = dCallEnd.getTime() - dCallStrt.getTime();
+
+        this.sCallStrt = sCallStrt;
+        this.sCallEnd = sCallEnd;
+
+        this.lHourDuration = TimeUnit.HOURS.convert(lDuration, TimeUnit.MILLISECONDS);
+        this.lMinDuration = TimeUnit.MINUTES.convert(lDuration, TimeUnit.MILLISECONDS);
+        this.lSecDuration = TimeUnit.SECONDS.convert(lDuration, TimeUnit.MILLISECONDS);
     }
     public Boolean SaveCallStatus(String sCallStat, String callAction, String sApprvCD){
         try {
