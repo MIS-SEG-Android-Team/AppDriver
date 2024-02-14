@@ -414,7 +414,7 @@ public class CallInteractManager {
         this.lMinDuration = TimeUnit.MINUTES.convert(lDuration, TimeUnit.MILLISECONDS);
         this.lSecDuration = TimeUnit.SECONDS.convert(lDuration, TimeUnit.MILLISECONDS);
     }
-    public Boolean SaveCallStatus(String sCallStat, String callAction, String sApprvCD){
+    public Boolean SaveCallStatus(String sCallStat, String callAction, String sApprvCD, String sRemarks){
         try {
             //validate first if transaction no is applied
             if (sTransNox == null){
@@ -424,7 +424,7 @@ public class CallInteractManager {
 
             //send json params for web request and get response
             JSONObject loTransParams = poTeleApp.SendCallStatus(sCallStat, callAction, sTransNox, cSubscr,
-                    sApprvCD, poSession.getUserID(), sClientID, sMobileNo, sCallStrt, sCallEnd);
+                    sApprvCD, poSession.getUserID(), sClientID, sMobileNo, sCallStrt, sCallEnd, sRemarks);
 
             if (loTransParams == null){
                 message = poTeleApp.getMessage();

@@ -184,7 +184,7 @@ public class GTeleApp {
     }
     /*THESE METHOD UPLOADS ALL CALL TRANSACTIONS AND STATUS AT ONCE*/
     public JSONObject SendCallStatus(String sCallStat, String callAction, String sReferNox, String cSubscr, String sApprvCd, String sUserID,
-                                        String sClientID, String sMobileNo, String sCallStrt, String sCallEnd){
+                                        String sClientID, String sMobileNo, String sCallStrt, String sCallEnd, String sRemarksx){
         try {
             //CREATE PARAMS USING JSON OBJECT
             JSONObject jsonParam = new JSONObject();
@@ -194,6 +194,7 @@ public class GTeleApp {
             jsonParam.put("sReferNox", sReferNox);
             jsonParam.put("dCallStrt", sCallStrt);
             jsonParam.put("dCallEndx", sCallEnd);
+            jsonParam.put("sRemarksx", sRemarksx);
 
             //PARAM FOR HOTLINE OUTGOING INSERT TABLE
             jsonParam.put("cSubscr", cSubscr);
