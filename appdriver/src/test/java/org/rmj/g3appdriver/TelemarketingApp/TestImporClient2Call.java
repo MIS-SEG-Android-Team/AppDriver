@@ -43,7 +43,7 @@ TestImporClient2Call {
         String sURL = "http://192.168.10.68:8080/telemarketing_app/GetCallClients.php";
 
         JSONObject loParams = new JSONObject();
-        loParams.put("sClientID","M01520000603");
+        loParams.put("sClientID","M09123002535");
 
         String response = WebClient.sendRequest(sURL, loParams.toString(), (HashMap<String, String>) headers);
         if(response == null){

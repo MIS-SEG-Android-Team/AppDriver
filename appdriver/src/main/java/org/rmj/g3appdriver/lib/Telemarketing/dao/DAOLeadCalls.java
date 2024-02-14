@@ -24,8 +24,7 @@ public interface DAOLeadCalls {
             "AND a.cSubscrbr IN (:sSim1, :sSim2) " +
             "ORDER BY a.dTransact DESC, a.cSubscrbr DESC, a.cTranStat DESC, b.srcIndex ASC LIMIT 1")
     LiveData<LeadInformation> GetInitLead(String sAgentID, String sSim1, String sSim2);
-    @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, ccl.xAddressx sAddressx, lead.sMobileNo sMobileNo, " +
-            "lead.sReferNox sReferNox, mci.sModelIDx sModelIDx, lead.dTransact dTransact " +
+    @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, ccl.xAddressx sAddressx, lead.sMobileNo sMobileNo " +
             "FROM Lead_Calls lead " +
             "LEFT JOIN  Call_Client ccl ON (lead.sClientID = ccl.sClientID) " +
             "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
@@ -37,7 +36,7 @@ public interface DAOLeadCalls {
             "FROM Lead_Calls lead " +
             "LEFT JOIN  Call_Client ccl ON (lead.sClientID = ccl.sClientID) " +
             "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
-            "WHERE sAgentIDx= :sUserIdxx AND cTranStat = '1' " +
+            "WHERE sAgentIDx= :sUserIdxx AND cTranStat <> '0' " +
             "ORDER BY lead.dTransact DESC, lead.sMobileNo ASC, ccl.sClientNM ASC")
     LiveData<List<LeadHistory>> GetCallHistory(String sUserIdxx);
     @Query("UPDATE Lead_Calls SET cTLMStatx= :cTLMStatx, cTranStat = :cTranStat, " +
@@ -52,7 +51,6 @@ public interface DAOLeadCalls {
     int UpdateLeads(ELeadCalls eLeadCalls);
     @Query("DELETE FROM Lead_Calls")
     int RemoveLeads();
-
     class LeadInformation{
         public String sTransNox;
         public String sReferNox;
@@ -66,7 +64,6 @@ public interface DAOLeadCalls {
         public String sClientNm;
         public String sAddressx;
         public String sMobileNo;
-        public String sModelIDx;
     }
     class LeadHistory{
         public String sReferNox;

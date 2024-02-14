@@ -4,16 +4,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Application;
-import android.database.DatabaseUtils;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.json.JSONException;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -26,7 +24,6 @@ import org.rmj.g3appdriver.GCircle.Apps.TeleMarketing.LeadsInformation;
 import org.rmj.g3appdriver.GCircle.room.GGC_GCircleDB;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOLeadCalls;
 import org.rmj.g3appdriver.lib.Telemarketing.dao.DAOPriorities;
-import org.rmj.g3appdriver.lib.Telemarketing.entities.EMCInquiry;
 import org.rmj.g3appdriver.lib.Telemarketing.entities.EPriorities;
 
 @RunWith(AndroidJUnit4.class)
@@ -42,10 +39,10 @@ public class TestAppImports {
 
     public LeadsInformation GetQueues(){
         LeadsInformation loLeads = new LeadsInformation();
-        loLeads.setsClientID("M16323000812");
-        loLeads.setsMobileNo("09188118093");
-        loLeads.setsTransNox("M0T123072843");
-        loLeads.setsReferNox("M0T123000816");
+        loLeads.setsClientID("M09123002535");
+        loLeads.setsMobileNo("09153876313");
+        loLeads.setsTransNox("M0T123090941");
+        loLeads.setsReferNox("M09123000121");
 
         loLeads.setsSourceCD("INQR");
         loLeads.setsSubscr("0");
@@ -66,7 +63,7 @@ public class TestAppImports {
 
         poCallManager = new CallInteractManager(instance);
         poCallManager.InitTransaction(GetQueues());
-        poCallManager.InitCallTime("2023-12-08 11:40:33", "2023-12-08 11:50:33");
+        poCallManager.InitQueue("2023-12-08 11:40:33", "2023-12-08 11:50:33");
 
         poDao = GGC_GCircleDB.getInstance(ApplicationProvider.getApplicationContext()).teleLeadsDao();
         poDaoPriorities = GGC_GCircleDB.getInstance(ApplicationProvider.getApplicationContext()).telePriorities();

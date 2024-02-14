@@ -50,7 +50,6 @@ public class CallInteractManager {
     private String sTransNox;
     private String sReferNox;
     private String sLeadSrc;
-    private String sUserIDx;
     private String sClientID;
     private String sMobileNo;
     public String sim1;
@@ -229,7 +228,6 @@ public class CallInteractManager {
         this.sClientID = loLeads.getsClientID();
         this.sMobileNo = loLeads.getsMobileNo();
         this.cSubscr = loLeads.getsSubscr();
-        this.sUserIDx = poSession.getUserID();
         this.dToday = frmDt;
     }
     public Boolean SaveClient2Call(){
@@ -370,6 +368,7 @@ public class CallInteractManager {
             emcInquiry.setsBrandIDx(loInq.get("sBrandIDx").toString());
             emcInquiry.setsModelIDx(loInq.get("sModelIDx").toString());
             emcInquiry.setsColorIDx(loInq.get("sColorIDx").toString());
+            emcInquiry.setcApplType(loInq.get("cApplType").toString());
             emcInquiry.setnTerms(Integer.valueOf(loInq.get("nTerms").toString()));
             emcInquiry.setdTargetxx(loInq.get("dTargetxx").toString());
             emcInquiry.setnDownPaym(Double.valueOf(loInq.get("nDownPaym").toString()));
@@ -399,7 +398,8 @@ public class CallInteractManager {
             return false;
         }
     }
-    public void InitCallTime(String sCallStrt, String sCallEnd) throws ParseException {
+
+    public void InitQueue(String sCallStrt, String sCallEnd) throws ParseException {
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
         Date dCallStrt = timeFormat.parse(sCallStrt);
@@ -424,7 +424,7 @@ public class CallInteractManager {
 
             //send json params for web request and get response
             JSONObject loTransParams = poTeleApp.SendCallStatus(sCallStat, callAction, sTransNox, cSubscr,
-                    sApprvCD, sUserIDx, sClientID, sMobileNo, sCallStrt, sCallEnd);
+                    sApprvCD, poSession.getUserID(), sClientID, sMobileNo, sCallStrt, sCallEnd);
 
             if (loTransParams == null){
                 message = poTeleApp.getMessage();
@@ -455,7 +455,7 @@ public class CallInteractManager {
                             loTransParams.get("sSourceCd").toString(),
                             loTransParams.get("cTranStat").toString(),
                             Integer.valueOf(loTransParams.get("nPriority").toString()),
-                            sUserIDx);
+                            poSession.getUserID());
 
                     message = poTeleApp.getMessage();
                 }else {
@@ -501,7 +501,7 @@ public class CallInteractManager {
                 return false;
             }
 
-            JSONObject loSchedule =  poTeleApp.UploadSchedule(sReferNox, sLeadSrc, dFollowUp, cTranstat, loConstants.GetRemarks(sRemarks), sUserIDx);
+            JSONObject loSchedule =  poTeleApp.UploadSchedule(sReferNox, sLeadSrc, dFollowUp, cTranstat, loConstants.GetRemarks(sRemarks), poSession.getUserID());
             if (loSchedule == null){
                 message = poTeleApp.getMessage();
                 return false;
@@ -580,7 +580,7 @@ public class CallInteractManager {
     }
     public Boolean UpdateLeadCallStat(String sTransNox, String sCallStat, String sApprvCd, String cTransTat){
         if (poDaoLeadCalls.UpdateLeadCall(sTransNox, sCallStat, cTransTat, sApprvCd, sCallStrt,
-                sCallEnd, sUserIDx, dToday) < 1){
+                sCallEnd, poSession.getUserID(), dToday) < 1){
             message= "Lead transaction failed to update on device";
             Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
             return false;
@@ -606,5 +606,8 @@ public class CallInteractManager {
     }
     public LiveData<List<DAOLeadCalls.LeadHistory>> GetHistory(){
         return poDaoLeadCalls.GetCallHistory(poSession.getUserID());
+    }
+    public LiveData<DAOMCInquiry.ProductInfo> GetProductDetails(){
+        return poDaoMcInq.GetMCInquiryDetails(sReferNox);
     }
 }

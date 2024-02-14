@@ -21,6 +21,8 @@ public class EMCInquiry {
     public String sModelIDx;
     @ColumnInfo(name = "sColorIDx")
     public String sColorIDx;
+    @ColumnInfo(name = "cApplType")
+    public String cApplType;
     @ColumnInfo(name = "nTerms")
     public Integer nTerms;
     @ColumnInfo(name = "dTargetxx")
@@ -83,6 +85,14 @@ public class EMCInquiry {
 
     public void setsColorIDx(String sColorIDx) {
         this.sColorIDx = sColorIDx;
+    }
+
+    public String getcApplType() {
+        return cApplType;
+    }
+
+    public void setcApplType(String cApplType) {
+        this.cApplType = cApplType;
     }
 
     public Integer getnTerms() {
