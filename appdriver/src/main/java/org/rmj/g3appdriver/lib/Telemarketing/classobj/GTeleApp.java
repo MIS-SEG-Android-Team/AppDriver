@@ -182,6 +182,41 @@ public class GTeleApp {
             return null;
         }
     }
+    public Boolean CreateLead(String sTransNox, String sUserID, String cTransStat){
+        try {
+            //CREATE PARAMS USING JSON OBJECT
+            JSONObject jsonParam = new JSONObject();
+
+            //PARAM FOR CALL_OUTGOING UPDATE COLUMN: cTLMStatx
+            jsonParam.put("sTransNox", sTransNox);
+            jsonParam.put("sUserID", sUserID);
+            jsonParam.put("cTransStat", cTransStat);
+
+            String lsResponse = WebClient.sendRequest(
+                    loApi.getUrlCreateLead(),
+                    jsonParam.toString(),
+                    poHeader.getHeaders());
+
+            if (lsResponse == null) {
+                message = SERVER_NO_RESPONSE;
+                return false;
+            }
+
+            JSONObject loResponse = new JSONObject(lsResponse);
+            String lsResult = loResponse.getString("result");
+            if (lsResult.equalsIgnoreCase("error")) {
+                JSONObject loError = loResponse.getJSONObject("error");
+                message = getErrorMessage(loError);;
+                return false;
+            }
+
+            message = "Successfully converted as lead";
+            return true;
+        }catch (Exception e){
+            message = e.getMessage();
+            return false;
+        }
+    }
     /*THESE METHOD UPLOADS ALL CALL TRANSACTIONS AND STATUS AT ONCE*/
     public JSONObject SendCallStatus(String sCallStat, String callAction, String sReferNox, String cSubscr, String sApprvCd, String sUserID,
                                         String sClientID, String sMobileNo, String sCallStrt, String sCallEnd, String sRemarksx){

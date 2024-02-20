@@ -414,6 +414,20 @@ public class CallInteractManager {
         this.lMinDuration = TimeUnit.MINUTES.convert(lDuration, TimeUnit.MILLISECONDS);
         this.lSecDuration = TimeUnit.SECONDS.convert(lDuration, TimeUnit.MILLISECONDS);
     }
+    public Boolean AssignAsLead(){
+        //validate first if transaction no is applied
+        if (sTransNox == null){
+            message = "No applied transaction number";
+            return false;
+        }
+
+        if (!poTeleApp.CreateLead(sTransNox, poSession.getUserID(), "1")){
+            message = poTeleApp.getMessage();
+            return false;
+        }
+
+        return true;
+    }
     public Boolean SaveCallStatus(String sCallStat, String callAction, String sApprvCD, String sRemarks){
         try {
             //validate first if transaction no is applied
