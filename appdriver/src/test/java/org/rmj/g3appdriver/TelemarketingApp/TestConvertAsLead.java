@@ -1,6 +1,7 @@
 package org.rmj.g3appdriver.TelemarketingApp;
 
 import static org.junit.Assert.assertNotNull;
+
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,18 +9,20 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.utils.SQLUtil;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(JUnit4.class)
-public class
-TestImporClient2Call {
+public class TestConvertAsLead {
     private Map<String, String> headers;
     @Before
     public void SetUp(){
         /*NOTE: RUN THIS ON 192.168.10.224 (TEST DATABASE) TO INITIALIZE HEADERS PROPERLY
-         * RUN: SELECT * FROM xxxSysUserLog WHERE  sUserIDxx = 'GAP0190004' AND sLogNoxxx = "GAP023110901" AND sProdctID = "gRider";
+         * RUN: SELECT * FROM
+         *
+         *  xxxSysUserLog WHERE  sUserIDxx = 'GAP0190004' AND sLogNoxxx = "GAP023110901" AND sProdctID = "gRider";
          * REQUIRED: Change 'dLogInxxx' column date to current date.*/
 
         Calendar calendar = Calendar.getInstance();
@@ -36,30 +39,23 @@ TestImporClient2Call {
         headers.put("g-api-user", "GAP0190004");
         headers.put("g-api-mobile", "09260375777");
         headers.put("g-api-token", "12312312");
-
     }
     @Test
-    public void TestImportClient2Call() throws Exception{
-        String sURL = "http://192.168.10.68:8080/telemarketing_app/GetCallClients.php";
+    public void TestAssignLead() throws Exception {
 
-        JSONObject loParams = new JSONObject();
-        loParams.put("sClientID","M09123002535");
+        String sURL = "http://192.168.10.68:8080/telemarketing_app/CreateLead.php";
 
-        String response = WebClient.sendRequest(sURL, loParams.toString(), (HashMap<String, String>) headers);
-        if(response == null){
+        JSONObject jsonParam = new JSONObject();
+
+        jsonParam.put("sTransNox", "M0T123090941");
+        jsonParam.put("sUserID", "GAP023000374");
+        jsonParam.put("cTransStat", "1");
+
+        String lsResponse = WebClient.sendRequest( sURL, jsonParam.toString(), (HashMap<String, String>) headers);
+        if(lsResponse == null){
             System.out.println("HTTP Error detected: " + System.getProperty("store.error.info"));
         }
 
-        JSONObject loJson = new JSONObject(response);
-        assertNotNull(loJson);
-
-        JSONObject loClient = loJson.getJSONObject("clientinfo");
-        assertNotNull(loClient);
-
-        System.out.println(loClient.get("sClientID"));
-        System.out.println(loClient.get("sCompnyNm"));
-        System.out.println(loClient.get("xAddressx"));
-        System.out.println(loClient.get("sMobileNo"));
-        System.out.println(loClient.get("sPhoneNox"));
+        System.out.println(lsResponse);
     }
 }

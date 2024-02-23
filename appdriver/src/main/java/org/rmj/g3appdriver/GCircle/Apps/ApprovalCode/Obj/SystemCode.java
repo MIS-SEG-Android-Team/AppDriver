@@ -123,7 +123,7 @@ public class SystemCode implements SCA {
             param.put("cIssuedBy", loCode.getIssuedBy());
             param.put("sMiscInfo", loCode.getMiscInfo());
             param.put("sRemarks1", loCode.getRemarks1());
-            param.put("sRemarks2", loCode.getApprCode() == null ? "" : loCode.getRemarks2());
+            param.put("sRemarks2", loCode.getRemarks2() == null ? "" : loCode.getRemarks2());
             param.put("sApprCode", loCode.getApprCode());
             param.put("sEntryByx", loCode.getEntryByx());
             param.put("sApprvByx", loCode.getApprvByx());

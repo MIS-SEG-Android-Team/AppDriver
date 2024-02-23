@@ -17,7 +17,6 @@ import java.util.Map;
 @RunWith(JUnit4.class)
 public class TestSaveSchedule {
     private Map<String, String> headers;
-    private GTeleConstants loConstants;
     @Before
     public void SetUp(){
         /*NOTE: RUN THIS ON 192.168.10.224 (TEST DATABASE) TO INITIALIZE HEADERS PROPERLY
@@ -40,8 +39,6 @@ public class TestSaveSchedule {
         headers.put("g-api-user", "GAP0190004");
         headers.put("g-api-mobile", "09260375777");
         headers.put("g-api-token", "12312312");
-
-        loConstants = new GTeleConstants();
     }
     @Test
     public void TestSaveSchedule() throws Exception {
