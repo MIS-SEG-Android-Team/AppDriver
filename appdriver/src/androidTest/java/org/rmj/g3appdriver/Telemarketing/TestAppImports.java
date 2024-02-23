@@ -43,6 +43,7 @@ public class TestAppImports {
         loLeads.setsMobileNo("09153876313");
         loLeads.setsTransNox("M0T123090941");
         loLeads.setsReferNox("M09123000121");
+        loLeads.setcTranStat("0");
 
         loLeads.setsSourceCD("INQR");
         loLeads.setsSubscr("0");
@@ -62,6 +63,7 @@ public class TestAppImports {
         poUser = new EmployeeMaster(instance);
 
         poCallManager = new CallInteractManager(instance);
+
         poCallManager.InitTransaction(GetQueues());
         poCallManager.InitQueue("2023-12-08 11:40:33", "2023-12-08 11:50:33");
 
@@ -71,30 +73,17 @@ public class TestAppImports {
     /*IF ERROR OCCURS, TRY TO RUN ONLY TEST YOU NEED AND COMMENT OTHER TESTS.*/
     @Test
     public void ImportCalls(){
-        EPriorities ePriorities = new EPriorities();
-        ePriorities.setIndex(2);
-        ePriorities.setsSourceCD("GNDO");
-
-        ePriorities.setIndex(1);
-        ePriorities.setsSourceCD("MCCA");
-
-        ePriorities.setIndex(3);
-        ePriorities.setsSourceCD("INQR");
-
-        poDaoPriorities.UpdatePriorities(ePriorities);
-
         Boolean hasSim = poCallManager.GetSimCards();
-
-        System.out.println(poCallManager.sim1);
-        System.out.println(poCallManager.sim2);
-        System.out.println(poCallManager.simCondition);
         System.out.println(poCallManager.getMessage());
         assertTrue(hasSim);
 
         Boolean isImported = poCallManager.ImportCalls();
-
         System.out.println(poCallManager.getMessage());
         assertTrue(isImported);
+
+        Boolean isImportedPriorites = poCallManager.ImportPriorities();
+        System.out.println(poCallManager.getMessage());
+        assertTrue(isImportedPriorites);
 
         poDao.GetInitLead("GAP023000374", poCallManager.sim1, poCallManager.sim2).observeForever(new Observer<DAOLeadCalls.LeadInformation>() {
             @Override
@@ -105,6 +94,7 @@ public class TestAppImports {
                 System.out.println(leadInformation.sSourceCD);
                 System.out.println(leadInformation.sClientID);
                 System.out.println(leadInformation.sMobileNo);
+                System.out.println(leadInformation.cTranStat);
             }
         });
     }
@@ -147,5 +137,11 @@ public class TestAppImports {
     @Test
     public void RemoveSession(){
         poCallManager.RemoveCallSession();
+    }
+    @Test
+    public void ConvertLead(){
+        Boolean isConverted = poCallManager.AssignAsLead();
+        System.out.println(poCallManager.getMessage());
+        assertTrue(isConverted);
     }
 }

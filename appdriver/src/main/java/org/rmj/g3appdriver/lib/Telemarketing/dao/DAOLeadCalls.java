@@ -15,14 +15,14 @@ public interface DAOLeadCalls {
     @Query("SELECT * FROM Lead_Calls WHERE sTransNox = :sTransNoxx")
     ELeadCalls GetLeadTrans(String sTransNoxx);
     @Query("SELECT a.sTransNox sTransNox, a.sReferNox sReferNox, a.sSourceCD sSourceCD, a.sClientID sClientID, " +
-            "a.sMobileNo sMobileNo, a.cSubscrbr cSubscrbr " +
+            "a.sMobileNo sMobileNo, a.cTranStat cTranStat, a.cSubscrbr cSubscrbr " +
             "FROM Lead_Calls a, Call_Priorities b " +
             "WHERE a.sSourceCD = b.sSourceCD " +
             "AND (a.cTranStat = '0' " +
             "OR (a.cTranStat = '1' " +
             "AND a.sAgentIDx = :sAgentID)) " +
             "AND a.cSubscrbr IN (:sSim1, :sSim2) " +
-            "ORDER BY a.dTransact DESC, a.cSubscrbr DESC, a.cTranStat DESC, b.srcIndex ASC LIMIT 1")
+            "ORDER BY a.dTransact DESC, a.cSubscrbr DESC, a.cTranStat DESC, b.srcIndex ASC, a.dModified DESC LIMIT 1")
     LiveData<LeadInformation> GetInitLead(String sAgentID, String sSim1, String sSim2);
     @Query("SELECT lead.sReferNox sReferNox, ccl.sClientNM sClientNm, ccl.xAddressx sAddressx, lead.sMobileNo sMobileNo " +
             "FROM Lead_Calls lead " +
@@ -45,6 +45,8 @@ public interface DAOLeadCalls {
             "WHERE sTransNox= :sTransNoxx")
     int UpdateLeadCall(String sTransNoxx, String cTLMStatx, String cTranStat, String sApprovCd,
                        String sCallStrt, String sCallEnd, String sModified, String dModified);
+    @Query("UPDATE Lead_Calls SET cTranStat = :cTransStat, sAgentIDx = :sUserID, dModified = :dModified WHERE sTransNox = :sTransNox")
+    int ConvertToLead(String sTransNox, String sUserID, String cTransStat, String dModified);
     @Insert
     Long SaveLeads(ELeadCalls eLeadCalls);
     @Update
@@ -57,6 +59,7 @@ public interface DAOLeadCalls {
         public String sSourceCD;
         public String sClientID;
         public String sMobileNo;
+        public String cTranStat;
         public String cSubscrbr;
     }
     class LeadDetails{

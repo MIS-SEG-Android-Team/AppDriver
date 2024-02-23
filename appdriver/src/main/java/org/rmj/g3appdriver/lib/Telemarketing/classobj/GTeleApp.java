@@ -206,11 +206,10 @@ public class GTeleApp {
             String lsResult = loResponse.getString("result");
             if (lsResult.equalsIgnoreCase("error")) {
                 JSONObject loError = loResponse.getJSONObject("error");
-                message = getErrorMessage(loError);;
+                message = getErrorMessage(loError);
                 return false;
             }
 
-            message = "Successfully converted as lead";
             return true;
         }catch (Exception e){
             message = e.getMessage();

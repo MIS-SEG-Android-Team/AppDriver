@@ -52,6 +52,7 @@ public class CallInteractManager {
     private String sLeadSrc;
     private String sClientID;
     private String sMobileNo;
+    private String cTranStat;
     public String sim1;
     public String sim2;
     private String cSubscr;
@@ -217,18 +218,48 @@ public class CallInteractManager {
     }
 
     /** REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO, BEFORE SAVING/UPDATING TRANSACTIONS*/
-    public void InitTransaction(LeadsInformation loLeads){
+    public Boolean InitTransaction(LeadsInformation loLeads){
         Date dcurrDt = Calendar.getInstance().getTime();
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String frmDt = sdFormat.format(dcurrDt);
 
-        this.sTransNox = loLeads.getsTransNox();
-        this.sReferNox = loLeads.getsReferNox();
-        this.sLeadSrc = loLeads.getsSourceCD();
-        this.sClientID = loLeads.getsClientID();
-        this.sMobileNo = loLeads.getsMobileNo();
-        this.cSubscr = loLeads.getsSubscr();
-        this.dToday = frmDt;
+        if (!loLeads.isDataValid()){
+            message = loLeads.getMessage();
+            return false;
+        }else {
+            this.sTransNox = loLeads.getsTransNox();
+            this.sReferNox = loLeads.getsReferNox();
+            this.sLeadSrc = loLeads.getsSourceCD();
+            this.sClientID = loLeads.getsClientID();
+            this.sMobileNo = loLeads.getsMobileNo();
+            this.cTranStat = loLeads.getcTranStat();
+            this.cSubscr = loLeads.getsSubscr();
+            this.dToday = frmDt;
+        }
+        return true;
+    }
+    public Boolean AssignAsLead(){
+        //assign to user account if status is open
+        if (cTranStat == "0"){
+
+            //validate first if transaction no is applied
+            if (sTransNox.isEmpty()){
+                message = "No applied transaction number";
+                return false;
+            }
+
+            if (!poTeleApp.CreateLead(sTransNox, poSession.getUserID(), "1")){
+                message = poTeleApp.getMessage();
+                return false;
+            }
+
+            if (!ConvertAsLead()){
+                message = getMessage();
+                return false;
+            }
+        }
+
+        return true;
     }
     public Boolean SaveClient2Call(){
         try {
@@ -414,20 +445,6 @@ public class CallInteractManager {
         this.lMinDuration = TimeUnit.MINUTES.convert(lDuration, TimeUnit.MILLISECONDS);
         this.lSecDuration = TimeUnit.SECONDS.convert(lDuration, TimeUnit.MILLISECONDS);
     }
-    public Boolean AssignAsLead(){
-        //validate first if transaction no is applied
-        if (sTransNox == null){
-            message = "No applied transaction number";
-            return false;
-        }
-
-        if (!poTeleApp.CreateLead(sTransNox, poSession.getUserID(), "1")){
-            message = poTeleApp.getMessage();
-            return false;
-        }
-
-        return true;
-    }
     public Boolean SaveCallStatus(String sCallStat, String callAction, String sApprvCD, String sRemarks){
         try {
             //validate first if transaction no is applied
@@ -603,6 +620,15 @@ public class CallInteractManager {
         message= "Lead transaction has been updated to device";
         Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
         return true;
+    }
+    public Boolean ConvertAsLead(){
+        if (poDaoLeadCalls.ConvertToLead(sTransNox, poSession.getUserID(), "1", dToday) < 1){
+            message= "Failed to assign lead on your account.";
+            return false;
+        }else {
+            message= "Lead has been successfully assigned to your account.";
+            return true;
+        }
     }
     public void RemoveCallSession(){
         poDaoLeadCalls.RemoveLeads();

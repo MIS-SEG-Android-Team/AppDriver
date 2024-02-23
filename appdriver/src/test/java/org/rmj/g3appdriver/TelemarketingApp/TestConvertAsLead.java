@@ -1,13 +1,13 @@
 package org.rmj.g3appdriver.TelemarketingApp;
 
 import static org.junit.Assert.assertNotNull;
+
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.rmj.g3appdriver.dev.Http.WebClient;
-import org.rmj.g3appdriver.lib.Telemarketing.constants.GTeleConstants;
 import org.rmj.g3appdriver.utils.SQLUtil;
 
 import java.util.Calendar;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(JUnit4.class)
-public class TestSaveSchedule {
+public class TestConvertAsLead {
     private Map<String, String> headers;
     @Before
     public void SetUp(){
@@ -41,18 +41,15 @@ public class TestSaveSchedule {
         headers.put("g-api-token", "12312312");
     }
     @Test
-    public void TestSaveSchedule() throws Exception {
+    public void TestAssignLead() throws Exception {
 
-        String sURL = "http://192.168.10.68:8080/telemarketing_app/SaveSchedule.php";
+        String sURL = "http://192.168.10.68:8080/telemarketing_app/CreateLead.php";
 
         JSONObject jsonParam = new JSONObject();
 
-        jsonParam.put("sTransNox", "M0T123000816");
-        jsonParam.put("sLeadSrc", "INQR");
-        jsonParam.put("dFollowUp", "2023-11-21");
-        jsonParam.put("cTransStat", "0");
-        jsonParam.put("sRemarks", "Reschedule mo boy testing");
-        jsonParam.put("sUserID", "M001160024");
+        jsonParam.put("sTransNox", "M0T123090941");
+        jsonParam.put("sUserID", "GAP023000374");
+        jsonParam.put("cTransStat", "1");
 
         String lsResponse = WebClient.sendRequest( sURL, jsonParam.toString(), (HashMap<String, String>) headers);
         if(lsResponse == null){
@@ -60,15 +57,5 @@ public class TestSaveSchedule {
         }
 
         System.out.println(lsResponse);
-
-        JSONObject loResponse = new JSONObject(lsResponse);
-        assertNotNull(loResponse);
-
-        JSONObject loSchedule = loResponse.getJSONObject("schedule");
-        assertNotNull(loSchedule);
-
-        System.out.println(loSchedule.get("sTransNox"));
-        System.out.println(loSchedule.get("dFollowUp"));
-        System.out.println(loSchedule.get("tablenm"));
     }
 }

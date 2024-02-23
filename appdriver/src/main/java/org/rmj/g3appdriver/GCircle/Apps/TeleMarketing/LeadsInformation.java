@@ -6,8 +6,13 @@ public class LeadsInformation {
     public String sSourceCD;
     public String sClientID;
     public String sMobileNo;
+    public String cTranStat;
     public String sSubscr;
     public String sUserID;
+    private String message;
+    public String getMessage(){
+        return message;
+    }
 
     public String getsTransNox() {
         return sTransNox;
@@ -49,6 +54,14 @@ public class LeadsInformation {
         this.sMobileNo = sMobileNo;
     }
 
+    public String getcTranStat() {
+        return cTranStat;
+    }
+
+    public void setcTranStat(String cTranStat) {
+        this.cTranStat = cTranStat;
+    }
+
     public String getsSubscr() {
         return sSubscr;
     }
@@ -63,5 +76,36 @@ public class LeadsInformation {
 
     public void setsUserID(String sUserID) {
         this.sUserID = sUserID;
+    }
+    public Boolean isDataValid(){
+        if (sTransNox.isEmpty()){
+            message = "Transaction number is empty";
+            return false;
+        }
+        if (sReferNox.isEmpty()){
+            message = "Source number is empty";
+            return false;
+        }
+        if (sSourceCD.isEmpty()){
+            message = "Source type is empty";
+            return false;
+        }
+        if (sClientID.isEmpty()){
+            message = "Client ID is empty";
+            return false;
+        }
+        if (sMobileNo.isEmpty()){
+            message = "Mobile number is empty";
+            return false;
+        }
+        if (cTranStat.isEmpty()){
+            message = "Transaction status is empty";
+            return false;
+        }
+        if (sSubscr.isEmpty()){
+            message = "Mobile subscriber is empty";
+            return false;
+        }
+        return true;
     }
 }
