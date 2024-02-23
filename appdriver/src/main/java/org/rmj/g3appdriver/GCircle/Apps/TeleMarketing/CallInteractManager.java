@@ -218,25 +218,19 @@ public class CallInteractManager {
     }
 
     /** REQUIRED: NEED TO INITIALIZE FIRST TRANSACTION NO, BEFORE SAVING/UPDATING TRANSACTIONS*/
-    public Boolean InitTransaction(LeadsInformation loLeads){
+    public void InitTransaction(LeadsInformation loLeads){
         Date dcurrDt = Calendar.getInstance().getTime();
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String frmDt = sdFormat.format(dcurrDt);
 
-        if (!loLeads.isDataValid()){
-            message = loLeads.getMessage();
-            return false;
-        }else {
-            this.sTransNox = loLeads.getsTransNox();
-            this.sReferNox = loLeads.getsReferNox();
-            this.sLeadSrc = loLeads.getsSourceCD();
-            this.sClientID = loLeads.getsClientID();
-            this.sMobileNo = loLeads.getsMobileNo();
-            this.cTranStat = loLeads.getcTranStat();
-            this.cSubscr = loLeads.getsSubscr();
-            this.dToday = frmDt;
-        }
-        return true;
+        this.sTransNox = loLeads.getsTransNox();
+        this.sReferNox = loLeads.getsReferNox();
+        this.sLeadSrc = loLeads.getsSourceCD();
+        this.sClientID = loLeads.getsClientID();
+        this.sMobileNo = loLeads.getsMobileNo();
+        this.cTranStat = loLeads.getcTranStat();
+        this.cSubscr = loLeads.getsSubscr();
+        this.dToday = frmDt;
     }
     public Boolean AssignAsLead(){
         //assign to user account if status is open

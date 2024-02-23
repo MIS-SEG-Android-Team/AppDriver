@@ -36,7 +36,7 @@ public interface DAOLeadCalls {
             "FROM Lead_Calls lead " +
             "LEFT JOIN  Call_Client ccl ON (lead.sClientID = ccl.sClientID) " +
             "LEFT JOIN MC_Inquiry mci ON (lead.sReferNox = mci.sTransNox) " +
-            "WHERE sAgentIDx= :sUserIdxx AND cTranStat <> '0' " +
+            "WHERE sAgentIDx= :sUserIdxx AND cTranStat NOT IN ('0','1') " +
             "ORDER BY lead.dTransact DESC, lead.sMobileNo ASC, ccl.sClientNM ASC")
     LiveData<List<LeadHistory>> GetCallHistory(String sUserIdxx);
     @Query("UPDATE Lead_Calls SET cTLMStatx= :cTLMStatx, cTranStat = :cTranStat, " +
