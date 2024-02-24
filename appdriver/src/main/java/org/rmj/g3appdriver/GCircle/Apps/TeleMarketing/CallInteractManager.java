@@ -232,25 +232,21 @@ public class CallInteractManager {
         this.cSubscr = loLeads.getsSubscr();
         this.dToday = frmDt;
     }
-    public Boolean AssignAsLead(){
-        //assign to user account if status is open
-        if (cTranStat == "0"){
+    public Boolean ChangeStatus(String status){
+        //validate first if transaction no is applied
+        if (sTransNox.isEmpty()){
+            message = "No applied transaction number";
+            return false;
+        }
 
-            //validate first if transaction no is applied
-            if (sTransNox.isEmpty()){
-                message = "No applied transaction number";
-                return false;
-            }
+        if (!poTeleApp.UpdateStatus(sTransNox, poSession.getUserID(), status)){
+            message = poTeleApp.getMessage();
+            return false;
+        }
 
-            if (!poTeleApp.CreateLead(sTransNox, poSession.getUserID(), "1")){
-                message = poTeleApp.getMessage();
-                return false;
-            }
-
-            if (!ConvertAsLead()){
-                message = getMessage();
-                return false;
-            }
+        if (!UpdateStatus(status)){
+            message = getMessage();
+            return false;
         }
 
         return true;
@@ -615,8 +611,8 @@ public class CallInteractManager {
         Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
         return true;
     }
-    public Boolean ConvertAsLead(){
-        if (poDaoLeadCalls.ConvertToLead(sTransNox, poSession.getUserID(), "1", dToday) < 1){
+    public Boolean UpdateStatus(String status){
+        if (poDaoLeadCalls.UpdateStatus(sTransNox, poSession.getUserID(), status, dToday) < 1){
             message= "Failed to assign lead on your account.";
             return false;
         }else {

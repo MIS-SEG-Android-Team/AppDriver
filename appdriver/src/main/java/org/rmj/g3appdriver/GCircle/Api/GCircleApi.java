@@ -113,7 +113,7 @@ public class GCircleApi extends WebApi {
     private static final String URL_GET_PRIORITIES = "telemarketing_app/GetPrioritySrc.php";
     private static final String URL_SEND_SCHEDULE = "telemarketing_app/SaveSchedule.php";
     private static final String URL_SEND_CALL_STATUS = "telemarketing_app/SaveCallStat.php";
-    private static final String URL_CREATE_LEAD = "telemarketing_app/CreateLead.php";
+    private static final String URL_CREATE_LEAD = "telemarketing_app/ChangeStatus.php";
 
     public GCircleApi(Application instance) {
         super(instance);

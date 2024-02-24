@@ -182,7 +182,7 @@ public class GTeleApp {
             return null;
         }
     }
-    public Boolean CreateLead(String sTransNox, String sUserID, String cTransStat){
+    public Boolean UpdateStatus(String sTransNox, String sUserID, String cTransStat){
         try {
             //CREATE PARAMS USING JSON OBJECT
             JSONObject jsonParam = new JSONObject();
