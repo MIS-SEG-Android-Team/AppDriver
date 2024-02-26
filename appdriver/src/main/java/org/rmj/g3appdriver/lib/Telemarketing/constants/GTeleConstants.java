@@ -40,4 +40,27 @@ public class GTeleConstants {
         }
         return "";
     }
+    public String GetRemarksConstants(String sConstants){
+        switch (sConstants){
+            case "NI":
+                return "NOT INTERESTED";
+            case "NN":
+                return "NOT NOW";
+            case "PS":
+                return "POSSIBLE SALES";
+            case "NC":
+                return "NO CAPACITY";
+            case "CB":
+                return "CALL BACK";
+            case "AM":
+                return "ANSWERING MACHINE";
+            case "WN":
+                return "WRONG NUMBER";
+            case "NA":
+                return "NO ANSWER";
+            case "UR":
+                return "CANNOT BE REACHED";
+        }
+        return "";
+    }
 }
