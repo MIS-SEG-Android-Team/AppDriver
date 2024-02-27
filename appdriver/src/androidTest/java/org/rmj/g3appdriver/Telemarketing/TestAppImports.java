@@ -139,8 +139,14 @@ public class TestAppImports {
         poCallManager.RemoveCallSession();
     }
     @Test
-    public void ConvertLead(){
-        Boolean isConverted = poCallManager.AssignAsLead();
+    public void AssignLead(){
+        Boolean isConverted = poCallManager.ChangeStatus("1");
+        System.out.println(poCallManager.getMessage());
+        assertTrue(isConverted);
+    }
+    @Test
+    public void DiscardLead(){
+        Boolean isConverted = poCallManager.ChangeStatus("3");
         System.out.println(poCallManager.getMessage());
         assertTrue(isConverted);
     }

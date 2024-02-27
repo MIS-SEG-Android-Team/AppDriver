@@ -46,7 +46,7 @@ public interface DAOLeadCalls {
     int UpdateLeadCall(String sTransNoxx, String cTLMStatx, String cTranStat, String sApprovCd,
                        String sCallStrt, String sCallEnd, String sModified, String dModified);
     @Query("UPDATE Lead_Calls SET cTranStat = :cTransStat, sAgentIDx = :sUserID, dModified = :dModified WHERE sTransNox = :sTransNox")
-    int ConvertToLead(String sTransNox, String sUserID, String cTransStat, String dModified);
+    int UpdateStatus(String sTransNox, String sUserID, String cTransStat, String dModified);
     @Insert
     Long SaveLeads(ELeadCalls eLeadCalls);
     @Update

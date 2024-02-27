@@ -4,8 +4,6 @@ import static org.rmj.g3appdriver.dev.Api.ApiResult.SERVER_NO_RESPONSE;
 import static org.rmj.g3appdriver.dev.Api.ApiResult.getErrorMessage;
 
 import android.app.Application;
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.rmj.g3appdriver.GCircle.Api.GCircleApi;
@@ -13,8 +11,6 @@ import org.rmj.g3appdriver.dev.Http.HttpHeaderManager;
 import org.rmj.g3appdriver.dev.Http.HttpHeaderProvider;
 import org.rmj.g3appdriver.dev.Http.WebClient;
 import org.rmj.g3appdriver.lib.Telemarketing.constants.GTeleConstants;
-
-import java.util.List;
 
 public class GTeleApp {
     private String TAG = getClass().getSimpleName();
@@ -182,7 +178,7 @@ public class GTeleApp {
             return null;
         }
     }
-    public Boolean CreateLead(String sTransNox, String sUserID, String cTransStat){
+    public Boolean UpdateStatus(String sTransNox, String sUserID, String cTransStat){
         try {
             //CREATE PARAMS USING JSON OBJECT
             JSONObject jsonParam = new JSONObject();

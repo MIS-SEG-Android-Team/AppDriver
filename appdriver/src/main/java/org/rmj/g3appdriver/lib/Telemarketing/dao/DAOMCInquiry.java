@@ -15,7 +15,7 @@ import java.util.List;
 public interface DAOMCInquiry {
     @Query("SELECT * FROM MC_Inquiry WHERE sTransNox= :sTransNox")
     EMCInquiry GetMCInquiry(String sTransNox);
-    @Query("SELECT b.sBrandNme sBrandNme, c.sModelNme sModelNme, d.sColorNme sColorNme, " +
+    @Query("SELECT b.sBrandNme sBrandNme, c.sModelNme sModelNme, d.sColorNme sColorNme, a.cApplType sPurchType, " +
             "h.nSelPrice  nSelPrice, e.nMinDownx nMinDownx, f.nMiscChrg nMiscChrg, f.nRebatesx nRebatesx, f.nEndMrtgg nEndMrtgg " +
             "FROM MC_Inquiry a " +
             "LEFT JOIN MC_Brand b ON (a.sBrandIDx = b.sBrandIDx) " +
@@ -40,6 +40,7 @@ public interface DAOMCInquiry {
         public String sBrandNme;
         public String sModelNme;
         public String sColorNme;
+        public String sPurchType;
         public double nSelPrice;
         public double nMinDownx;
         public double nMiscChrg;

@@ -232,25 +232,21 @@ public class CallInteractManager {
         this.cSubscr = loLeads.getsSubscr();
         this.dToday = frmDt;
     }
-    public Boolean AssignAsLead(){
-        //assign to user account if status is open
-        if (cTranStat == "0"){
+    public Boolean ChangeStatus(String status){
+        //validate first if transaction no is applied
+        if (sTransNox.isEmpty()){
+            message = "No applied transaction number";
+            return false;
+        }
 
-            //validate first if transaction no is applied
-            if (sTransNox.isEmpty()){
-                message = "No applied transaction number";
-                return false;
-            }
+        if (!poTeleApp.UpdateStatus(sTransNox, poSession.getUserID(), status)){
+            message = poTeleApp.getMessage();
+            return false;
+        }
 
-            if (!poTeleApp.CreateLead(sTransNox, poSession.getUserID(), "1")){
-                message = poTeleApp.getMessage();
-                return false;
-            }
-
-            if (!ConvertAsLead()){
-                message = getMessage();
-                return false;
-            }
+        if (!UpdateStatus(status)){
+            message = getMessage();
+            return false;
         }
 
         return true;
@@ -615,8 +611,8 @@ public class CallInteractManager {
         Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
         return true;
     }
-    public Boolean ConvertAsLead(){
-        if (poDaoLeadCalls.ConvertToLead(sTransNox, poSession.getUserID(), "1", dToday) < 1){
+    public Boolean UpdateStatus(String status){
+        if (poDaoLeadCalls.UpdateStatus(sTransNox, poSession.getUserID(), status, dToday) < 1){
             message= "Failed to assign lead on your account.";
             return false;
         }else {
@@ -624,13 +620,32 @@ public class CallInteractManager {
             return true;
         }
     }
-    public void RemoveCallSession(){
-        poDaoLeadCalls.RemoveLeads();
-        poDaoClient.RemoveClient2Call();
-        poDaoClientMobile.RemoveClientMobile();
-        poDaoMcInq.RemoveInquiries();
-        poDaoPriorities.RemovePriorities();
-        poDaoHOutgoing.RemoveHOutgoing();
+    public Boolean RemoveCallSession(){
+        if (poDaoLeadCalls.RemoveLeads() < 1){
+            message = "Unable to clear data for leads";
+            return false;
+        }
+        if (poDaoPriorities.RemovePriorities() < 1){
+            message = "Unable to clear data for priorities";
+            return false;
+        }
+        if (poDaoClient.RemoveClient2Call() < 1){
+            message = "Unable to clear data for client information";
+            return false;
+        }
+        if (poDaoClientMobile.RemoveClientMobile() < 1){
+            message = "Unable to clear data for client mobile";
+            return false;
+        }
+        if (poDaoMcInq.RemoveInquiries() < 1){
+            message = "Unable to clear data for product inquiry";
+            return false;
+        }
+        if (poDaoHOutgoing.RemoveHOutgoing() < 1){
+            message = "Unable to clear data for outgoing calls";
+            return false;
+        }
+        return true;
     }
     public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueues(){
         return poDaoLeadCalls.GetInitLead(poSession.getUserID(), sim1, sim2);
