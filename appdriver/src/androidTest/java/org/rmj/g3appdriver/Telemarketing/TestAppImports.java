@@ -124,7 +124,7 @@ public class TestAppImports {
     }
     @Test
     public void SaveCallStatus(){
-        Boolean isSaved = poCallManager.SaveCallStatus("POSSIBLE SALES", "2", "C00112062302", "Hello po testing lang");
+        Boolean isSaved = poCallManager.SaveCallStatus("PS", "2", "C00112062302", "Hello po testing lang");
         System.out.println(poCallManager.getMessage());
         assertTrue(isSaved);
     }

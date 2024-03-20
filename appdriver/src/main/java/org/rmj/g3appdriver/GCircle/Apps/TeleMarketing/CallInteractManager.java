@@ -155,17 +155,9 @@ public class CallInteractManager {
 
                 //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
                 if (poDaoLeadCalls.GetLeadTrans(sTransNox) == null){
-                    if (poDaoLeadCalls.SaveLeads(eLeadCalls).intValue() < 1){
-                        message= "Failed to save leads on device";
-                        Log.d(TAG, "Table: Call_Outgoing Transaction No: "+ sTransNox);
-                        return false;
-                    }
+                    poDaoLeadCalls.SaveLeads(eLeadCalls);
                 }else {
-                    if (poDaoLeadCalls.UpdateLeads(eLeadCalls) < 1){
-                        message= "Failed to update leads on device";
-                        Log.d(TAG, "Table: Call_Outgoing Transaction No: "+ sTransNox);
-                        return false;
-                    }
+                    poDaoLeadCalls.UpdateLeads(eLeadCalls);
                 }
             }
             message= "Lead Calls imported successfully to device";
@@ -196,17 +188,9 @@ public class CallInteractManager {
 
                 //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
                 if (poDaoPriorities.GetByIndex(index) == null){
-                    if (poDaoPriorities.SavePriorities(ePriorities).intValue() < 1){
-                        message= "Failed to save priorities on device";
-                        Log.d(TAG, "Table: Call_Priorities Index No: "+ String.valueOf(index));
-                        return false;
-                    }
+                    poDaoPriorities.SavePriorities(ePriorities);
                 }else {
-                    if (poDaoPriorities.UpdatePriorities(ePriorities) < 1){
-                        message= "Failed to update leads on device";
-                        Log.d(TAG, "Table: Call_Priorities Index No: "+ String.valueOf(index));
-                        return false;
-                    }
+                    poDaoPriorities.UpdatePriorities(ePriorities);
                 }
             }
             message= "Priorities imported successfully to device";
@@ -244,14 +228,11 @@ public class CallInteractManager {
             return false;
         }
 
-        if (!UpdateStatus(status)){
-            message = getMessage();
-            return false;
-        }
+        poDaoLeadCalls.UpdateStatus(sTransNox, poSession.getUserID(), status, dToday);
 
         return true;
     }
-    public Boolean SaveClient2Call(){
+    public Boolean SaveClient2Call() {
         try {
             JSONObject loParam = new JSONObject();
             loParam.put("sClientID", sClientID);
@@ -280,17 +261,9 @@ public class CallInteractManager {
 
             //get exisitng record on local database, if 0 then insert else update
             if (poDaoClient.GetClient2Call(sClientid) == null){
-                if (poDaoClient.SaveClients(eClient2Call).intValue() < 1){
-                    message= "Failed to save client's information";
-                    Log.d(TAG, "Table: Client_Master Client ID: "+ sClientid);
-                    return false;
-                }
+                poDaoClient.SaveClients(eClient2Call);
             }else {
-                if (poDaoClient.UpdateClients(eClient2Call) < 1){
-                    message= "Failed to update client's information";
-                    Log.d(TAG, "Table: Client_Master Client ID: "+ sClientid);
-                    return false;
-                }
+                poDaoClient.UpdateClients(eClient2Call);
             }
 
             message = "Client's Info saved to device";
@@ -341,17 +314,9 @@ public class CallInteractManager {
             eClientMobile.setcRecdStat(loMobiles.get("cRecdStat").toString());
 
             if (poDaoClientMobile.GetClientMobile(sClientId, sMobile) == null){
-                if (poDaoClientMobile.SaveClientMobile(eClientMobile) < 1){
-                    message = "Failed to import client's mobile information";
-                    Log.d(TAG, "Table: Client_Mobile Mobile No: " + sMobile);
-                    return false;
-                }
+                poDaoClientMobile.SaveClientMobile(eClientMobile);
             }else {
-                if (poDaoClientMobile.UpdateClientMobile(eClientMobile) < 1){
-                    message = sClientID + " client id failed to update on local";
-                    Log.d(TAG, "Table: Client_Mobile Mobile No: " + sMobile);
-                    return false;
-                }
+                poDaoClientMobile.UpdateClientMobile(eClientMobile);
             }
 
             message = "Client's Mobile saved to device";
@@ -399,17 +364,9 @@ public class CallInteractManager {
             emcInquiry.setsTableNM(loInq.get("sTableNM").toString());
 
             if (poDaoMcInq.GetMCInquiry(sTransNox) == null){
-                if (poDaoMcInq.SaveMCInq(emcInquiry).intValue() < 1){
-                    message = "Failed to import inquiry on device";
-                    Log.d(TAG, "Table: "+ loInq.get("sTableNM") + "Transaction No: " + sTransNox);
-                    return false;
-                }
+                poDaoMcInq.SaveMCInq(emcInquiry);
             }else {
-                if (poDaoMcInq.UpdateMCInq(emcInquiry) < 1){
-                    message = "Failed to update inquiry on device";
-                    Log.d(TAG, "Table: "+ loInq.get("sTableNM") + "Transaction No: " + sTransNox);
-                    return false;
-                }
+                poDaoMcInq.UpdateMCInq(emcInquiry);
             }
 
             message = "Inquiries saved to device";
@@ -419,7 +376,6 @@ public class CallInteractManager {
             return false;
         }
     }
-
     public void InitQueue(String sCallStrt, String sCallEnd) throws ParseException {
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
@@ -453,16 +409,13 @@ public class CallInteractManager {
             }
 
             String dTransact = loTransParams.get("dTransact").toString();
-            if (sCallStat == "POSSIBLE SALES"){
-
-            }
 
             //'POSSIBLE SALES' AND 'NOT NOW' STATUS, INSERT TO HOTLINE_OUTGOING
-            if (sCallStat == "POSSIBLE SALES" || sCallStat == "NOT NOW"){
+            if (sCallStat == "PS" || sCallStat == "NN" || sCallStat == "CB"){
                 String sHOutgoingNox = loTransParams.get("sTransNox").toString();
 
                 if (sHOutgoingNox != null && !sHOutgoingNox.isEmpty()){
-                    InsertHotlineOutgoing(sCallStat, sHOutgoingNox,
+                    InsertHotlineOutgoing(sHOutgoingNox,
                             dTransact,
                             loTransParams.get("sDivision").toString(),
                             sMobileNo,
@@ -487,21 +440,14 @@ public class CallInteractManager {
 
             //UPDATE NUNREACHX, IF STATUS 'CANNOT BE REACHED', ELSE 0
             int nUnreachx = 0;
-            if (sCallStat == "CANNOT BE REACHED"){
+            if (sCallStat == "UR"){
                 nUnreachx = 1;
                 message= getMessage() + " Status: Unreachable";
             }
             //UPDATE CLIENT MOBILE, IMPORT DATA AS NEW ROW IF NOT FOUND ON LOCAL
-            if (UpdateCMobile(sClientID, sMobileNo, dTransact, nUnreachx) == false){
-                message = getMessage();
-                return false;
-            }
-
-            //UPDATE LEAD'S CTLMSTATX TO SELECTED STATUS
-            if (UpdateLeadCallStat(sTransNox, sCallStat, sApprvCD, callAction) == false){
-                message = getMessage();
-                return false;
-            }
+            poDaoClientMobile.UpdateCallTrans(sClientID, sMobileNo, dTransact, nUnreachx);
+            poDaoLeadCalls.UpdateLeadCall(sTransNox, sCallStat, callAction, sApprvCD, sCallStrt,
+                    sCallEnd, poSession.getUserID(), dToday);
 
             message = "Call transaction has been saved to device";
             return true;
@@ -530,13 +476,8 @@ public class CallInteractManager {
 
             String loTransNox = loSchedule.get("sTransNox").toString();
             String loFollowUp = loSchedule.get("dFollowUp").toString();
-            String loTableNm = loSchedule.get("tablenm").toString();
 
-            if (poDaoMcInq.UpdateFollowUp(loFollowUp, loTransNox) < 1){
-                message = "Failed to save schedule on device";
-                Log.d(TAG, "Table: " + loTableNm + " Transaction No: " + loTransNox);
-                return false;
-            }
+            poDaoMcInq.UpdateFollowUp(loFollowUp, loTransNox);
 
             message = "Schedule has been saved on device";
             return true;
@@ -545,7 +486,7 @@ public class CallInteractManager {
             return false;
         }
     }
-    public Boolean InsertHotlineOutgoing(String sCallstat, String sTransNox, String dTransact,String sDivision, String sMobileNo,
+    public Boolean InsertHotlineOutgoing(String sTransNox, String dTransact,String sDivision, String sMobileNo,
                                          String sMessagex, String cSubscr, String dDueDate, String cSendStat,
                                          int nNoRetryx, String sUDHeader, String sReferNox, String sSourceCd,
                                          String cTranStat, int nPriority, String sUserID){
@@ -570,82 +511,22 @@ public class CallInteractManager {
 
         //GET EXISTING RECORD ON LOCAL DB, IF 0 'SAVE' ELSE 'UPDATE'
         if (poDaoHOutgoing.GetHotlineOutgoing(sTransNox) == null){
-            if (poDaoHOutgoing.SaveHotlineOutgoing(eHotlineOutgoing) < 1){
-                message= "Failed to save "+ sCallstat + " transaction on device";
-                Log.d(TAG, "Table: Hotline_Outgoing Transaction No: " + sTransNox);
-                return false;
-            }
+            poDaoHOutgoing.SaveHotlineOutgoing(eHotlineOutgoing);
         }else {
-            if (poDaoHOutgoing.UpdateHotlineOutgoing(eHotlineOutgoing) < 1){
-                message= "Failed to update "+ sCallstat + " transaction on device";
-                Log.d(TAG, "Table: Hotline_Outgoing Transaction No: " + sTransNox);
-                return false;
-            }
+            poDaoHOutgoing.UpdateHotlineOutgoing(eHotlineOutgoing);
         }
 
         message = "Transaction has been saved to device";
         Log.d(TAG, "Table: Hotline_Outgoing Transaction No: " + sTransNox);
         return true;
     }
-    public Boolean UpdateCMobile(String sClientID, String sMobileNo, String dTransact, int nUnreachx){
-
-        if (poDaoClientMobile.UpdateCallTrans(sClientID, sMobileNo, dTransact, nUnreachx) < 1){
-            message= "Client Mobile failed to update on device";
-            Log.d(TAG, "Table: Client Mobile Mobile No: " + sMobileNo);
-            return false;
-        }
-
-        message = "Client Mobile has been update on device";
-        Log.d(TAG, "Table: Client Mobile Mobile No: " + sMobileNo);
-        return true;
-    }
-    public Boolean UpdateLeadCallStat(String sTransNox, String sCallStat, String sApprvCd, String cTransTat){
-        if (poDaoLeadCalls.UpdateLeadCall(sTransNox, sCallStat, cTransTat, sApprvCd, sCallStrt,
-                sCallEnd, poSession.getUserID(), dToday) < 1){
-            message= "Lead transaction failed to update on device";
-            Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
-            return false;
-        }
-
-        message= "Lead transaction has been updated to device";
-        Log.d(TAG, "Table: Call_Outgoing Transaction No: " + sTransNox);
-        return true;
-    }
-    public Boolean UpdateStatus(String status){
-        if (poDaoLeadCalls.UpdateStatus(sTransNox, poSession.getUserID(), status, dToday) < 1){
-            message= "Failed to assign lead on your account.";
-            return false;
-        }else {
-            message= "Lead has been successfully assigned to your account.";
-            return true;
-        }
-    }
-    public Boolean RemoveCallSession(){
-        if (poDaoLeadCalls.RemoveLeads() < 1){
-            message = "Unable to clear data for leads";
-            return false;
-        }
-        if (poDaoPriorities.RemovePriorities() < 1){
-            message = "Unable to clear data for priorities";
-            return false;
-        }
-        if (poDaoClient.RemoveClient2Call() < 1){
-            message = "Unable to clear data for client information";
-            return false;
-        }
-        if (poDaoClientMobile.RemoveClientMobile() < 1){
-            message = "Unable to clear data for client mobile";
-            return false;
-        }
-        if (poDaoMcInq.RemoveInquiries() < 1){
-            message = "Unable to clear data for product inquiry";
-            return false;
-        }
-        if (poDaoHOutgoing.RemoveHOutgoing() < 1){
-            message = "Unable to clear data for outgoing calls";
-            return false;
-        }
-        return true;
+    public void RemoveCallSession(){
+        poDaoLeadCalls.RemoveLeads();
+        poDaoPriorities.RemovePriorities();
+        poDaoClient.RemoveClient2Call();
+        poDaoClientMobile.RemoveClientMobile();
+        poDaoMcInq.RemoveInquiries();
+        poDaoHOutgoing.RemoveHOutgoing();
     }
     public LiveData<DAOLeadCalls.LeadInformation> GetLeadQueues(){
         return poDaoLeadCalls.GetInitLead(poSession.getUserID(), sim1, sim2);
